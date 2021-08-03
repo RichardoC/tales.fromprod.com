@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Archive
+permalink: /
 ---
 <section>
   {% if site.posts[0] %}

@@ -14,14 +14,13 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Thoughts from Production
-email: N/A
+email: talesfromprod@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Welcome Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.
+
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://tales.fromprod.com" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  richardoc
+github_username:  RichardoC
 destination: docs
 
 # Build settings
@@ -33,12 +32,18 @@ plugins:
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
-# exclude:
-#   - Gemfile
-#   - Gemfile.lock
+exclude:
+  - Gemfile
+  - Gemfile.lock
 #   - node_modules
 #   - vendor/bundle/
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# Theme config
 color_scheme: "dark"
+permalink: pretty
+search_enabled: true
+heading_anchors: true
+footer_content: "Copyright &copy; 2021 Richard Tweed."
