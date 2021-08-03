@@ -7,3 +7,4 @@ Welcome Richard Tweed's thoughts on Cloud Native Software, Kubernetes, Productio
 
 - [GitHub](https://github.com/RichardoC)
 - [Linkedin](https://www.linkedin.com/in/richardftweed/)
+- [Email](mailto:talesfromprod+site@gmail.com)
