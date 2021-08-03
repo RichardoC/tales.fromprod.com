@@ -1,6 +1,9 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-layout: home
+layout: default
+title: About
+permalink: /about/
 ---
+Welcome Richard Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.
+
+[Github](https://github.com/RichardoC)
+[Linkedin](https://www.linkedin.com/in/richardftweed/)
