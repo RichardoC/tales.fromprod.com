@@ -13,8 +13,8 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Thoughts from Production
-email: talesfromprod@gmail.com
+title: Tales from Production
+email: talesfromprod+site@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Welcome Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.
 
