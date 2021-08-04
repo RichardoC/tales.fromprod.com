@@ -13,10 +13,10 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Tales from Production
+title: Tales from Prod
 email: talesfromprod+site@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Welcome Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.
+  Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://tales.fromprod.com" # the base hostname & protocol for your site, e.g. http://example.com
