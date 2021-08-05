@@ -17,6 +17,9 @@ Okay, let's generate that message, and then paste it in the text box
 ```bash
 python3 -c 'print(":longthonk1:" + ":longthonk2::longthonk3::longthonk4:" * ((40000- len(":longthonk1:") - len(":longthonk5:") )// len(":longthonk2::longthonk3::longthonk4:")) + ":longthonk5:")'
 ```
+
+Also, turns out `xargs -J` can't interpolate 40k characters, and `xargs -I` can only do even fewer. The `-J` doesn't error, it'll only put the characters afterwards as if that flag is ignored. Who knew?
+
 ### What happened
 So, you can paste this in and wait a *long* time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great video in real time
 
