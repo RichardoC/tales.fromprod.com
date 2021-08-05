@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-05T10:07:53-05:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations/" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-04T15:00:00-05:00</published><updated>2021-08-04T15:00:00-05:00</updated><id>https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations/">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-05T15:12:18-05:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations/" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-04T15:00:00-05:00</published><updated>2021-08-04T15:00:00-05:00</updated><id>https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/slack/api/nonsense/2021/08/04/always-document-api-limitations/">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
 &lt;p&gt;During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”&lt;/p&gt;
 
 &lt;h2 id=&quot;to-the-docs&quot;&gt;To the docs!&lt;/h2&gt;
@@ -11,7 +11,7 @@
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python3 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'print(&quot;:longthonk1:&quot; + &quot;:longthonk2::longthonk3::longthonk4:&quot; * ((40000- len(&quot;:longthonk1:&quot;) - len(&quot;:longthonk5:&quot;) )// len(&quot;:longthonk2::longthonk3::longthonk4:&quot;)) + &quot;:longthonk5:&quot;)'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Also, turns out &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -J&lt;/code&gt; can’t interpolate 40k characters, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -I&lt;/code&gt; can only do even fewer. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-J&lt;/code&gt; doesn’t error, it’ll only put the characters afterwards as if that flag is ignored. Who knew?&lt;/p&gt;
+&lt;p&gt;Also, turns out &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -J&lt;/code&gt; can’t interpolate 40k characters, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -I&lt;/code&gt; can only do even fewer. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-J&lt;/code&gt; doesn’t throw an error, it’ll only put the characters afterwards as if that flag is ignored. Who knew?&lt;/p&gt;
 
 &lt;h3 id=&quot;what-happened&quot;&gt;What happened&lt;/h3&gt;
 &lt;p&gt;So, you can paste this in and wait a &lt;em&gt;long&lt;/em&gt; time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great video in real time&lt;/p&gt;
@@ -27,12 +27,12 @@ Your browser does not support the video tag.
 &lt;p&gt;Well, let’s assume that the web client wasn’t up to the challenge of our message (sorry devs). Why don’t we try the API ourselves?&lt;/p&gt;
 
 &lt;h2 id=&quot;having-fun-at-the-expense-of-the-slack-api&quot;&gt;Having fun at the expense of the slack API&lt;/h2&gt;
-&lt;p&gt;I didn’t want to create an app for this, so what do to? Using use API tokens for the API is no longer supported…. Or is it?&lt;/p&gt;
+&lt;p&gt;I didn’t want to create an app for this, so what do to? Using user API tokens for the API is no longer supported…. Or is it?&lt;/p&gt;
 
 &lt;h3 id=&quot;getting-api-calls-to-work-with-user-tokens&quot;&gt;Getting API calls to work with user tokens&lt;/h3&gt;
-&lt;p&gt;I got the network calls while sending a message and started stripping piece of it until I found the minimum that works…&lt;/p&gt;
+&lt;p&gt;I got the network calls while sending a message and started stripping parts from it until I found the minimum that works…&lt;/p&gt;
 
-&lt;p&gt;Turns out all you need is the user token, and the cookies. If you don’t include the cookie you’ll get an unauthorised response.&lt;/p&gt;
+&lt;p&gt;Turns out all you need is the user token, and the cookies (Ie everything in the value of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cookie:&lt;/code&gt; request header). If you don’t include the cookie you’ll get an unauthorised response.&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{&quot;ok&quot;: false, &quot;error&quot;: &quot;invalid_auth&quot;}&lt;/code&gt;&lt;/p&gt;
 
@@ -51,7 +51,7 @@ Your browser does not support the video tag.
 &lt;p&gt;Slack support were lovely, but essentially wondering why would I do such a thing, and suggested I just don’t send as many emojis 😔&lt;/p&gt;
 
 &lt;h3 id=&quot;max-length--max-length&quot;&gt;Max length != max length&lt;/h3&gt;
-&lt;p&gt;The number of slackmojis you can send seems to vary, though on what I’m not sure. The message needs to be less than 40k characters long, but it also seems to depend on which slackmoji you want to send. It seems that you can only send about half as many animated slackmojis… Which seems to be for the best given how slow the client gets when you send 5 messages, each with ~20k animated slackmojis.&lt;/p&gt;
+&lt;p&gt;The number of slackmojis you can send seems to vary, though on what I’m not sure. The message needs to be less than 40k characters long, but it also seems to depend on which slackmoji you want to send. It seems that you can only send about half as many animated slackmojis… Which seems to be for the best. The client gets &lt;em&gt;slow&lt;/em&gt; when you send 5 messages, each with &lt;em&gt;only&lt;/em&gt; 1,100 animated slackmojis.&lt;/p&gt;
 
 &lt;h2 id=&quot;tldr&quot;&gt;TLDR&lt;/h2&gt;
 &lt;p&gt;You should put sensible limits and validation on your API requests (+1 Slack) and document them (-1 Slack)&lt;/p&gt;

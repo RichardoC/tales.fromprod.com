@@ -18,7 +18,7 @@ Okay, let's generate that message, and then paste it in the text box
 python3 -c 'print(":longthonk1:" + ":longthonk2::longthonk3::longthonk4:" * ((40000- len(":longthonk1:") - len(":longthonk5:") )// len(":longthonk2::longthonk3::longthonk4:")) + ":longthonk5:")'
 ```
 
-Also, turns out `xargs -J` can't interpolate 40k characters, and `xargs -I` can only do even fewer. The `-J` doesn't error, it'll only put the characters afterwards as if that flag is ignored. Who knew?
+Also, turns out `xargs -J` can't interpolate 40k characters, and `xargs -I` can only do even fewer. The `-J` doesn't throw an error, it'll only put the characters afterwards as if that flag is ignored. Who knew?
 
 ### What happened
 So, you can paste this in and wait a *long* time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great video in real time
@@ -34,12 +34,12 @@ Once it renders the message, nothing happens if you click the send button.
 Well, let's assume that the web client wasn't up to the challenge of our message (sorry devs). Why don't we try the API ourselves?
 
 ## Having fun at the expense of the slack API
-I didn't want to create an app for this, so what do to? Using use API tokens for the API is no longer supported.... Or is it?
+I didn't want to create an app for this, so what do to? Using user API tokens for the API is no longer supported.... Or is it?
 
 ### Getting API calls to work with user tokens
-I got the network calls while sending a message and started stripping piece of it until I found the minimum that works...
+I got the network calls while sending a message and started stripping parts from it until I found the minimum that works...
 
-Turns out all you need is the user token, and the cookies. If you don't include the cookie you'll get an unauthorised response.
+Turns out all you need is the user token, and the cookies (Ie everything in the value of the `Cookie:` request header). If you don't include the cookie you'll get an unauthorised response.
 
 ```{"ok": false, "error": "invalid_auth"}```
 
@@ -58,7 +58,7 @@ This error has the wonderful explanation in the [docs](https://api.slack.com/met
 Slack support were lovely, but essentially wondering why would I do such a thing, and suggested I just don't send as many emojis 😔
 
 ### Max length != max length
-The number of slackmojis you can send seems to vary, though on what I'm not sure. The message needs to be less than 40k characters long, but it also seems to depend on which slackmoji you want to send. It seems that you can only send about half as many animated slackmojis... Which seems to be for the best given how slow the client gets when you send 5 messages, each with ~20k animated slackmojis.
+The number of slackmojis you can send seems to vary, though on what I'm not sure. The message needs to be less than 40k characters long, but it also seems to depend on which slackmoji you want to send. It seems that you can only send about half as many animated slackmojis... Which seems to be for the best. The client gets *slow* when you send 5 messages, each with *only* 1,100 animated slackmojis.
 
 
 ## TLDR
