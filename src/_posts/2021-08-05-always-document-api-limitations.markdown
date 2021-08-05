@@ -33,7 +33,9 @@ I didn't want to create an app for this, so what do to? Using use API tokens for
 ### Getting API calls to work with user tokens
 I got the network calls while sending a message and started stripping piece of it until I found the minimum that works...
 
-Turns out all you need is the user token, and the cookies.
+Turns out all you need is the user token, and the cookies. If you don't include the cookie you'll get an unauthorised response.
+
+```{"ok": false, "error": "invalid_auth"}```
 
 ### How are slackmojis represented?
 
