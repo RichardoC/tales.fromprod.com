@@ -6,4 +6,4 @@ _site/
 
 docs-tmp/
 
-*.DS_Store #ignore this macos file
+.DS_Store #ignore this macos file
