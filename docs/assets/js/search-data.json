@@ -1,19 +1,43 @@
 {"0": {
     "doc": "About",
     "title": "About",
-    "content": "Welcome to Richard Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with. - [GitHub](https://github.com/RichardoC) - [Linkedin](https://www.linkedin.com/in/richardftweed/) - [Email](mailto:talesfromprod+site@gmail.com) ",
+    "content": "Welcome to Richard Tweed’s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he’s been tinkering with. | GitHub | Linkedin | Email | . ",
     "url": "https://tales.fromprod.com/about/",
     "relUrl": "/about/"
   },"1": {
     "doc": "Archive",
     "title": "Archive",
-    "content": "{% if site.posts[0] %} {% capture currentyear %}{{ 'now' | date: \"%Y\" }}{% endcapture %} {% capture firstpostyear %}{{ site.posts[0].date | date: '%Y' }}{% endcapture %} {% if currentyear == firstpostyear %} This year's posts . {% else %} {{ firstpostyear }} . {% endif %} {%for post in site.posts %} {% unless post.next %} . {% else %} {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %} {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %} {% if year != nyear %} . {{ post.date | date: '%Y' }} . {% endif %} {% endunless %} | {{ post.date | date:\"%d %b\" }} - {{ post.title }} | {% endfor %} . {% endif %} ",
+    "content": "This year's posts . | 04 Aug - Slack-mojis, and why documenting API limitations helps! | 03 Aug - Welcome to Tales From Prod! | . ",
     "url": "https://tales.fromprod.com/",
     "relUrl": "/"
   },"2": {
     "doc": "Useful resources",
+    "title": "Useful Resouces",
+    "content": "This page contains various resources I’ve found useful, one way or another . ",
+    "url": "https://tales.fromprod.com/useful-resources/#useful-resouces",
+    "relUrl": "/useful-resources/#useful-resouces"
+  },"3": {
+    "doc": "Useful resources",
+    "title": "Kubernetes",
+    "content": ". | https://brennerm.github.io/posts/kubernetes-overview-diagrams.html . | Buzzword bingo for Kubernetes, and nicely shows how they are linked | . | . Kubernetes Networking . | Networking deep dive video . | Delves into the complexity of Kubernetes networking | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources/#kubernetes",
+    "relUrl": "/useful-resources/#kubernetes"
+  },"4": {
+    "doc": "Useful resources",
+    "title": "Security",
+    "content": ". | https://cloudseclist.com/ . | Run by Marco Lancini, great resource for cloud security articles | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources/#security",
+    "relUrl": "/useful-resources/#security"
+  },"5": {
+    "doc": "Useful resources",
+    "title": "Build system(s)",
+    "content": ". | Please . | An extensible build system | . | Pleasings . | Useful build rules for the Please build system | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources/#build-systems",
+    "relUrl": "/useful-resources/#build-systems"
+  },"6": {
+    "doc": "Useful resources",
     "title": "Useful resources",
-    "content": "# Useful Resouces This page contains various resources I've found useful, one way or another ## Kubernetes - [https://brennerm.github.io/posts/kubernetes-overview-diagrams.html](https://brennerm.github.io/posts/kubernetes-overview-diagrams.html) - Buzzword bingo for Kubernetes, and nicely shows how they are linked ### Kubernetes Networking - [Networking deep dive video](https://www.youtube.com/watch?v=0Omvgd7Hg1I) - Delves into the complexity of Kubernetes networking ## Security - [https://cloudseclist.com/](https://cloudseclist.com/) - Run by Marco Lancini, great resource for cloud security articles ## Build system(s) - [Please](https://please.build) - An extensible build system - [Pleasings](https://github.com/thought-machine/pleasings) - Useful build rules for the Please build system ",
+    "content": " ",
     "url": "https://tales.fromprod.com/useful-resources/",
     "relUrl": "/useful-resources/"
   }
