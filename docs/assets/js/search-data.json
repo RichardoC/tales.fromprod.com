@@ -11,30 +11,36 @@
     "url": "https://tales.fromprod.com/",
     "relUrl": "/"
   },"2": {
+    "doc": "Categories",
+    "title": "Categories",
+    "content": ". Slack . Slack-mojis, and why documenting API limitations helps! . APIs . Slack-mojis, and why documenting API limitations helps! . Nonsense . Slack-mojis, and why documenting API limitations helps! . ",
+    "url": "https://tales.fromprod.com/categories/",
+    "relUrl": "/categories/"
+  },"3": {
     "doc": "Useful resources",
     "title": "Useful Resouces",
     "content": "This page contains various resources I’ve found useful, one way or another . ",
     "url": "https://tales.fromprod.com/useful-resources/#useful-resouces",
     "relUrl": "/useful-resources/#useful-resouces"
-  },"3": {
+  },"4": {
     "doc": "Useful resources",
     "title": "Kubernetes",
     "content": ". | https://brennerm.github.io/posts/kubernetes-overview-diagrams.html . | Buzzword bingo for Kubernetes, and nicely shows how they are linked | . | . Kubernetes Networking . | Networking deep dive video . | Delves into the complexity of Kubernetes networking | . | . ",
     "url": "https://tales.fromprod.com/useful-resources/#kubernetes",
     "relUrl": "/useful-resources/#kubernetes"
-  },"4": {
+  },"5": {
     "doc": "Useful resources",
     "title": "Security",
     "content": ". | https://cloudseclist.com/ . | Run by Marco Lancini, great resource for cloud security articles | . | . ",
     "url": "https://tales.fromprod.com/useful-resources/#security",
     "relUrl": "/useful-resources/#security"
-  },"5": {
+  },"6": {
     "doc": "Useful resources",
     "title": "Build system(s)",
     "content": ". | Please . | An extensible build system | . | Pleasings . | Useful build rules for the Please build system | . | . ",
     "url": "https://tales.fromprod.com/useful-resources/#build-systems",
     "relUrl": "/useful-resources/#build-systems"
-  },"6": {
+  },"7": {
     "doc": "Useful resources",
     "title": "Useful resources",
     "content": " ",
