@@ -1,1 +1,93 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-03T19:05:27-05:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Welcome to Tales From Prod!</title><link href="https://tales.fromprod.com/welcome/update/2021/08/03/welcome-to-tales-from-prod/" rel="alternate" type="text/html" title="Welcome to Tales From Prod!" /><published>2021-08-03T15:00:00-05:00</published><updated>2021-08-03T15:00:00-05:00</updated><id>https://tales.fromprod.com/welcome/update/2021/08/03/welcome-to-tales-from-prod</id><content type="html" xml:base="https://tales.fromprod.com/welcome/update/2021/08/03/welcome-to-tales-from-prod/">&lt;p&gt;This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”&lt;/p&gt;</content><author><name></name></author><category term="welcome" /><category term="update" /><summary type="html">This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”</summary></entry></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-06T09:19:19-05:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/slack/apis/nonsense/2021/08/05/always-document-api-limitations/" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-05T15:00:00-05:00</published><updated>2021-08-05T15:00:00-05:00</updated><id>https://tales.fromprod.com/slack/apis/nonsense/2021/08/05/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/slack/apis/nonsense/2021/08/05/always-document-api-limitations/">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
+&lt;p&gt;During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”&lt;/p&gt;
+
+&lt;h2 id=&quot;to-the-docs&quot;&gt;To the docs!&lt;/h2&gt;
+&lt;p&gt;Slack &lt;a href=&quot;https://api.slack.com/changelog/2018-04-truncating-really-long-messages&quot;&gt;document&lt;/a&gt; that the max message length is &lt;em&gt;40,000 characters&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Given this, and that you can declare a slackmoji with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;:slackmoji:&lt;/code&gt; we should be able to send 40,000/(len(:slackmoji:)) right…?&lt;/p&gt;
+
+&lt;p&gt;Okay, let’s generate that message, and then paste it in the text box&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python3 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'print(&quot;:longthonk1:&quot; + &quot;:longthonk2::longthonk3::longthonk4:&quot; * ((40000- len(&quot;:longthonk1:&quot;) - len(&quot;:longthonk5:&quot;) )// len(&quot;:longthonk2::longthonk3::longthonk4:&quot;)) + &quot;:longthonk5:&quot;)'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Also, turns out &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -J&lt;/code&gt; can’t interpolate 40k characters, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xargs -I&lt;/code&gt; can only do even fewer. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-J&lt;/code&gt; doesn’t throw an error, it’ll only put the characters afterwards as if that flag is ignored. Who knew?&lt;/p&gt;
+
+&lt;h3 id=&quot;what-happened&quot;&gt;What happened&lt;/h3&gt;
+&lt;p&gt;So, you can paste this in and wait a &lt;em&gt;long&lt;/em&gt; time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great gif in real time&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/2021-08-05-always-document-api-limitations/slow-decoding.gif&quot; alt=&quot;Slack slowly parsing the message and rendering one slackmoji at a time&quot; width=&quot;610&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once it renders the message, nothing happens if you click the send button.&lt;/p&gt;
+
+&lt;h3 id=&quot;now-what&quot;&gt;Now what?&lt;/h3&gt;
+&lt;p&gt;Well, let’s assume that the web client wasn’t up to the challenge of our message (sorry devs). Why don’t we try the API ourselves?&lt;/p&gt;
+
+&lt;h2 id=&quot;having-fun-at-the-expense-of-the-slack-api&quot;&gt;Having fun at the expense of the slack API&lt;/h2&gt;
+&lt;p&gt;I didn’t want to create an app for this, so what do to? Using user API tokens for the API is no longer supported…. Or is it?&lt;/p&gt;
+
+&lt;h3 id=&quot;getting-api-calls-to-work-with-user-tokens&quot;&gt;Getting API calls to work with user tokens&lt;/h3&gt;
+&lt;p&gt;I got the network calls while sending a message and started stripping parts from it until I found the minimum that works…&lt;/p&gt;
+
+&lt;p&gt;Turns out all you need is the user token, and the cookies (Ie everything in the value of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cookie:&lt;/code&gt; request header). If you don’t include the cookie you’ll get an unauthorised response.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{&quot;ok&quot;: false, &quot;error&quot;: &quot;invalid_auth&quot;}&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;how-are-slackmojis-represented&quot;&gt;How are slackmojis represented?&lt;/h3&gt;
+
+&lt;p&gt;After further experimentation, it turns out the API actually considers slackmojis to be emojis, and they have to be in a list of blocks. This makes it a bit harder to work out the max message size (and meet it)&lt;/p&gt;
+
+&lt;h2 id=&quot;findings&quot;&gt;Findings&lt;/h2&gt;
+
+&lt;h3 id=&quot;request-failed-successfully-or-unexpected-errors&quot;&gt;Request failed successfully or “Unexpected Errors”&lt;/h3&gt;
+&lt;p&gt;If you try to send too many slackmojis in a message, you’ll get a 200 and a response of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{&quot;ok&quot;:false,&quot;error&quot;:&quot;msg_blocks_too_long&quot;}&lt;/code&gt; which is frustrating. At least give me a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;400&lt;/code&gt; error!&lt;/p&gt;
+
+&lt;p&gt;This error has the wonderful explanation in the &lt;a href=&quot;https://api.slack.com/methods/chat.postMessage#errors&quot;&gt;docs&lt;/a&gt;.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;msg_blocks_too_long [hidden]	msg blocks too long (generated)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Slack support were lovely, but essentially wondering why would I do such a thing, and suggested I just don’t send as many emojis 😔&lt;/p&gt;
+
+&lt;h3 id=&quot;max-length--max-length&quot;&gt;Max length != max length&lt;/h3&gt;
+&lt;p&gt;The number of slackmojis you can send seems to vary, though on what I’m not sure. The message needs to be less than 40k characters long, but it also seems to depend on which slackmoji you want to send. It seems that you can only send about half as many animated slackmojis… Which seems to be for the best. The client gets &lt;em&gt;slow&lt;/em&gt; when you send 5 messages, each with &lt;em&gt;only&lt;/em&gt; 1,100 animated slackmojis.&lt;/p&gt;
+
+&lt;h2 id=&quot;tldr&quot;&gt;TLDR&lt;/h2&gt;
+&lt;p&gt;You should put sensible limits and validation on your API requests (+1 Slack) and document them (-1 Slack)&lt;/p&gt;
+
+&lt;p&gt;Why? Someone will try to push them at some point, and it’s not always someone wanting to have a bit of innocent fun in a slack thread…&lt;/p&gt;
+
+&lt;p&gt;Here’s a gif of the laggy aftermath&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/2021-08-05-always-document-api-limitations/laggy-rendering.gif&quot; alt=&quot;Slack rendering over 2,000 animated slackmojis judderingly&quot; width=&quot;720&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;sample-code&quot;&gt;Sample code&lt;/h2&gt;
+&lt;p&gt;Please only use this for innocent fun, where you have permission as it can really slow a slack client if it has to render too many slackmojis.&lt;/p&gt;
+
+&lt;p&gt;This is provided under an &lt;a href=&quot;https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt&quot;&gt;MIT license&lt;/a&gt; and I hold no responsibility for how you choose to use it.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;http.client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urllib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Replace
+# TOKEN with your bearer token like xoxc-
+# COOKIE with your browser cookies, you can get this from the network tab
+# CHANNEL with the channel, something like DD95R8TDY, it'll be the second level in your browser ie $2 in https://app.slack.com/client/$1/$2
+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# If you want to reply to a thread replace
+# THREAD with the thread_ts from inspecting the URL of the thread it'll be the fourth level in your browser ie $3 in  https://app.slack.com/client/$1/$2/thread/$2-$3
+# otherwise remove &quot;thread_ts&quot;: &quot;THREAD&quot;,
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HTTPSConnection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;slack.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Content-type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;application/json; charset=utf-8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Authorization&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Bearer TOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;cookie&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;COOKIE&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;extrathonk&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;',{&quot;type&quot;:&quot;emoji&quot;,&quot;name&quot;:&quot;thonking-intensifies&quot;},'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;40600&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'{&quot;type&quot;:&quot;emoji&quot;,&quot;name&quot;:&quot;thonking-intensifies&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;',{&quot;type&quot;:&quot;emoji&quot;,&quot;name&quot;:&quot;thonking-intensifies&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;',{&quot;type&quot;:&quot;emoji&quot;,&quot;name&quot;:&quot;thonking-intensifies&quot;},'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;',{&quot;type&quot;:&quot;emoji&quot;,&quot;name&quot;:&quot;thonking-intensifies&quot;}'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'{&quot;channel&quot;: &quot;CHANNEL&quot;, &quot;thread_ts&quot;: &quot;THREAD&quot;,  &quot;blocks&quot;: [{&quot;type&quot;:&quot;rich_text&quot;,&quot;elements&quot;:[{&quot;type&quot;:&quot;rich_text_section&quot;,&quot;elements&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;‎&quot;}, %s]}]}]}'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extrathonk&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POST&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/api/chat.postMessage&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getresponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# response.reason Required as Slack will return a 200, even if your message fails due to &quot;msg_blocks_too_long&quot;.
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Nonsense" /><summary type="html">Slackmojis and API limits During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”</summary></entry><entry><title type="html">Welcome to Tales From Prod!</title><link href="https://tales.fromprod.com/2021/08/03/welcome-to-tales-from-prod/" rel="alternate" type="text/html" title="Welcome to Tales From Prod!" /><published>2021-08-03T15:00:00-05:00</published><updated>2021-08-03T15:00:00-05:00</updated><id>https://tales.fromprod.com/2021/08/03/welcome-to-tales-from-prod</id><content type="html" xml:base="https://tales.fromprod.com/2021/08/03/welcome-to-tales-from-prod/">&lt;p&gt;This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”&lt;/p&gt;</content><author><name></name></author><summary type="html">This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”</summary></entry></feed>
