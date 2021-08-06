@@ -41,9 +41,11 @@ exclude:
 #   - vendor/gems/
 #   - vendor/ruby/
 
+# So pages by default have a nice URL that's not going to change with category refinement.
+permalink: /:year/:y_day/:title:output_ext
+
 # Theme config
 color_scheme: "dark"
-permalink: pretty
 search_enabled: true
 heading_anchors: true
-footer_content: "Copyright &copy; 2021 Richard Tweed. All views expressed are my own"
+footer_content: "Copyright &copy; 2021 Richard Finlay Tweed. All rights reserved. All views expressed are my own"

@@ -70,7 +70,7 @@ Here's a gif of the laggy aftermath
 ## Sample code
 Please only use this for innocent fun, where you have permission as it can really slow a slack client if it has to render too many slackmojis.
 
-This is provided under an [MIT license](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt) and I hold no responsibility for how you choose to use it.
+This snippet is provided under an [MIT license](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt) and I hold no responsibility for how you choose to use it.
 
 ```python
 import http.client, urllib.parse
