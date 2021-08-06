@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Slack-mojis, and why documenting API limitations helps!"
-date:   2021-08-04 20:00:00 -0000
-categories: slack api nonsense
+date:   2021-08-05 20:00:00 -0000
+categories: [Slack, APIs,  Nonsense]
 ---
 # Slackmojis and API limits
 During a "discussion" on our slack channel about long... thonks, a question occurred - "Just how many slackmojis can be sent in a slack message?"
@@ -21,12 +21,9 @@ python3 -c 'print(":longthonk1:" + ":longthonk2::longthonk3::longthonk4:" * ((40
 Also, turns out `xargs -J` can't interpolate 40k characters, and `xargs -I` can only do even fewer. The `-J` doesn't throw an error, it'll only put the characters afterwards as if that flag is ignored. Who knew?
 
 ### What happened
-So, you can paste this in and wait a *long* time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great video in real time
+So, you can paste this in and wait a *long* time, as the slack client seems to parse the message for each slackmoji and then render it leading to the following great gif in real time
 
-<video width="610" controls>
-  <source src="/assets/2021-08-05-always-document-api-limitations/slow-decoding.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
+<img src="/static/2021-08-05-always-document-api-limitations/slow-decoding.gif" alt="Slack slowly parsing the message and rendering one slackmoji at a time"  width="610" />
 
 Once it renders the message, nothing happens if you click the send button.
 
@@ -66,13 +63,9 @@ You should put sensible limits and validation on your API requests (+1 Slack) an
 
 Why? Someone will try to push them at some point, and it's not always someone wanting to have a bit of innocent fun in a slack thread...
 
-Here's a video of the laggy aftermath
+Here's a gif of the laggy aftermath
 
-<video width="720" controls>
-  <source src="/assets/2021-08-05-always-document-api-limitations/laggy-rendering.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
-
+<img src="/static/2021-08-05-always-document-api-limitations/laggy-rendering.gif" alt="Slack rendering over 2,000 animated slackmojis judderingly"  width="720" />
 
 ## Sample code
 Please only use this for innocent fun, where you have permission as it can really slow a slack client if it has to render too many slackmojis.
