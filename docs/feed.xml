@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-10T13:56:50+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/222/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-10T03:00:00+01:00</published><updated>2021-08-10T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/222/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/222/managing-google-groups-via-api.html">&lt;h1 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-10T18:02:46+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/222/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-10T03:00:00+01:00</published><updated>2021-08-10T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/222/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/222/managing-google-groups-via-api.html">&lt;h1 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
 &lt;p&gt;Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -47,50 +47,8 @@
 
 &lt;p&gt;The following is pseudo code and won’t compile without changes&lt;/p&gt;
 
-&lt;div class=&quot;language-golang highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+&lt;div class=&quot;language-golang highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;//TODO Add the code that's currently in main.go&lt;/span&gt;
 
-&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;//Whatever other deps you need go here&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;goption&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;google.golang.org/api/option&quot;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;google.golang.org/api/cloudidentity/v1&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-
-  &lt;span class=&quot;c&quot;&gt;// Create your goptions from your credential file.&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// This is the Service Account Key you downloaded during&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// The prerequisites.&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;goptions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;goption&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WithCredentialsFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/some/file/location.json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-  &lt;span class=&quot;c&quot;&gt;// Next you'll want to get the group you're interested in&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// The only way I found was to get all accessible groups&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// Then filter for the relevant email address&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;groupsService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewGroupsService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;gsl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groupsService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// Replace CXXXXXXXX with the customer number&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// you got during prerequisites&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;gsl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Parent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;customers/CXXXXXXXX&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;listedGroupsResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gsl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;listedGroups&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;listedGroupsResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Groups&lt;/span&gt;
-
-  &lt;span class=&quot;c&quot;&gt;// The email address of the Group is actually the &quot;GroupKey.Id&quot;&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// logging out the first email address as we'll pretend that's what we want&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// Rather than taking the first element, you would loop through and select&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;// the one you want&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;relevantGroup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;listedGroups&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Email address of group was %+v&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-  &lt;span class=&quot;c&quot;&gt;// Now to get the membership of the group, so we can see the emails of the current members&lt;/span&gt;
-  
-
-
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Google" /><category term="APIs" /><category term="Golang" /><category term="Go" /><summary type="html">Managing Google Groups via the API, despite their best efforts Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.</summary></entry><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/2021/217/always-document-api-limitations.html" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-05T21:00:00+01:00</published><updated>2021-08-05T21:00:00+01:00</updated><id>https://tales.fromprod.com/2021/217/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/2021/217/always-document-api-limitations.html">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
 &lt;p&gt;During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”&lt;/p&gt;
 

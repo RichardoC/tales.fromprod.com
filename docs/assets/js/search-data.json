@@ -31,7 +31,7 @@
   },"5": {
     "doc": "Useful resources",
     "title": "Security",
-    "content": ". | https://cloudseclist.com/ . | Run by Marco Lancini, great resource for cloud security articles | . | . ",
+    "content": ". | https://cloudseclist.com/ . | Run by Marco Lancini, great resource for cloud security articles | . | NSA guide to hardening Kubernetes . | Unexpected resource, but seems a reasonable baseline. | . | . ",
     "url": "https://tales.fromprod.com/useful-resources.html#security",
     "relUrl": "/useful-resources.html#security"
   },"6": {

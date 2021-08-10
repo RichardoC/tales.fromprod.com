@@ -39,50 +39,8 @@ These steps should be equivalent for other languages, but haven't tried.
 The following is pseudo code and won't compile without changes
 
 ```golang
-package main
+//TODO Add the code that's currently in main.go
 
-import (
-  //Whatever other deps you need go here
-
-  goption "google.golang.org/api/option"
-  cloudidentity "google.golang.org/api/cloudidentity/v1"
-)
-
-func main() {
-
-  // Create your goptions from your credential file.
-  // This is the Service Account Key you downloaded during
-  // The prerequisites.
-  goptions := goption.WithCredentialsFile("/some/file/location.json")
-
-  // Next you'll want to get the group you're interested in
-  // The only way I found was to get all accessible groups
-  // Then filter for the relevant email address
-
-  groupsService := cloudidentity.NewGroupsService(cis)
-	gsl := groupsService.List()
-  // Replace CXXXXXXXX with the customer number
-  // you got during prerequisites
-	gsl.Parent("customers/CXXXXXXXX")
-	listedGroupsResponse, err := gsl.Do()
-	if err != nil {
-		log.Error(err)
-	}
-
-  listedGroups := listedGroupsResponse.Groups
-
-  // The email address of the Group is actually the "GroupKey.Id"
-  // logging out the first email address as we'll pretend that's what we want
-  // Rather than taking the first element, you would loop through and select
-  // the one you want
-  relevantGroup := listedGroups[0]
-  log.Info("Email address of group was %+v", group.GroupKey.Id)
-
-  // Now to get the membership of the group, so we can see the emails of the current members
-  
-
-
-}
 ```
 
 
