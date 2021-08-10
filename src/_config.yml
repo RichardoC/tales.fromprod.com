@@ -44,6 +44,8 @@ exclude:
 # So pages by default have a nice URL that's not going to change with category refinement.
 permalink: /:year/:y_day/:title:output_ext
 
+timezone: Europe/London
+
 # Theme config
 color_scheme: "dark"
 search_enabled: true
