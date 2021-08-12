@@ -21,10 +21,10 @@ A golang binary which manages the membership of a Google Group for you. The step
 * A paid for Google Workspace
 * A Google cloud Service Account (SA)
   * An API key for that SA
-  * To record the email address of that SA
+  * The email address of that SA
   * This SA requires **no permissions at all** in the cloud console
 * The magic "Customer ID"
-  * This can only be obtained through the steps on <https://support.google.com/a/answer/10070793?hl=en> by a workspace admin
+  * TThis can only be obtained by a workspace admin , via the steps on <https://support.google.com/a/answer/10070793?hl=en>
 * The google group you wish to manage
   * You should add the SA's email address as an "OWNER" of that group, and change the subscription to "no emails" as it can't receive them.
 
