@@ -16,6 +16,8 @@ This page contains various resources I've found useful, one way or another
 ## Security
 - [https://cloudseclist.com/](https://cloudseclist.com/)
     - Run by Marco Lancini, great resource for cloud security articles
+- [NSA guide to hardening Kubernetes](https://media.defense.gov/2021/Aug/03/2002820425/-1/-1/1/CTR_KUBERNETES%20HARDENING%20GUIDANCE.PDF)
+    - Unexpected resource, but seems a reasonable baseline.
 
 ## Build system(s)
 - [Please](https://please.build)
