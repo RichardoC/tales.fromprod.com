@@ -106,7 +106,10 @@ func main() {
 	// Now to get the membership of the group, so we can see the emails of the current members
 
 	gms := cloudidentity.NewGroupsMembershipsService(cis)
+
+	// Response containing list of memberships
 	lmr, err := gms.List(groupName).Do()
+	// Pulling out just the memberships
 	currentMemberships := lmr.Memberships
 
 	var currentEmails []string
