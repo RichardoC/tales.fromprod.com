@@ -10,7 +10,7 @@ Google have made it difficult to do this, they somewhat document two different A
 * [Using the directory API](https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups)
 * [Using the Cloud Identity APIs - newer and seems to be preferred going forward](https://cloud.google.com/identity/docs/how-to/create-dynamic-groups)
 
-At the time of writing, this are not sufficiently detailed to do more than work out those are the APIs to use. That's where this guide comes in.
+At the time of writing, these are not sufficiently detailed to do more than work out those are the APIs to use. That's where this guide comes in.
 
 ## What this will help you achieve
 
