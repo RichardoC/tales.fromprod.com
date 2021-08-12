@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Managing Google Groups via the API, aka what they don't want you to do!"
-date:   2021-08-10 2:00:00
+date:   2021-08-11 2:00:00
 categories: [Google, APIs,  Golang, Go]
 ---
 # Managing Google Groups via the API, despite their best efforts
