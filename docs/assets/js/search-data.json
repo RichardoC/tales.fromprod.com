@@ -1,0 +1,50 @@
+{"0": {
+    "doc": "About",
+    "title": "About",
+    "content": "Welcome to Richard Tweed’s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he’s been tinkering with. | GitHub | Linkedin | Email | . ",
+    "url": "https://tales.fromprod.com/about/",
+    "relUrl": "/about/"
+  },"1": {
+    "doc": "Archive",
+    "title": "Archive",
+    "content": "This year's posts . | 10 Aug - Managing Google Groups via the API, aka what they don't want you to do! | 05 Aug - Slack-mojis, and why documenting API limitations helps! | 03 Aug - Welcome to Tales From Prod! | . ",
+    "url": "https://tales.fromprod.com/",
+    "relUrl": "/"
+  },"2": {
+    "doc": "Categories",
+    "title": "Categories",
+    "content": ". Slack . Slack-mojis, and why documenting API limitations helps! . APIs . Managing Google Groups via the API, aka what they don't want you to do! . Slack-mojis, and why documenting API limitations helps! . Nonsense . Slack-mojis, and why documenting API limitations helps! . Google . Managing Google Groups via the API, aka what they don't want you to do! . Golang . Managing Google Groups via the API, aka what they don't want you to do! . Go . Managing Google Groups via the API, aka what they don't want you to do! . ",
+    "url": "https://tales.fromprod.com/categories/",
+    "relUrl": "/categories/"
+  },"3": {
+    "doc": "Useful resources",
+    "title": "Useful Resouces",
+    "content": "This page contains various resources I’ve found useful, one way or another . ",
+    "url": "https://tales.fromprod.com/useful-resources.html#useful-resouces",
+    "relUrl": "/useful-resources.html#useful-resouces"
+  },"4": {
+    "doc": "Useful resources",
+    "title": "Kubernetes",
+    "content": ". | https://brennerm.github.io/posts/kubernetes-overview-diagrams.html . | Buzzword bingo for Kubernetes, and nicely shows how they are linked | . | . Kubernetes Networking . | Networking deep dive video . | Delves into the complexity of Kubernetes networking | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources.html#kubernetes",
+    "relUrl": "/useful-resources.html#kubernetes"
+  },"5": {
+    "doc": "Useful resources",
+    "title": "Security",
+    "content": ". | https://cloudseclist.com/ . | Run by Marco Lancini, great resource for cloud security articles | . | NSA guide to hardening Kubernetes . | Unexpected resource, but seems a reasonable baseline. | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources.html#security",
+    "relUrl": "/useful-resources.html#security"
+  },"6": {
+    "doc": "Useful resources",
+    "title": "Build system(s)",
+    "content": ". | Please . | An extensible build system | . | Pleasings . | Useful build rules for the Please build system | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources.html#build-systems",
+    "relUrl": "/useful-resources.html#build-systems"
+  },"7": {
+    "doc": "Useful resources",
+    "title": "Useful resources",
+    "content": " ",
+    "url": "https://tales.fromprod.com/useful-resources.html",
+    "relUrl": "/useful-resources.html"
+  }
+}

@@ -12,9 +12,9 @@ Google have made it difficult to do this, they somewhat document two different A
 
 At the time of writing, this are not sufficiently detailed to do more than work out those are the APIs to use. That's where this guide comes in.
 
-## What you'll achieve by the end of this and why you care//rephrase
+## What this will help you achieve
 
-A google group who's membership is managed (via email address) by a Golang binary. The steps will apply to the other language client libraries
+A golang binary which manages the membership of a Google Group for you. The steps will likely apply to the other language client libraries
 
 ## Prerequisites
 * Google Cloud Identity Premium
@@ -24,17 +24,14 @@ A google group who's membership is managed (via email address) by a Golang binar
   * To record the email address of that SA
   * This SA requires **no permissions at all** in the cloud console
 * The magic "Customer ID"
-  * This can only be obtained through the steps on [https://support.google.com/a/answer/10070793?hl=en] by a workspace admin
+  * This can only be obtained through the steps on <https://support.google.com/a/answer/10070793?hl=en> by a workspace admin
 * The google group you wish to manage
   * You should add the SA's email address as an "OWNER" of that group, and change the subscription to "no emails" as it can't receive them.
 
-## Managing Google Group membership in Golang
-These steps should be equivalent for other languages, but haven't tried.
-
 ### Dependencies
 * A source of email addresses to add to your group
-* The (cloud identity client library)[https://pkg.go.dev/google.golang.org/api@v0.51.0/cloudidentity/v1]
-* The (Google API options library)[https://pkg.go.dev/google.golang.org/api@v0.52.0/option]
+* The [cloud identity client library](https://pkg.go.dev/google.golang.org/api@v0.51.0/cloudidentity/v1)
+* The [Google API options library](https://pkg.go.dev/google.golang.org/api@v0.52.0/option)
 
 The following is example code and won't compile without changes, and lacks niceties like error handling and retrying in the face of inevitable errors.
 
@@ -157,9 +154,8 @@ func main() {
 	// Now to remove the extra members
 
 	// Have a horrible loop as there doesn't seem to be a nice way to get a membership ID...
-  // MembershipLookupCall doesn't exist :(
-    
-  )
+	// MembershipLookupCall doesn't exist :(
+
 	for _, email := range emailsForRemoval {
 
 		found := false
@@ -177,7 +173,6 @@ func main() {
 		}
 		if !found {
 			log.Error(err)
-			errorsEncountered++
 			continue
 		}
 
