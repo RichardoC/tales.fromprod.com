@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-12T16:56:19+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-11T03:00:00+01:00</published><updated>2021-08-11T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html">&lt;h1 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-08-30T23:56:10+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-11T03:00:00+01:00</published><updated>2021-08-11T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html">&lt;h1 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
 &lt;p&gt;Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -19,13 +19,13 @@
   &lt;li&gt;A Google cloud Service Account (SA)
     &lt;ul&gt;
       &lt;li&gt;An API key for that SA&lt;/li&gt;
-      &lt;li&gt;To record the email address of that SA&lt;/li&gt;
+      &lt;li&gt;The email address of that SA&lt;/li&gt;
       &lt;li&gt;This SA requires &lt;strong&gt;no permissions at all&lt;/strong&gt; in the cloud console&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;The magic “Customer ID”
     &lt;ul&gt;
-      &lt;li&gt;This can only be obtained through the steps on &lt;a href=&quot;https://support.google.com/a/answer/10070793?hl=en&quot;&gt;https://support.google.com/a/answer/10070793?hl=en&lt;/a&gt; by a workspace admin&lt;/li&gt;
+      &lt;li&gt;TThis can only be obtained by a workspace admin , via the steps on &lt;a href=&quot;https://support.google.com/a/answer/10070793?hl=en&quot;&gt;https://support.google.com/a/answer/10070793?hl=en&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;The google group you wish to manage
@@ -112,7 +112,10 @@
 	&lt;span class=&quot;c&quot;&gt;// Now to get the membership of the group, so we can see the emails of the current members&lt;/span&gt;
 
 	&lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewGroupsMembershipsService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Response containing list of memberships&lt;/span&gt;
 	&lt;span class=&quot;n&quot;&gt;lmr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Pulling out just the memberships&lt;/span&gt;
 	&lt;span class=&quot;n&quot;&gt;currentMemberships&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lmr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Memberships&lt;/span&gt;
 
 	&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;

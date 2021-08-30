@@ -42,6 +42,12 @@
     "relUrl": "/useful-resources.html#build-systems"
   },"7": {
     "doc": "Useful resources",
+    "title": "Docker",
+    "content": "Tips and tricks . | .dockerignore . | Taking advantage of .dockerignore to reduce docker build times, and reduce sensitive data exposure | . | . ",
+    "url": "https://tales.fromprod.com/useful-resources.html#docker",
+    "relUrl": "/useful-resources.html#docker"
+  },"8": {
+    "doc": "Useful resources",
     "title": "Useful resources",
     "content": " ",
     "url": "https://tales.fromprod.com/useful-resources.html",

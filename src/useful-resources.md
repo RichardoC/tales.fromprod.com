@@ -24,3 +24,8 @@ This page contains various resources I've found useful, one way or another
     - An extensible build system
 - [Pleasings](https://github.com/thought-machine/pleasings)
     - Useful build rules for the Please build system
+
+## Docker
+### Tips and tricks
+- [.dockerignore](https://medium.com/hackernoon/do-not-ignore-dockerignore-47f5fb67b448)
+    - Taking advantage of `.dockerignore` to reduce docker build times, and reduce sensitive data exposure
