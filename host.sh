@@ -15,4 +15,4 @@ elif [ -x "$(command -v nerdctl)" ]; then
 fi
 
 
-$_BINARY run --rm --publish 127.0.0.1:4000:4000 --volume="$(pwd):/srv/jekyll:rw" --volume="$(pwd)/.gemdata:/usr/local/bundle:rw" -it jekyll/jekyll:$JEKYLL_VERSION jekyll serve -s /srv/jekyll/src -d /srv/jekyll/docs-tmp --watch --incremental
+$_BINARY run --rm --p 4000:4000 --volume="$(pwd):/srv/jekyll:rw" -it jekyll/jekyll:$JEKYLL_VERSION jekyll serve -s /srv/jekyll/src -d /srv/jekyll/docs-tmp --watch --incremental
