@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn't!"
-date:   2021-11-21 14:00:00
+date:   2021-11-28 14:00:00
 categories: [Kubernetes,  QEMU]
 ---
 # Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn't!
@@ -117,6 +117,12 @@ sudo vim /etc/dhcpcd.conf
 
 # at the very bottom add, without the #
 # interface br0
+
+```
+Next is to let QEMU use this bridge, largely following <https://wiki.archlinux.org/title/QEMU#Bridged_networking_using_qemu-bridge-helper>
+
+
+```bash
 
 ```
 
