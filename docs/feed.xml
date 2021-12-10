@@ -1,4 +1,253 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-11-24T18:42:52+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</title><link href="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html" rel="alternate" type="text/html" title="How Slack and Discord prevent you scanning Infrastructure with link previews" /><published>2021-08-11T20:00:00+01:00</published><updated>2021-08-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html">&lt;h1 id=&quot;how-slack-and-discord-prevent-you-scanning-infrastructure-with-link-previews&quot;&gt;How Slack and Discord prevent you scanning Infrastructure with link previews&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T15:18:24+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
+
+&lt;p&gt;While this guide does work, don’t do this. Emulation is &lt;em&gt;slow&lt;/em&gt; and Raspberry Pi CPUs (even overclocked to 2GHz) are slower!&lt;/p&gt;
+
+&lt;p&gt;Also, you have to use x86_64 emulation (rather than KVM) because Pis use an ARM instruction set rather than x86.&lt;/p&gt;
+
+&lt;h1 id=&quot;cpu-benchmark-for-slowness&quot;&gt;CPU benchmark for slowness&lt;/h1&gt;
+&lt;p&gt;This benchmark is terrible, but gives an indication of single threaded performance&lt;/p&gt;
+
+&lt;h1 id=&quot;on-my-macbook&quot;&gt;On my macbook&lt;/h1&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#On my work machine&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;time dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/urandom &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/null &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2000000 &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
+
+real	0m4.264s
+user	0m0.000s
+sys	0m4.264s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edited&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# On a VM on k3s-005&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/urandom &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/null &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2000000 &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
+
+real 0m 19.08s
+user 0m 0.03s
+sys 0m 18.94s
+
+&lt;span class=&quot;c&quot;&gt;# Natively on that Pi&lt;/span&gt;
+pi@node-005:~ &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/urandom &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/null &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2000000 &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
+
+real	0m2.784s
+user	0m0.004s
+sys	0m2.769s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;architecture&quot;&gt;Architecture&lt;/h2&gt;
+
+&lt;div align=&quot;center&quot;&gt;x86_64 Application&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;Kubernetes (k3s)&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;QEMU x86_64 emulation&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;Raspberry Pis&lt;/div&gt;
+
+&lt;h1 id=&quot;equipment-in-use&quot;&gt;Equipment in use&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;4 * Pi 4 8GB&lt;/li&gt;
+  &lt;li&gt;SSD enclosure per Pi supporting UASP&lt;/li&gt;
+  &lt;li&gt;SSD per Pi&lt;/li&gt;
+  &lt;li&gt;Ethernet switch&lt;/li&gt;
+  &lt;li&gt;A router&lt;/li&gt;
+  &lt;li&gt;Power&lt;/li&gt;
+  &lt;li&gt;misc cables&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;oss-in-use&quot;&gt;OSs in use&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Raspbian 64 bit on the Pis&lt;/li&gt;
+  &lt;li&gt;Alpine in the x86_64 VMs&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;setting-up-the-pis&quot;&gt;Setting up the Pis&lt;/h2&gt;
+
+&lt;p&gt;We installed 64 bit Raspbian on the SSDs and booted from them.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-the-dependencies&quot;&gt;Installing the dependencies&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt upgrade &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; qemu nmon virtinst qemu-utils qemu-system-x86 tmux vim dnsmasq-utils dnsmasq-base iptables libvirt-daemon-system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;overclocking-the-pis&quot;&gt;Overclocking the Pis&lt;/h3&gt;
+&lt;p&gt;The Raspberry Pi doesn’t have the fastest CPU, so we overclocked it to 2GHz and over_voltage 6 to keep the warranty. Full guide &lt;a href=&quot;https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/&quot;&gt;https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;setting-up-the-qemu-groups&quot;&gt;Setting up the QEMU groups&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;groupadd libvirt-qemu
+groupadd libvirt
+groupadd libvirtd
+useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; libvirt-qemu libvirt-qemu
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;setting-up-swap-in-case-its-need-since-8gb-ram-isnt-much&quot;&gt;Setting up swap (in case it’s need since 8GB RAM isn’t much)&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Create and mount swap&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;fallocate &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; 64G /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod &lt;/span&gt;600 /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;mkswap /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;swapon /swapfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Next add an entry to fstab so that the swap is mounted on boot.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;echo '/swapfile swap swap defaults 0 0' &amp;gt;&amp;gt; /etc/fstab&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Next check that trim works on the PI, if it’s working you should get something similar to the following&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo fstrim -av
+/boot: 0 B (0 bytes) trimmed
+/: 19.9 GiB (21294051328 bytes) trimmed
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;If this fails, you’ll need to follow &lt;a href=&quot;https://www.jeffgeerling.com/blog/2020/enabling-trim-on-external-ssd-on-raspberry-pi&quot;&gt;https://www.jeffgeerling.com/blog/2020/enabling-trim-on-external-ssd-on-raspberry-pi&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Due to the high volume of writes expected since the SSD will be used as RAM, configure TRIM to run frequently to prevent rapid deterioration of the SSD.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# trimming every 2 min:&lt;/span&gt;
+Sudo vi /lib/systemd/system/fstrim.timer
+&lt;span class=&quot;c&quot;&gt;# change:&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Timer]
+&lt;span class=&quot;nv&quot;&gt;OnCalender&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;:0/2
+&lt;span class=&quot;nv&quot;&gt;AccuracySec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl daemon-reload
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;setting-up-the-bridge-networking-so-the-vms-can-connect-directly-helpful-for-k8s&quot;&gt;Setting up the Bridge networking so the VMs can connect directly (helpful for k8s)&lt;/h3&gt;
+&lt;p&gt;Largely following &lt;a href=&quot;https://www.raspberrypi.com/documentation/computers/configuration.html#bridging&quot;&gt;https://www.raspberrypi.com/documentation/computers/configuration.html#bridging&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;echo '[NetDev]
+Name=br0
+Kind=bridge
+' &amp;gt;&amp;gt; /etc/systemd/network/bridge-br0.netdev&quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;echo '[Match]
+Name=eth0
+
+[Network]
+Bridge=br0
+' &amp;gt;&amp;gt; /etc/systemd/network/bridge-br0.netdev&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;systemd-networkd
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Next ensure that eth0 is on the bridge network, and it’s the bridge that does dhcp rather than other interfaces&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vim /etc/dhcpcd.conf
+&lt;span class=&quot;c&quot;&gt;# At top add the following, without the #&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# denyinterfaces wlan0 eth0&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# at the very bottom add, without the #&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# interface br0&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Next is to let QEMU use this bridge, largely following &lt;a href=&quot;https://wiki.archlinux.org/title/QEMU#Bridged_networking_using_qemu-bridge-helper&quot;&gt;https://wiki.archlinux.org/title/QEMU#Bridged_networking_using_qemu-bridge-helper&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo mkdir&lt;/span&gt; /etc/qemu
+
+Sudo vim /etc/qemu/bridge.conf
+
+allow br0
+
+
+&lt;span class=&quot;c&quot;&gt;# Add all that into a script (run as root):&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#!bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOT&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt; /etc/systemd/network/bridge-br0.netdev
+[NetDev]
+Name=br0
+Kind=bridge
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOT
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOT&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt; /etc/systemd/network/br0-member-eth0.network
+[Match]
+Name=eth0
+
+[Network]
+Bridge=br0
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOT
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'1s/^/denyinterfaces wlan0 eth0 \n/'&lt;/span&gt; /etc/dhcpcd.conf
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;interface br0&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; /etc/dhcpcd.conf
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/etc/qemu&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
+  &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; /etc/qemu
+&lt;span class=&quot;k&quot;&gt;fi
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;allow br0&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /etc/qemu/bridge.conf
+
+
+&lt;span class=&quot;c&quot;&gt;#then need to execute later&lt;/span&gt;
+systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;system-networkd
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;running-the-x86-vm&quot;&gt;Running the x86 VM&lt;/h3&gt;
+&lt;p&gt;For the VM we used Alpine as it’s a light OS and compatible with k3s. You can choose your download from https://alpinelinux.org/downloads/&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-virt-3.15.0-x86_64.iso
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Next you’ll have to create a disk image for the Alpine VM, we created a 128GB sparse image given the size of the SSDs we used.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;qemu-img create &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; qcow2 alpine.qcow2 128G
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now to run the VM, this command must be run from a display because it attempts to open a window. It is possible to do this in a headless fashion, but we couldn’t get that working.
+Each VM needs a unique mac address for the networking to work correctly&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;qemu-system-x86_64 &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; alpine-node &lt;span class=&quot;nt&quot;&gt;-drive&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/pi/alpine.qcow2 &lt;span class=&quot;nt&quot;&gt;-smp&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;cpus&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; 60G,slots&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;4,maxmem&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;61G &lt;span class=&quot;nt&quot;&gt;-accel&lt;/span&gt; tcg,thread&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;multi &lt;span class=&quot;nt&quot;&gt;-nic&lt;/span&gt; bridge,br&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;br0,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio-net-pci,mac&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;52:54:00:12:34:50
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Exciting options, 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-accel tcg,thread=multi&lt;/code&gt; enables the VM to use multiple host cores
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;virtio-net-pci&lt;/code&gt; allows a virtual nic that works with the bridge configured.&lt;/p&gt;
+
+&lt;p&gt;You should ensure each of these VMs have a unique hostname, and a static IP in your router. This will make k3s configuration much easier&lt;/p&gt;
+
+&lt;h2 id=&quot;configuring-k3s&quot;&gt;Configuring k3s&lt;/h2&gt;
+&lt;p&gt;For our setup, one Pi ran the k3s control plane natively (and didn’t have a VM running) and the other Pis each had a VM running. Those VMs were joined to the k3s cluster as worker nodes.&lt;/p&gt;
+
+&lt;p&gt;Before installing on the control node, follow &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/advanced/#enabling-legacy-iptables-on-raspbian-buster&quot;&gt;https://rancher.com/docs/k3s/latest/en/advanced/#enabling-legacy-iptables-on-raspbian-buster&lt;/a&gt; to set up iptables correctly and &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/advanced/#enabling-cgroups-for-raspbian-buster&quot;&gt;https://rancher.com/docs/k3s/latest/en/advanced/#enabling-cgroups-for-raspbian-buster&lt;/a&gt; to set up cgroups correctly.&lt;/p&gt;
+
+&lt;p&gt;Before installing on the (virtual) worker nodes, follow &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup&quot;&gt;https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-the-control-plane&quot;&gt;Installing the control-plane&lt;/h3&gt;
+
+&lt;p&gt;Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet…&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
+apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; curl
+curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | sh -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;prevent-pods-running-on-control-plane&quot;&gt;Prevent pods running on control plane&lt;/h2&gt;
+&lt;p&gt;It’s generally a bad idea to run workloads on your control plane, especially in this case as our workloads with be x86 but the control plane is ARM64.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl taint nodes node-0001 node-role.kubernetes.io/master&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;:NoSchedule
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;adding-worker-nodes&quot;&gt;Adding worker nodes&lt;/h3&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+apk add curl &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | &lt;span class=&quot;nv&quot;&gt;K3S_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://node-001:6443 &lt;span class=&quot;nv&quot;&gt;K3S_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;SomeTokenFromControlPlane sh -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With this&lt;/p&gt;
+
+&lt;h2 id=&quot;success&quot;&gt;Success?&lt;/h2&gt;
+&lt;p&gt;If you’re successful, you should have a working k3s cluster with workloads running on x86 (slowly!)&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pi@node-001:~ &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get nodes
+NAME                            STATUS   ROLES                  AGE    VERSION
+node-001                        Ready    control-plane,master   105m   v1.21.5+k3s2
+k3s-002                         Ready    control-plane,master   100m   v1.21.5+k3s2
+k3s-003                         Ready    control-plane,master   90m   v1.21.5+k3s2
+k3s-004                         Ready    control-plane,master   80m   v1.21.5+k3s2
+k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3s2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;why-you-shouldnt-do-this&quot;&gt;Why you shouldn’t do this&lt;/h2&gt;
+
+&lt;p&gt;Over 1.5 cores of the Pi is used by &lt;em&gt;k3s&lt;/em&gt;, nevermind the workloads we want to run!&lt;/p&gt;
+
+&lt;p&gt;Here’s a simple &lt;a href=&quot;https://github.com/reactive-tech/kubegres&quot;&gt;pod&lt;/a&gt; which didn’t manage to start, even after 5 mins due to the CPU limitations.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pi@node-001:~ &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;kubectl get pod &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt;
+NAME                                              READY   STATUS              RESTARTS   AGE
+kubegres-controller-manager-75b6765589-kvr97      1/2     ContainerCreating   0          4m54s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
+&lt;p&gt;Don’t run x86 on Pis, especially not on kubernetes!&lt;/p&gt;</content><author><name></name></author><category term="Kubernetes" /><category term="QEMU" /><summary type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</summary></entry><entry><title type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</title><link href="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html" rel="alternate" type="text/html" title="How Slack and Discord prevent you scanning Infrastructure with link previews" /><published>2021-08-11T20:00:00+01:00</published><updated>2021-08-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html">&lt;h1 id=&quot;how-slack-and-discord-prevent-you-scanning-infrastructure-with-link-previews&quot;&gt;How Slack and Discord prevent you scanning Infrastructure with link previews&lt;/h1&gt;
 
 &lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;
 This is based on conjecture for Discord, and reading some Slack docs. This is not based on statements from them.&lt;/p&gt;
