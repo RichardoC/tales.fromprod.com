@@ -50,7 +50,7 @@ sys	0m2.769s
 
 # Equipment in use
 * 4 * Pi 4 8GB
-* SSD enclosure per Pi
+* SSD enclosure per Pi supporting UASP
 * SSD per Pi
 * Ethernet switch
 * A router
@@ -71,6 +71,9 @@ We installed 64 bit Raspbian on the SSDs and booted from them.
 sudo apt update && sudo apt upgrade -y && sudo apt install -y qemu nmon virtinst qemu-utils qemu-system-x86 tmux vim dnsmasq-utils dnsmasq-base iptables libvirt-daemon-system
 ```
 
+### Overclocking the Pis
+The Raspberry Pi doesn't have the fastest CPU, so we overclocked it to 2GHz and over_voltage 6 to keep the warranty. Full guide <https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/>
+
 ### Setting up the QEMU groups
 
 ```bash
@@ -90,6 +93,28 @@ Next add an entry to fstab so that the swap is mounted on boot.
 ```bash
 sudo su -c "echo '/swapfile swap swap defaults 0 0' >> /etc/fstab"
 ```
+Next check that trim works on the PI, if it's working you should get something similar to the following
+
+```
+sudo fstrim -av
+/boot: 0 B (0 bytes) trimmed
+/: 19.9 GiB (21294051328 bytes) trimmed
+```
+If this fails, you'll need to follow <https://www.jeffgeerling.com/blog/2020/enabling-trim-on-external-ssd-on-raspberry-pi>
+
+Due to the high volume of writes expected since the SSD will be used as RAM, configure TRIM to run frequently to prevent rapid deterioration of the SSD.
+
+```bash
+# trimming every 2 min:
+Sudo vi /lib/systemd/system/fstrim.timer
+# change:
+[Timer]
+OnCalender=*:0/2
+AccuracySec=0
+
+sudo systemctl daemon-reload
+```
+
 
 ### Setting up the Bridge networking so the VMs can connect directly (helpful for k8s)
 Largely following <https://www.raspberrypi.com/documentation/computers/configuration.html#bridging>
@@ -123,6 +148,67 @@ Next is to let QEMU use this bridge, largely following <https://wiki.archlinux.o
 
 
 ```bash
+sudo mkdir /etc/qemu
+
+Sudo vim /etc/qemu/bridge.conf
+
+allow br0
+
+
+# Add all that into a script (run as root):
+#!bin/bash
+
+cat <<EOT > /etc/systemd/network/bridge-br0.netdev
+[NetDev]
+Name=br0
+Kind=bridge
+EOT
+
+cat <<EOT > /etc/systemd/network/br0-member-eth0.network
+[Match]
+Name=eth0
+
+[Network]
+Bridge=br0
+EOT
+
+sed -i '1s/^/denyinterfaces wlan0 eth0 \n/' /etc/dhcpcd.conf
+echo "interface br0" >> /etc/dhcpcd.conf
+
+if [[ ! -d "/etc/qemu" ]]; then
+  mkdir /etc/qemu
+fi
+echo "allow br0" > /etc/qemu/bridge.conf
+
+
+#then need to execute later
+systemctl enable system-networkd
 
 ```
+
+### Running the x86 VM
+For the VM we used Alpine as it's a light OS and compatible with k3s. You can choose your download from https://alpinelinux.org/downloads/
+
+```bash
+wget https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-virt-3.15.0-x86_64.iso
+```
+Next you'll have to create a disk image for the Alpine VM, we created a 128GB sparse image given the size of the SSDs we used.
+
+```bash
+qemu-img create -f qcow2 alpine.qcow2 128G
+
+```
+
+Now to run the VM, this command must be run from a display because it attempts to open a window. It is possible to do this in a headless fashion, but we couldn't get that working.
+Each VM needs a unique mac address for the networking to work correctly
+
+```bash
+sudo qemu-system-x86_64 --name alpine-node -drive file=/home/pi/alpine.qcow2 -smp cpus=4 -m 60G,slots=4,maxmem=61G -accel tcg,thread=multi -nic bridge,br=br0,model=virtio-net-pci,mac=52:54:00:12:34:50
+```
+Exciting options, 
+`-accel tcg,thread=multi` enables the VM to use multiple host cores
+`virtio-net-pci` allows a virtual nic that works with the bridge configured.
+
+
+
 
