@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T16:08:44+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T16:35:15+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
 
 &lt;p&gt;While this guide does work, don’t do this. Emulation is &lt;em&gt;slow&lt;/em&gt; and Raspberry Pi CPUs (even overclocked to 2GHz) are slower!&lt;/p&gt;
 
@@ -13,7 +13,7 @@
 
 real	0m4.264s
 user	0m0.000s
-sys	0m4.264s &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;edited&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+sys	0m4.264s
 
 &lt;span class=&quot;c&quot;&gt;# On a VM on k3s-005&lt;/span&gt;
 &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;time dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/urandom &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/null &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2000000 &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
@@ -87,9 +87,9 @@ useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; libvirt-qemu libvirt-qe
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Next check that trim works on the PI, if it’s working you should get something similar to the following&lt;/p&gt;
 
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo fstrim -av
-/boot: 0 B (0 bytes) trimmed
-/: 19.9 GiB (21294051328 bytes) trimmed
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;fstrim &lt;span class=&quot;nt&quot;&gt;-av&lt;/span&gt;
+/boot: 0 B &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; trimmed
+/: 19.9 GiB &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;21294051328 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; trimmed
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;If this fails, you’ll need to follow &lt;a href=&quot;https://www.jeffgeerling.com/blog/2020/enabling-trim-on-external-ssd-on-raspberry-pi&quot;&gt;https://www.jeffgeerling.com/blog/2020/enabling-trim-on-external-ssd-on-raspberry-pi&lt;/a&gt;&lt;/p&gt;
 
@@ -199,8 +199,7 @@ Each VM needs a unique mac address for the networking to work correctly&lt;/p&gt
 
 &lt;p&gt;Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet…&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
 apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; curl
 curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | sh -
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -214,11 +213,10 @@ curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | sh 
 &lt;h3 id=&quot;adding-worker-nodes&quot;&gt;Adding worker nodes&lt;/h3&gt;
 &lt;p&gt;Pretty simple, &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/quick-start/#install-script&quot;&gt;full guide here.&lt;/a&gt;&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-apk add curl &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | &lt;span class=&quot;nv&quot;&gt;K3S_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://node-001:6443 &lt;span class=&quot;nv&quot;&gt;K3S_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;SomeTokenFromControlPlane sh -
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apk add curl &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | &lt;span class=&quot;nv&quot;&gt;K3S_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://node-001:6443 &lt;span class=&quot;nv&quot;&gt;K3S_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;SomeTokenFromControlPlane sh -
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;With this, the x86_64 workers nodes should be added the cluster.&lt;/p&gt;
+&lt;p&gt;With this, the x86_64 workers nodes should be added the cluster. Each node should have a unique hostname and be connectable on that hostname from all nodes.&lt;/p&gt;
 
 &lt;h2 id=&quot;success&quot;&gt;Success?&lt;/h2&gt;
 &lt;p&gt;If you’re successful, you should have a working k3s cluster with workloads running on x86 (slowly!)&lt;/p&gt;
