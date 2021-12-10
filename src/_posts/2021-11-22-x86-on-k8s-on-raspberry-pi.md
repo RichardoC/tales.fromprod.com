@@ -46,7 +46,7 @@ sys	0m2.769s
 
 <div align="center">Raspberry Pis</div>
 
-# Equipment in use
+## Equipment in use
 * 4 * Pi 4 8GB
 * SSD enclosure per Pi supporting UASP
 * SSD per Pi
