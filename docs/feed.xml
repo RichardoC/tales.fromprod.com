@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T16:41:57+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T16:44:32+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
 
 &lt;p&gt;While this guide does work, don’t do this. Emulation is &lt;em&gt;slow&lt;/em&gt; and Raspberry Pi CPUs (even overclocked to 2GHz) are slower!&lt;/p&gt;
 
 &lt;p&gt;Also, you have to use x86_64 emulation (rather than KVM) because Pis use an ARM instruction set rather than x86.&lt;/p&gt;
 
-&lt;h1 id=&quot;cpu-benchmark-for-slowness&quot;&gt;CPU benchmark for slowness&lt;/h1&gt;
+&lt;h2 id=&quot;cpu-benchmark-for-slowness&quot;&gt;CPU benchmark for slowness&lt;/h2&gt;
 &lt;p&gt;This benchmark is terrible, but gives an indication of single threaded performance&lt;/p&gt;
 
-&lt;h1 id=&quot;on-my-macbook&quot;&gt;On my macbook&lt;/h1&gt;
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#On my work machine&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;time dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/urandom &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/null &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2000000 &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
 
@@ -58,11 +57,9 @@ sys	0m2.769s
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;setting-up-the-pis&quot;&gt;Setting up the Pis&lt;/h2&gt;
-
 &lt;p&gt;We installed 64 bit Raspbian on the SSDs and booted from them.&lt;/p&gt;
 
 &lt;h3 id=&quot;installing-the-dependencies&quot;&gt;Installing the dependencies&lt;/h3&gt;
-
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt upgrade &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; qemu nmon virtinst qemu-utils qemu-system-x86 tmux vim dnsmasq-utils dnsmasq-base iptables libvirt-daemon-system
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -70,7 +67,6 @@ sys	0m2.769s
 &lt;p&gt;The Raspberry Pi doesn’t have the fastest CPU, so we overclocked it to 2GHz and over_voltage 6 to keep the warranty. Full guide &lt;a href=&quot;https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/&quot;&gt;https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;setting-up-the-qemu-groups&quot;&gt;Setting up the QEMU groups&lt;/h3&gt;
-
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;groupadd libvirt-qemu
 groupadd libvirt
 groupadd libvirtd
@@ -78,7 +74,6 @@ useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; libvirt-qemu libvirt-qe
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;setting-up-swap-in-case-its-need-since-8gb-ram-isnt-much&quot;&gt;Setting up swap (in case it’s need since 8GB RAM isn’t much)&lt;/h3&gt;
-
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Create and mount swap&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;fallocate &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; 64G /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo chmod &lt;/span&gt;600 /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;mkswap /swapfile &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;swapon /swapfile
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -86,7 +81,6 @@ useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; libvirt-qemu libvirt-qe
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;echo '/swapfile swap swap defaults 0 0' &amp;gt;&amp;gt; /etc/fstab&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Next check that trim works on the PI, if it’s working you should get something similar to the following&lt;/p&gt;
-
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;fstrim &lt;span class=&quot;nt&quot;&gt;-av&lt;/span&gt;
 /boot: 0 B &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; trimmed
 /: 19.9 GiB &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;21294051328 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; trimmed
@@ -196,7 +190,6 @@ Each VM needs a unique mac address for the networking to work correctly&lt;/p&gt
 &lt;p&gt;Before installing on the (virtual) worker nodes, follow &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup&quot;&gt;https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;installing-the-control-plane&quot;&gt;Installing the control-plane&lt;/h3&gt;
-
 &lt;p&gt;Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet…&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
@@ -230,7 +223,6 @@ k3s-004                         Ready    control-plane,master   80m   v1.21.5+k3
 k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3s2
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;h2 id=&quot;why-you-shouldnt-do-this&quot;&gt;Why you shouldn’t do this&lt;/h2&gt;
-
 &lt;p&gt;Over 1.5 cores of the Pi is used by &lt;em&gt;k3s&lt;/em&gt;, never mind the workloads we want to run!&lt;/p&gt;
 
 &lt;p&gt;Here’s a simple &lt;a href=&quot;https://github.com/reactive-tech/kubegres&quot;&gt;pod&lt;/a&gt; which didn’t manage to start, even after 5 mins due to the CPU limitations.&lt;/p&gt;

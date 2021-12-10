@@ -10,10 +10,9 @@ While this guide does work, don't do this. Emulation is *slow* and Raspberry Pi 
 
 Also, you have to use x86_64 emulation (rather than KVM) because Pis use an ARM instruction set rather than x86.
 
-# CPU benchmark for slowness
+## CPU benchmark for slowness
 This benchmark is terrible, but gives an indication of single threaded performance
 
-# On my macbook
 ```bash
 #On my work machine
 time dd if=/dev/urandom of=/dev/null bs=2000000 count=100
@@ -61,11 +60,9 @@ sys	0m2.769s
 * Alpine in the x86_64 VMs
 
 ## Setting up the Pis
-
 We installed 64 bit Raspbian on the SSDs and booted from them.
 
 ### Installing the dependencies
-
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt install -y qemu nmon virtinst qemu-utils qemu-system-x86 tmux vim dnsmasq-utils dnsmasq-base iptables libvirt-daemon-system
 ```
@@ -74,7 +71,6 @@ sudo apt update && sudo apt upgrade -y && sudo apt install -y qemu nmon virtinst
 The Raspberry Pi doesn't have the fastest CPU, so we overclocked it to 2GHz and over_voltage 6 to keep the warranty. Full guide <https://www.seeedstudio.com/blog/2020/02/12/how-to-safely-overclock-your-raspberry-pi-4-to-2-147ghz/>
 
 ### Setting up the QEMU groups
-
 ```bash
 groupadd libvirt-qemu
 groupadd libvirt
@@ -83,7 +79,6 @@ useradd -g libvirt-qemu libvirt-qemu
 ```
 
 ### Setting up swap (in case it's need since 8GB RAM isn't much)
-
 ```bash
 # Create and mount swap
 sudo fallocate -l 64G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
@@ -93,7 +88,6 @@ Next add an entry to fstab so that the swap is mounted on boot.
 sudo su -c "echo '/swapfile swap swap defaults 0 0' >> /etc/fstab"
 ```
 Next check that trim works on the PI, if it's working you should get something similar to the following
-
 ```bash
 sudo fstrim -av
 /boot: 0 B (0 bytes) trimmed
@@ -144,7 +138,6 @@ sudo vim /etc/dhcpcd.conf
 
 ```
 Next is to let QEMU use this bridge, largely following <https://wiki.archlinux.org/title/QEMU#Bridged_networking_using_qemu-bridge-helper>
-
 
 ```bash
 sudo mkdir /etc/qemu
@@ -214,7 +207,6 @@ Before installing on the control node, follow <https://rancher.com/docs/k3s/late
 Before installing on the (virtual) worker nodes, follow <https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup>
 
 ### Installing the control-plane
-
 Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet...
 
 ```bash
@@ -252,7 +244,6 @@ k3s-004                         Ready    control-plane,master   80m   v1.21.5+k3
 k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3s2
 ```
 ## Why you shouldn't do this
-
 Over 1.5 cores of the Pi is used by *k3s*, never mind the workloads we want to run!
 
 Here's a simple [pod](https://github.com/reactive-tech/kubegres) which didn't manage to start, even after 5 mins due to the CPU limitations.
