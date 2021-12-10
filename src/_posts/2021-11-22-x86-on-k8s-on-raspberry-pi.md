@@ -20,7 +20,7 @@ time dd if=/dev/urandom of=/dev/null bs=2000000 count=100
 
 real	0m4.264s
 user	0m0.000s
-sys	0m4.264s (edited)
+sys	0m4.264s
 
 # On a VM on k3s-005
 $ time dd if=/dev/urandom of=/dev/null bs=2000000 count=100
@@ -36,7 +36,6 @@ real	0m2.784s
 user	0m0.004s
 sys	0m2.769s
 ```
-
 
 ## Architecture
 
@@ -95,7 +94,7 @@ sudo su -c "echo '/swapfile swap swap defaults 0 0' >> /etc/fstab"
 ```
 Next check that trim works on the PI, if it's working you should get something similar to the following
 
-```
+```bash
 sudo fstrim -av
 /boot: 0 B (0 bytes) trimmed
 /: 19.9 GiB (21294051328 bytes) trimmed
@@ -219,7 +218,6 @@ Before installing on the (virtual) worker nodes, follow <https://rancher.com/doc
 Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet...
 
 ```bash
-
 sudo -i
 apt install -y curl
 curl -sfL https://get.k3s.io | sh -
@@ -236,11 +234,10 @@ kubectl taint nodes node-0001 node-role.kubernetes.io/master=true:NoSchedule
 Pretty simple, [full guide here.](https://rancher.com/docs/k3s/latest/en/quick-start/#install-script)
 
 ```bash
-
 apk add curl && curl -sfL https://get.k3s.io | K3S_URL=https://node-001:6443 K3S_TOKEN=SomeTokenFromControlPlane sh -
 ```
 
-With this, the x86_64 workers nodes should be added the cluster. 
+With this, the x86_64 workers nodes should be added the cluster. Each node should have a unique hostname and be connectable on that hostname from all nodes.
 
 ## Success?
 If you're successful, you should have a working k3s cluster with workloads running on x86 (slowly!)
