@@ -209,6 +209,49 @@ Exciting options,
 `-accel tcg,thread=multi` enables the VM to use multiple host cores
 `virtio-net-pci` allows a virtual nic that works with the bridge configured.
 
+You should ensure each of these VMs have a unique hostname, and a static IP in your router. This will make k3s configuration much easier
 
 
+## Configuring k3s
+For our setup, one Pi ran the k3s control plane natively (and didn't have a VM running) and the other Pis each had a VM running. Those VMs were joined to the k3s cluster as worker nodes.
 
+Before installing on the control node, follow <https://rancher.com/docs/k3s/latest/en/advanced/#enabling-legacy-iptables-on-raspbian-buster> to set up iptables correctly and <https://rancher.com/docs/k3s/latest/en/advanced/#enabling-cgroups-for-raspbian-buster> to set up cgroups correctly.
+
+Before installing on the (virtual) worker nodes, follow <https://rancher.com/docs/k3s/latest/en/advanced/#additional-preparation-for-alpine-linux-setup>
+
+### Installing the control-plane
+
+Unfortunately, the easiest way to install k3s with systemd is running random scripts from the internet...
+
+```bash
+
+sudo -i
+apt install -y curl
+curl -sfL https://get.k3s.io | sh -
+```
+
+## Prevent pods running on control plane
+
+```bash
+kubectl taint nodes node-0001 node-role.kubernetes.io/master=true:NoSchedule
+```
+### Adding worker nodes
+
+```bash
+
+apk add curl && curl -sfL https://get.k3s.io | K3S_URL=https://node-001:6443 K3S_TOKEN=SomeTokenFromControlPlane sh -
+```
+
+With this
+
+## Success?
+If you're successful, you should have a working k3s cluster with workloads running on x86 (slowly!)
+
+```bash
+pi@node-001:~ $ kubectl get nodes
+NAME                            STATUS   ROLES                  AGE    VERSION
+node-001                        Ready    control-plane,master   105m   v1.21.5+k3s2
+k3s-002                         Ready    control-plane,master   100m   v1.21.5+k3s2
+k3s-003                         Ready    control-plane,master   90m   v1.21.5+k3s2
+k3s-004                         Ready    control-plane,master   80m   v1.21.5+k3s2
+k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3s2
