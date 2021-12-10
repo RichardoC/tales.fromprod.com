@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T15:18:24+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T15:52:14+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
 
 &lt;p&gt;While this guide does work, don’t do this. Emulation is &lt;em&gt;slow&lt;/em&gt; and Raspberry Pi CPUs (even overclocked to 2GHz) are slower!&lt;/p&gt;
 
@@ -96,7 +96,7 @@ useradd &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; libvirt-qemu libvirt-qe
 &lt;p&gt;Due to the high volume of writes expected since the SSD will be used as RAM, configure TRIM to run frequently to prevent rapid deterioration of the SSD.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# trimming every 2 min:&lt;/span&gt;
-Sudo vi /lib/systemd/system/fstrim.timer
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;vi /lib/systemd/system/fstrim.timer
 &lt;span class=&quot;c&quot;&gt;# change:&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Timer]
 &lt;span class=&quot;nv&quot;&gt;OnCalender&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;:0/2
@@ -135,11 +135,6 @@ Bridge=br0
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo mkdir&lt;/span&gt; /etc/qemu
 
-Sudo vim /etc/qemu/bridge.conf
-
-allow br0
-
-
 &lt;span class=&quot;c&quot;&gt;# Add all that into a script (run as root):&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;#!bin/bash&lt;/span&gt;
 
@@ -172,7 +167,7 @@ systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;system-networkd
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;running-the-x86-vm&quot;&gt;Running the x86 VM&lt;/h3&gt;
-&lt;p&gt;For the VM we used Alpine as it’s a light OS and compatible with k3s. You can choose your download from https://alpinelinux.org/downloads/&lt;/p&gt;
+&lt;p&gt;For the VM we used Alpine as it’s a light OS and compatible with k3s. You can choose your download from &lt;a href=&quot;https://alpinelinux.org/downloads/&quot;&gt;https://alpinelinux.org/downloads/&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;wget https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-virt-3.15.0-x86_64.iso
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -217,12 +212,13 @@ curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | sh 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;adding-worker-nodes&quot;&gt;Adding worker nodes&lt;/h3&gt;
+&lt;p&gt;Pretty simple, &lt;a href=&quot;https://rancher.com/docs/k3s/latest/en/quick-start/#install-script&quot;&gt;full guide here.&lt;/a&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 apk add curl &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; curl &lt;span class=&quot;nt&quot;&gt;-sfL&lt;/span&gt; https://get.k3s.io | &lt;span class=&quot;nv&quot;&gt;K3S_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://node-001:6443 &lt;span class=&quot;nv&quot;&gt;K3S_TOKEN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;SomeTokenFromControlPlane sh -
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;With this&lt;/p&gt;
+&lt;p&gt;With this, the x86_64 workers nodes should be added the cluster.&lt;/p&gt;
 
 &lt;h2 id=&quot;success&quot;&gt;Success?&lt;/h2&gt;
 &lt;p&gt;If you’re successful, you should have a working k3s cluster with workloads running on x86 (slowly!)&lt;/p&gt;
@@ -237,7 +233,7 @@ k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;h2 id=&quot;why-you-shouldnt-do-this&quot;&gt;Why you shouldn’t do this&lt;/h2&gt;
 
-&lt;p&gt;Over 1.5 cores of the Pi is used by &lt;em&gt;k3s&lt;/em&gt;, nevermind the workloads we want to run!&lt;/p&gt;
+&lt;p&gt;Over 1.5 cores of the Pi is used by &lt;em&gt;k3s&lt;/em&gt;, never mind the workloads we want to run!&lt;/p&gt;
 
 &lt;p&gt;Here’s a simple &lt;a href=&quot;https://github.com/reactive-tech/kubegres&quot;&gt;pod&lt;/a&gt; which didn’t manage to start, even after 5 mins due to the CPU limitations.&lt;/p&gt;
 
@@ -247,7 +243,7 @@ kubegres-controller-manager-75b6765589-kvr97      1/2     ContainerCreating   0 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
-&lt;p&gt;Don’t run x86 on Pis, especially not on kubernetes!&lt;/p&gt;</content><author><name></name></author><category term="Kubernetes" /><category term="QEMU" /><summary type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</summary></entry><entry><title type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</title><link href="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html" rel="alternate" type="text/html" title="How Slack and Discord prevent you scanning Infrastructure with link previews" /><published>2021-08-11T20:00:00+01:00</published><updated>2021-08-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html">&lt;h1 id=&quot;how-slack-and-discord-prevent-you-scanning-infrastructure-with-link-previews&quot;&gt;How Slack and Discord prevent you scanning Infrastructure with link previews&lt;/h1&gt;
+&lt;p&gt;Don’t run x86 on Pis, especially not on kubernetes! They just aren’t fast enough (yet)&lt;/p&gt;</content><author><name></name></author><category term="Kubernetes" /><category term="QEMU" /><summary type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</summary></entry><entry><title type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</title><link href="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html" rel="alternate" type="text/html" title="How Slack and Discord prevent you scanning Infrastructure with link previews" /><published>2021-08-11T20:00:00+01:00</published><updated>2021-08-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html">&lt;h1 id=&quot;how-slack-and-discord-prevent-you-scanning-infrastructure-with-link-previews&quot;&gt;How Slack and Discord prevent you scanning Infrastructure with link previews&lt;/h1&gt;
 
 &lt;p&gt;&lt;strong&gt;NOTE&lt;/strong&gt;
 This is based on conjecture for Discord, and reading some Slack docs. This is not based on statements from them.&lt;/p&gt;

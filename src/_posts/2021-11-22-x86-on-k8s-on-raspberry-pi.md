@@ -106,7 +106,7 @@ Due to the high volume of writes expected since the SSD will be used as RAM, con
 
 ```bash
 # trimming every 2 min:
-Sudo vi /lib/systemd/system/fstrim.timer
+sudo vi /lib/systemd/system/fstrim.timer
 # change:
 [Timer]
 OnCalender=*:0/2
@@ -150,11 +150,6 @@ Next is to let QEMU use this bridge, largely following <https://wiki.archlinux.o
 ```bash
 sudo mkdir /etc/qemu
 
-Sudo vim /etc/qemu/bridge.conf
-
-allow br0
-
-
 # Add all that into a script (run as root):
 #!bin/bash
 
@@ -187,7 +182,7 @@ systemctl enable system-networkd
 ```
 
 ### Running the x86 VM
-For the VM we used Alpine as it's a light OS and compatible with k3s. You can choose your download from https://alpinelinux.org/downloads/
+For the VM we used Alpine as it's a light OS and compatible with k3s. You can choose your download from <https://alpinelinux.org/downloads/>
 
 ```bash
 wget https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-virt-3.15.0-x86_64.iso
@@ -238,13 +233,14 @@ kubectl taint nodes node-0001 node-role.kubernetes.io/master=true:NoSchedule
 ```
 
 ### Adding worker nodes
+Pretty simple, [full guide here.](https://rancher.com/docs/k3s/latest/en/quick-start/#install-script)
 
 ```bash
 
 apk add curl && curl -sfL https://get.k3s.io | K3S_URL=https://node-001:6443 K3S_TOKEN=SomeTokenFromControlPlane sh -
 ```
 
-With this
+With this, the x86_64 workers nodes should be added the cluster. 
 
 ## Success?
 If you're successful, you should have a working k3s cluster with workloads running on x86 (slowly!)
@@ -260,7 +256,7 @@ k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3
 ```
 ## Why you shouldn't do this
 
-Over 1.5 cores of the Pi is used by *k3s*, nevermind the workloads we want to run!
+Over 1.5 cores of the Pi is used by *k3s*, never mind the workloads we want to run!
 
 Here's a simple [pod](https://github.com/reactive-tech/kubegres) which didn't manage to start, even after 5 mins due to the CPU limitations.
 
@@ -271,4 +267,4 @@ kubegres-controller-manager-75b6765589-kvr97      1/2     ContainerCreating   0 
 ```
 
 ## Conclusions
-Don't run x86 on Pis, especially not on kubernetes!
+Don't run x86 on Pis, especially not on kubernetes! They just aren't fast enough (yet)
