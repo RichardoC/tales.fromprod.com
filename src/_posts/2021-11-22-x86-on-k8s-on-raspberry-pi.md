@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn't!"
-date:   2021-11-28 14:00:00
+date:   2021-12-08 19:00:00
 categories: [Kubernetes,  QEMU]
 ---
 # Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn't!
@@ -231,10 +231,12 @@ curl -sfL https://get.k3s.io | sh -
 ```
 
 ## Prevent pods running on control plane
+It's generally a bad idea to run workloads on your control plane, especially in this case as our workloads with be x86 but the control plane is ARM64.
 
 ```bash
 kubectl taint nodes node-0001 node-role.kubernetes.io/master=true:NoSchedule
 ```
+
 ### Adding worker nodes
 
 ```bash
@@ -255,3 +257,18 @@ k3s-002                         Ready    control-plane,master   100m   v1.21.5+k
 k3s-003                         Ready    control-plane,master   90m   v1.21.5+k3s2
 k3s-004                         Ready    control-plane,master   80m   v1.21.5+k3s2
 k3s-005                         Ready    control-plane,master   70m   v1.21.5+k3s2
+```
+## Why you shouldn't do this
+
+Over 1.5 cores of the Pi is used by *k3s*, nevermind the workloads we want to run!
+
+Here's a simple [pod](https://github.com/reactive-tech/kubegres) which didn't manage to start, even after 5 mins due to the CPU limitations.
+
+```bash
+pi@node-001:~ $ kubectl get pod -w
+NAME                                              READY   STATUS              RESTARTS   AGE
+kubegres-controller-manager-75b6765589-kvr97      1/2     ContainerCreating   0          4m54s
+```
+
+## Conclusions
+Don't run x86 on Pis, especially not on kubernetes!
