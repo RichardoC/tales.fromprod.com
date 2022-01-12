@@ -5,6 +5,9 @@ date:   2021-08-11 2:00:00
 categories: [Google, APIs,  Golang, Go]
 ---
 # Managing Google Groups via the API, despite their best efforts
+
+<strong> Better version available [here](/2022/011/improved-managing-google-groups.html) </strong>
+
 Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.
 
 * [Using the directory API](https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups)

@@ -1,4 +1,177 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2021-12-10T16:47:18+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2022-01-12T15:31:09+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.</subtitle><entry><title type="html">Attempt 2 - Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2022/011/improved-managing-google-groups.html" rel="alternate" type="text/html" title="Attempt 2 - Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2022-01-11T19:00:00+00:00</published><updated>2022-01-11T19:00:00+00:00</updated><id>https://tales.fromprod.com/2022/011/improved-managing-google-groups</id><content type="html" xml:base="https://tales.fromprod.com/2022/011/improved-managing-google-groups.html">&lt;h1 id=&quot;attempt-2---managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Attempt 2 - Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
+&lt;p&gt;Due to some issues with the groupsService.List() (still pending with Google Support) I found a cleaner way to find the groups, by using a lookup based on the group email address.
+I have rewritten this guide to use this instead, as it’s a more sensible way of approaching this problem. The old guide will remain as it should work…&lt;/p&gt;
+
+&lt;h2 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h2&gt;
+&lt;p&gt;Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups&quot;&gt;Using the directory API&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cloud.google.com/identity/docs/how-to/create-dynamic-groups&quot;&gt;Using the Cloud Identity APIs - newer and seems to be preferred going forward&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At the time of writing, these are not sufficiently detailed to do more than work out those are the APIs to use. That’s where this guide comes in.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-this-will-help-you-achieve&quot;&gt;What this will help you achieve&lt;/h2&gt;
+
+&lt;p&gt;A golang binary which manages the membership of a Google Group for you. The steps will likely apply to the other language client libraries&lt;/p&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;Google Cloud Identity Premium&lt;/li&gt;
+  &lt;li&gt;A paid for Google Workspace&lt;/li&gt;
+  &lt;li&gt;A Google cloud Service Account (SA)
+    &lt;ul&gt;
+      &lt;li&gt;An API key for that SA&lt;/li&gt;
+      &lt;li&gt;The email address of that SA&lt;/li&gt;
+      &lt;li&gt;This SA requires &lt;strong&gt;no permissions at all&lt;/strong&gt; in the cloud console&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The google group you wish to manage
+    &lt;ul&gt;
+      &lt;li&gt;You should add the SA’s email address as an “OWNER” of that group, and change the subscription to “no emails” as it can’t receive them.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;dependencies&quot;&gt;Dependencies&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;A source of email addresses to add to your group&lt;/li&gt;
+  &lt;li&gt;The &lt;a href=&quot;https://pkg.go.dev/google.golang.org/api@v0.51.0/cloudidentity/v1&quot;&gt;cloud identity client library&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;The &lt;a href=&quot;https://pkg.go.dev/google.golang.org/api@v0.52.0/option&quot;&gt;Google API options library&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following is example code and won’t compile without changes, and lacks niceties like error handling and retrying in the face of inevitable errors.&lt;/p&gt;
+
+&lt;p&gt;This should provide a clearer understanding of the hierarchy of the Google Groups data model.&lt;/p&gt;
+
+&lt;div class=&quot;language-golang highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;//Whatever other deps you need go here&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;google.golang.org/api/cloudidentity/v1&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;goption&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;google.golang.org/api/option&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;// Variables to replace in this sample (nonworking) code&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;// requiredGroup@example.com -&amp;gt; The email address of the google group you care about&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;// &quot;a@a.com&quot;, &quot;b@a.com&quot; -&amp;gt; The actual list of emails you want added&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;// addDelta -&amp;gt; A function to say which emails need added to the group based on current emails&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;// removeDelta -&amp;gt; A function to say which emails need removed from the group based on current emails&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Create your goptions from your credential file.&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// This is the Service Account Key you downloaded during&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// The prerequisites.&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;goptions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;goption&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WithCredentialsFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/some/file/location.json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Background&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;cis&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;goptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Next you'll want to get the group you're interested in&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// The only way I found was to get all accessible groups&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Then filter for the relevant email address&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;groupsService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewGroupsService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Different from old verison&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Finding the groupName by using the fact that the GroupKeyId &lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Is actually the email address of the group&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// The group name is a magic thing of format  groups/{group_id}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;groupsServiceLookup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groupsService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Lookup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;groupsServiceLookup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GroupKeyId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ggroupemail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;groupLookupResponse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groupsServiceLookup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Fatal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// If we wanted the group directly&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// reqGroup, err := gs.Get(groupLookupResponse.Name).Do()&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Now to get the membership of the group, so we can see the emails of the current members&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewGroupsMembershipsService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Response containing list of memberships&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;lmr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupLookupResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Pulling out just the memberships&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;currentMemberships&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lmr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Memberships&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;member&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentMemberships&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// The EntityKey == PreferredMemberKey == the user email&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;member&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PreferredMemberKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;desiredEmails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a@a.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;b@a.com&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;//The following functions aren't defined, you need to define this logic yourself&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Example if you wish to only add the new emails&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Rather than deal with 409 which you get&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// if the email is already a member&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;additionalEmails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addDelta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;desiredEmails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// Example if you wish to remove any members who shouldn't be there&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;emailsToRemove&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;removeDelta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;desiredEmails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentEmails&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Now to add the new members&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;additionalEmails&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EntityKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;roles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MembershipRole&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MembershipRole&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;MEMBER&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// Despite the docs saying it's Member by default, we must explicitly set it&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// Or you will get ERROR: googleapi: Error 400: resource.roles must be specified, badRequest&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// when trying to create the membership&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;mem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudidentity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Membership&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PreferredMemberKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Roles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roles&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;c&quot;&gt;// This part youll want to make retriable&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// Any 409's are &quot;fine&quot; as it means the member already exists&lt;/span&gt;
+		&lt;span class=&quot;c&quot;&gt;// Using the &quot;Name&quot; found earlier as it's annoying to create due to format&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;relevantGroup&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;errStr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sprint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Contains&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;errStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Error 409&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Now to remove the extra members&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;// Have a horrible loop as there doesn't seem to be a nice way to get a membership ID...&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;// MembershipLookupCall doesn't exist :(&lt;/span&gt;
+
+	&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emailsForRemoval&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Membership&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentMemberships&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Membership&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PreferredMemberKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Membership&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Do&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Errorf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Encountered error while deleting membership %+v&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+					&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;found&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Google" /><category term="APIs" /><category term="Golang" /><category term="Go" /><summary type="html">Attempt 2 - Managing Google Groups via the API, despite their best efforts Due to some issues with the groupsService.List() (still pending with Google Support) I found a cleaner way to find the groups, by using a lookup based on the group email address. I have rewritten this guide to use this instead, as it’s a more sensible way of approaching this problem. The old guide will remain as it should work…</summary></entry><entry><title type="html">Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!</title><link href="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html" rel="alternate" type="text/html" title="Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!" /><published>2021-12-08T19:00:00+00:00</published><updated>2021-12-08T19:00:00+00:00</updated><id>https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi</id><content type="html" xml:base="https://tales.fromprod.com/2021/342/x86-on-k8s-on-raspberry-pi.html">&lt;h1 id=&quot;running-a-kubernetes-native-x86_64-application-on-raspberry-pis-and-why-you-shouldnt&quot;&gt;Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!&lt;/h1&gt;
 
 &lt;p&gt;While this guide does work, don’t do this. Emulation is &lt;em&gt;slow&lt;/em&gt; and Raspberry Pi CPUs (even overclocked to 2GHz) are slower!&lt;/p&gt;
 
@@ -259,6 +432,9 @@ This is based on conjecture for Discord, and reading some Slack docs. This is no
 
 &lt;h2 id=&quot;tldr&quot;&gt;TLDR&lt;/h2&gt;
 &lt;p&gt;They don’t run the preview HTTP requests from your machine, and only provide a well documented but uncommon (for infrastructure) set of tags.&lt;/p&gt;</content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Discord" /><category term="Security" /><summary type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</summary></entry><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-11T03:00:00+01:00</published><updated>2021-08-11T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html">&lt;h1 id=&quot;managing-google-groups-via-the-api-despite-their-best-efforts&quot;&gt;Managing Google Groups via the API, despite their best efforts&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt; Better version available &lt;a href=&quot;/2022/011/improved-managing-google-groups.html&quot;&gt;here&lt;/a&gt; &lt;/strong&gt;&lt;/p&gt;
+
 &lt;p&gt;Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -449,7 +625,7 @@ This is based on conjecture for Discord, and reading some Slack docs. This is no
 
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Google" /><category term="APIs" /><category term="Golang" /><category term="Go" /><summary type="html">Managing Google Groups via the API, despite their best efforts Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.</summary></entry><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/2021/217/always-document-api-limitations.html" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-05T21:00:00+01:00</published><updated>2021-08-05T21:00:00+01:00</updated><id>https://tales.fromprod.com/2021/217/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/2021/217/always-document-api-limitations.html">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Google" /><category term="APIs" /><category term="Golang" /><category term="Go" /><summary type="html">Managing Google Groups via the API, despite their best efforts</summary></entry><entry><title type="html">Slack-mojis, and why documenting API limitations helps!</title><link href="https://tales.fromprod.com/2021/217/always-document-api-limitations.html" rel="alternate" type="text/html" title="Slack-mojis, and why documenting API limitations helps!" /><published>2021-08-05T21:00:00+01:00</published><updated>2021-08-05T21:00:00+01:00</updated><id>https://tales.fromprod.com/2021/217/always-document-api-limitations</id><content type="html" xml:base="https://tales.fromprod.com/2021/217/always-document-api-limitations.html">&lt;h1 id=&quot;slackmojis-and-api-limits&quot;&gt;Slackmojis and API limits&lt;/h1&gt;
 &lt;p&gt;During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”&lt;/p&gt;
 
 &lt;h2 id=&quot;to-the-docs&quot;&gt;To the docs!&lt;/h2&gt;
