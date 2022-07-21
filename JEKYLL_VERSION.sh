@@ -1,3 +1,3 @@
 #!/bin/bash
 
-export JEKYLL_VERSION=3.8
+export JEKYLL_VERSION=4.2.2

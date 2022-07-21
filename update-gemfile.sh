@@ -1,11 +1,6 @@
 #!/bin/bash
 
-rm -rf "$PWD/docs-tmp/"
-mkdir "$PWD/docs-tmp/"
-
-rm -rf "$PWD/docs/"
-mkdir "$PWD/docs/"
-
+source JEKYLL_VERSION.sh
 
 export _BINARY="docker"
 
@@ -17,6 +12,5 @@ elif [ -x "$(command -v nerdctl)" ]; then
   _BINARY="nerdctl "
 fi
 
-nerdctl volume rm jekyll
 
-nerdctl volume create jekyll
+$_BINARY run -p 4000:4000 --rm --volume="$(pwd):/srv/jekyll:rw" --volume="jekyll:/usr/local/bundle" -it jekyll/jekyll:$JEKYLL_VERSION bundle update
