@@ -14,4 +14,4 @@ elif [ -x "$(command -v nerdctl)" ]; then
 fi
 
 
-$_BINARY run --rm --volume="$PWD:/srv/jekyll" -it jekyll/jekyll:$JEKYLL_VERSION jekyll build -s /srv/jekyll/src -d /srv/jekyll/docs
+$_BINARY run --rm --volume="$PWD:/srv/jekyll" --volume="jekyll:/usr/local/bundle" -it jekyll/jekyll:$JEKYLL_VERSION jekyll build -s /srv/jekyll/src -d /srv/jekyll/docs
