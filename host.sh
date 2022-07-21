@@ -2,8 +2,6 @@
 
 source JEKYLL_VERSION.sh
 
-./clean.sh
-
 export _BINARY="docker"
 
 if [ -x "$(command -v lima)" ]; then
@@ -15,4 +13,4 @@ elif [ -x "$(command -v nerdctl)" ]; then
 fi
 
 
-$_BINARY run -p 4000:4000 --rm --volume="$(pwd):/srv/jekyll:rw" -it jekyll/jekyll:$JEKYLL_VERSION jekyll serve -s /srv/jekyll/src -d /srv/jekyll/docs-tmp --watch --incremental
+$_BINARY run -p 4000:4000 --rm --volume="$(pwd):/srv/jekyll:rw" --volume="jekyll:/usr/local/bundle" -it jekyll/jekyll:$JEKYLL_VERSION jekyll serve -s /srv/jekyll/src -d /srv/jekyll/docs-tmp --watch --incremental
