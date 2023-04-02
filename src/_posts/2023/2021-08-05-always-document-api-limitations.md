@@ -2,7 +2,7 @@
 layout: post
 title:  "Using Kubernetes as a network scanner"
 date:   2023-01-01 20:00:00 -0000
-categories: [Kuberntes, APIs,  Nonsense]
+categories: [Kubernetes, APIs,  Nonsense]
 ---
 # Using Kubernetes as a network scanner
 
@@ -74,6 +74,10 @@ rest_client_requests_total{code="<error>",host="$SERVER:${PORT}",method="POST"} 
 
 This can even be used to probe localhost on the APIServer host itself!
 
+### What payload are we sending?
+
+The API server will send an [AdmissionRequest](https://kubernetes.io/docs/reference/config-api/apiserver-admission.v1/#admission-k8s-io-v1-AdmissionRequest) request to the server we have configured in the `URL` above. We do not have control of this schema but we, as an attacker, have complete control of the kind, request etc etc because we can register API services, or custom resources to set these fields to whatever we want.
+
 ### Why does this work
 
 Kubernetes provides metrics on all uses of its internal rest client, which is how it POSTs to the "admission controller" we created
@@ -88,7 +92,7 @@ APIService's while cool, can only be sent to services within the cluster which r
 
 ### What about forcing services to have external IPs?
 
-You can force the IPs in an endpoint slice (the place k8s sends traffic to) to non standard IPs, but the specific metadata IPs are blocked since they're link locall addresses.
+You can force the IPs in an endpoint slice (the place k8s sends traffic to) to non standard IPs, but the specific metadata IPs are blocked since they're link local addresses.
 
 I didn't investigate this further, as the API server doesn't directly connect to these, and instead sends the traffic via kubelets.
 
