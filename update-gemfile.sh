@@ -13,4 +13,4 @@ elif [ -x "$(command -v nerdctl)" ]; then
 fi
 
 
-$_BINARY run -p 4000:4000 --rm --volume="$(pwd):/srv/jekyll:rw" --volume="jekyll:/usr/local/bundle" -it jekyll/jekyll:$JEKYLL_VERSION bundle update
+$_BINARY run --rm --volume="$(pwd):/srv/jekyll:rw" --volume="jekyll:/usr/local/bundle" -it jekyll/jekyll:$JEKYLL_VERSION bundle update
