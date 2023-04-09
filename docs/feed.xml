@@ -1,4 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2022-12-13T23:34:36+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">VPN over VPN on OpenWrt</title><link href="https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt.html" rel="alternate" type="text/html" title="VPN over VPN on OpenWrt" /><published>2022-12-13T19:00:00+00:00</published><updated>2022-12-13T19:00:00+00:00</updated><id>https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt</id><content type="html" xml:base="https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt.html">&lt;h1 id=&quot;vpn-over-vpn-on-openwrt-on-one-device&quot;&gt;VPN over VPN on Openwrt on one device&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2023-04-10T00:19:12+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Getting started with LLMs locally</title><link href="https://tales.fromprod.com/2023/099/getting-started-llms-locally.html" rel="alternate" type="text/html" title="Getting started with LLMs locally" /><published>2023-04-09T20:00:00+01:00</published><updated>2023-04-09T20:00:00+01:00</updated><id>https://tales.fromprod.com/2023/099/getting-started-llms-locally</id><content type="html" xml:base="https://tales.fromprod.com/2023/099/getting-started-llms-locally.html">&lt;h1 id=&quot;getting-started-with-llms-locally&quot;&gt;Getting started with LLMs locally&lt;/h1&gt;
+
+&lt;p&gt;So you’ve heard all the hype about Large Language Models (LLM) and want to run one yourself locally. This guide details how&lt;/p&gt;
+
+&lt;h2 id=&quot;why-would-i-want-to-run-it-locally&quot;&gt;Why would I want to run it locally?&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;You want to peer behind the curtain of what’s actually happening&lt;/li&gt;
+  &lt;li&gt;You don’t want you prompts to be sent to a third party&lt;/li&gt;
+  &lt;li&gt;Why not?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ubuntu (ish)&lt;/li&gt;
+  &lt;li&gt;Huge amounts of ram, or a huge &lt;a href=&quot;https://help.ubuntu.com/community/SwapFaq&quot;&gt;swapfile/swap&lt;/a&gt; partition. 32GB+ is commonly required&lt;/li&gt;
+  &lt;li&gt;Python experience&lt;/li&gt;
+  &lt;li&gt;A fast internet connection&lt;/li&gt;
+  &lt;li&gt;50GB+ free storage space&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;getting-started-guide&quot;&gt;Getting started guide&lt;/h2&gt;
+
+&lt;p&gt;Install &lt;a href=&quot;https://docs.docker.com/engine/install/debian/&quot;&gt;Docker&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have an nvidia GPU configured with cuda you might be able to follow &lt;a href=&quot;https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html&quot;&gt;https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html&lt;/a&gt; to use GPU acceleration.&lt;/p&gt;
+
+&lt;p&gt;Install git and git lfs and set it up.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;git git-lfs
+git lfs &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Download the docker image with all the tools you need, this is ~ 10GB&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker pull huggingface/transformers-all-latest-gpu
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Discover the model you want to play with on Hugging Face such as &lt;a href=&quot;https://huggingface.co/cerebras/Cerebras-GPT-2.7B&quot;&gt;https://huggingface.co/cerebras/Cerebras-GPT-2.7B&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can download it by cloning the git repo (~11GB)&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://huggingface.co/cerebras/Cerebras-GPT-2.7B
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now to run the model&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--rm&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pwd&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;:/model docker.io/huggingface/transformers-all-latest-gpu
+&lt;span class=&quot;c&quot;&gt;# From now all commands are inside the container&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /model
+&lt;span class=&quot;c&quot;&gt;# start a python interpreter to use&lt;/span&gt;
+python3
+&lt;span class=&quot;c&quot;&gt;# from now all commands are inside the python interpreter&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;actually-playing-with-the-model&quot;&gt;Actually playing with the model&lt;/h3&gt;
+
+&lt;p&gt;Now for the Python, in the REPL terminal.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# This stage will take a while as it loads the model into ram, and may lead to it getting OOMK
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;transformers&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoTokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoModelForCausalLM&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoTokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_pretrained&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./Cerebras-GPT-2.7B&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AutoModelForCausalLM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_pretrained&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./Cerebras-GPT-2.7B&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# convenience function to wrap the steps from prompt to reponse
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;model_on_prompt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;inputs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;return_tensors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pt&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;outputs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;generate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num_beams&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;max_new_tokens&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;early_stopping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;no_repeat_ngram_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;text_output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokenizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;batch_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;outputs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;skip_special_tokens&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Now to run the model on your prompt
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model_on_prompt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;What can I use LLMs for?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="ML" /><category term="Python" /><category term="Docker" /><summary type="html">Getting started with LLMs locally</summary></entry><entry><title type="html">VPN over VPN on OpenWrt</title><link href="https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt.html" rel="alternate" type="text/html" title="VPN over VPN on OpenWrt" /><published>2022-12-13T19:00:00+00:00</published><updated>2022-12-13T19:00:00+00:00</updated><id>https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt</id><content type="html" xml:base="https://tales.fromprod.com/2022/347/VPN-over-VPN-on-Openwrt.html">&lt;h1 id=&quot;vpn-over-vpn-on-openwrt-on-one-device&quot;&gt;VPN over VPN on Openwrt on one device&lt;/h1&gt;
 
 &lt;p&gt;OpenWrt has reasonable &lt;a href=&quot;https://openwrt.org/docs/guide-user/services/vpn/wireguard/client&quot;&gt;guides&lt;/a&gt; on using your router as a WireGuard client but it’s missing a how to on running VPN over VPN. This article will close that gap&lt;/p&gt;
 
