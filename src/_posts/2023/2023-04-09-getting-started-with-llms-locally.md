@@ -12,6 +12,7 @@ So you've heard all the hype about Large Language Models (LLM) and want to run o
 
 * You want to peer behind the curtain of what's actually happening
 * You don't want you prompts to be sent to a third party
+* You want to test the LLM with sensitive intellectual property
 * Why not?
 
 ## Prerequisites
