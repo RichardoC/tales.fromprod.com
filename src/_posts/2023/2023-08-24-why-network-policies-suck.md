@@ -1,9 +1,22 @@
 ---
 layout: post
-title:  "Why network polciies in Kubernetes suck"
+title:  "Why network polcies in Kubernetes suck"
 date:   2023-08-24 20:00:00 -0000
 categories: [APIs,  Kubernetes, Networking]
 ---
+
+TLDR:
+Networking is highly variable, and there are no sane assumptions that work across all Kubernetes distributions and cloud vendors.
+
+To clarify, it's not particularly that network policies suck, it's that the real world is messy - especially for entworking
+specifically
+too many layers of networking
+no safe dry-run/nag mode
+all cnis work a bit differently
+you get it work, your bank stops working
+loads of scheduled things in core, breakages may not be obvious for months
+network policies work on source not destination, which can be hard to reason about
+
 
 Let's see whether these work on our cluster (Rancher Destop on macOS, v1.9.1)
 ```console
@@ -131,3 +144,64 @@ In theory calico works, but it's a right pain to get working - especially with k
 
 Try cilium instead?
 https://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/#k8s-install-quick
+
+
+wget https://docs.cilium.io/en/stable/_downloads/cf9ee6e71b2988e2ef225c7d156e31ed/rancher-desktop-override.yaml
+mv rancher-desktop-override.yaml ~/Library/Application\ Support/rancher-desktop/lima/_config/override.yaml
+
+Finally, open the Rancher Desktop UI and go to Kubernetes Settings panel and click “Reset Kubernetes”.
+
+After a few minutes Rancher Desktop will start back up prepared for installing Cilium.
+
+rdctl shell
+
+CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+
+CLI_ARCH=amd64
+if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+
+# doesn't work in rancher sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+rm cilium-linux-${CLI_ARCH}.tar.gz
+rm cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+sudo su
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+# TODO, update cilium guide with this fix
+cilium install --version 1.14.1 --set 'cni.binPath=/usr/libexec/cni'
+# then delete any stuck pods
+
+
+Retry our earlier test
+
+kubectl create ns test-network-policies
+# replace with URL?
+kubectl --namespace test-network-policies apply -f src/static/2023-08-24-why-network-policies-suck/default-deny-egress.yaml
+# let's run a pod and see what we can do
+kubectl --namespace test-network-policies run -i -t --restart=Never test-egress-pod --image=busybox --command -- sh
+If you don't see a command prompt, try pressing enter.
+/ #
+/ #
+/ # timeout 1  nc -vz 1.1.1.1 53
+punt!
+Terminated
+
+IT WORKS!
+
+
+
+Show inbound connections working
+
+nc -l -p 8080 -s 0.0.0.0
+
+kubectl create ns show-inbound
+
+kubectl --namespace show-inbound run -i -t --restart=Never test-ingress-pod --image=busybox --command -- sh
+
+
+
+# change ip to whatever the pod actually has
+curl http://10.0.0.83:8080/hello-from-the-other-side
+
+Now to show why this is shit
