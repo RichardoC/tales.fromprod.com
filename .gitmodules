@@ -1,0 +1,3 @@
+[submodule "migrate/themes/docura"]
+	path = migrate/themes/docura
+	url = https://github.com/docura/docura.git

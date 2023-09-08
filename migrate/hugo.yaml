@@ -1,0 +1,5 @@
+baseURL: https://tales.fromprod.com
+disablePathToLower: true
+languageCode: en-gb
+title: Tales from Prod
+theme : docura
