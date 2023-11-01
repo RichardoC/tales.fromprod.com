@@ -1,5 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2023-08-23T17:50:44+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Bulk deleting tickets in Jira</title><link href="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html" rel="alternate" type="text/html" title="Bulk deleting tickets in Jira" /><published>2023-06-26T21:00:00+01:00</published><updated>2023-06-26T21:00:00+01:00</updated><id>https://tales.fromprod.com/2023/177/bulk-deleting-in-jira</id><content type="html" xml:base="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html">&lt;h1 id=&quot;bulk-deleting-tickets-in-jira&quot;&gt;Bulk deleting tickets in Jira&lt;/h1&gt;
-&lt;p&gt;For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling chnages, and the 10,000s of old tickets are no longer “correct” in the test project.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2023-11-01T14:14:21+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Pass through JSON logs with vector or filebeat</title><link href="https://tales.fromprod.com/2023/305/pass-through-json-logs.html" rel="alternate" type="text/html" title="Pass through JSON logs with vector or filebeat" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/pass-through-json-logs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/pass-through-json-logs.html">&lt;h1 id=&quot;pass-through-json-logs-with-vector-or-filebeat&quot;&gt;Pass through JSON logs with vector or filebeat&lt;/h1&gt;
+
+&lt;p&gt;Say you are using an application that emits JSON formatted logs, with one log per line in the log file, and you want to store these in ElasticSearch and view them natively in kibana - how would you manage this?&lt;/p&gt;
+
+&lt;p&gt;Both Vector and filebeat have quirks, so I’ve written this guide on how I got these log processors to perform as I wanted - just passing through the original json object so elastic search can parse it as expected&lt;/p&gt;
+
+&lt;h2 id=&quot;vector&quot;&gt;Vector&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://vector.dev/docs/&quot;&gt;Vector&lt;/a&gt; is a log processor written in Rust supported by Datadog.&lt;/p&gt;
+
+&lt;p&gt;One of the main quirks is that it automatically puts you message in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.message&lt;/code&gt; in the data model, with some other metadata that isn’t documented in any single place&lt;/p&gt;
+
+&lt;p&gt;Using the snippet below, the logs are read from a series of files in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tmp&lt;/code&gt; that have a json object on each line, and are named “my_log” with a suffix&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# vector.yaml&lt;/span&gt;
+
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;healthchecks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;require_healthy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;sources&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;my_application_log_file&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;file&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/tmp/my-log*&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;transforms&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;audit_files_json_parser&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my_application_log_file&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;remap&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|-&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;. = parse_json!(.message)&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;sinks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;elasticsearch&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;audit_files_json_parser&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;strategy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;basic&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_USER}&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_PASSWORD}&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;endpoints&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_URL}&quot;&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;bulk&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;my_application&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;create&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bulk&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;filebeat&quot;&gt;Filebeat&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.elastic.co/guide/en/beats/filebeat/current/index.html&quot;&gt;Filebeat&lt;/a&gt; is a log processor maintained by Elastic&lt;/p&gt;
+
+&lt;p&gt;The equivalent configuration for filebeat is&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;filebeat.inputs&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;filestream&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my_application_log_file&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/tmp/my-log*&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;processors&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;decode_json_fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;process_array&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;max_depth&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;overwrite_keys&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;add_error_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;move_fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;message&quot;&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[]&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# move message fields up to root&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;output.elasticsearch&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;hosts&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_URL}&apos;&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_USER}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${ELASTICSEARCH_PASSWORD}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my_application&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;bulk_max_size&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;50&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;compression_level&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;logging.to_stderr&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;gotchas&quot;&gt;Gotchas&lt;/h3&gt;
+
+&lt;p&gt;Despite the docs claiming that the following works, it won’t with a particularly unhelpful error message &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{\&quot;type\&quot;:\&quot;document_parsing_exception\&quot;,\&quot;reason\&quot;:\&quot;[1:1537] object mapping for [message] tried to parse field [message] as object, but found a concrete value\&quot;}, dropping event!&quot;,&quot;service.name&quot;:&quot;filebeat&quot;,&quot;ecs.version&quot;:&quot;1.6.0&quot;}&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;decode_json_fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;]&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;process_array&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;false&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;max_depth&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;overwrite_keys&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;add_error_key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# will place the json in the root object&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;My best guess is that it needs to do this in two operations rather than one, hence the snippet above.&lt;/p&gt;</content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html">Pass through JSON logs with vector or filebeat</summary></entry><entry><title type="html">Bulk deleting tickets in Jira</title><link href="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html" rel="alternate" type="text/html" title="Bulk deleting tickets in Jira" /><published>2023-06-26T21:00:00+01:00</published><updated>2023-06-26T21:00:00+01:00</updated><id>https://tales.fromprod.com/2023/177/bulk-deleting-in-jira</id><content type="html" xml:base="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html">&lt;h1 id=&quot;bulk-deleting-tickets-in-jira&quot;&gt;Bulk deleting tickets in Jira&lt;/h1&gt;
+&lt;p&gt;For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.&lt;/p&gt;
 
 &lt;p&gt;So, you want to clean up the old tickets, so only the new “valid” tickets exist in this test project.&lt;/p&gt;
 
@@ -39,13 +138,13 @@
   &lt;li&gt;You have a JQL query that matches the issues you want to delete, and ONLY the issues you want to delete and have exported it (URL encoded) as JIRA_JQL&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Example URL encoded JQL is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;project%20%3D%20TOY%20AND%20issuetype%20%3D%20Vulnerability%20ORDER%20BY%20created%20DESC&lt;/code&gt; which matches all vulnerabilty issues in a project called TOY&lt;/p&gt;
+&lt;p&gt;Example URL encoded JQL is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;project%20%3D%20TOY%20AND%20issuetype%20%3D%20Vulnerability%20ORDER%20BY%20created%20DESC&lt;/code&gt; which matches all vulnerability issues in a project called TOY&lt;/p&gt;
 
 &lt;h3 id=&quot;final-script&quot;&gt;Final script&lt;/h3&gt;
 
 &lt;p&gt;OBLIGATORY WARNING - this will delete all issues which match the JQL, and ALL subtasks use with caution!&lt;/p&gt;
 
-&lt;p&gt;This script will attempt to delete the issues, with 12 parallel threads. It has zero error handlin or backoff so you are likely to get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;429 - Too many requests&lt;/code&gt; and should cancel the script and wait a few minutes before resuming.
+&lt;p&gt;This script will attempt to delete the issues, with 12 parallel threads. It has zero error handling or backoff so you are likely to get &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;429 - Too many requests&lt;/code&gt; and should cancel the script and wait a few minutes before resuming.
 During this time your user will be unable to use the Jira webapp as well, as it’s your user that gets rate limited, not the API token.&lt;/p&gt;
 
 &lt;p&gt;You may also have to rerun this script multiple times if you have more than ~ 10,000 issues, as this doesn’t follow any pagination.&lt;/p&gt;
@@ -57,7 +156,7 @@ During this time your user will be unable to use the Jira webapp as well, as it�
 &lt;/span&gt;&lt;span class=&quot;go&quot;&gt;14054 completed
 14050 completed
 &lt;/span&gt;&lt;span class=&quot;c&quot;&gt;...
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Jira" /><category term="APIs" /><category term="Atlassian" /><summary type="html">Bulk deleting tickets in Jira For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling chnages, and the 10,000s of old tickets are no longer “correct” in the test project.</summary></entry><entry><title type="html">Getting started with LLMs locally</title><link href="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html" rel="alternate" type="text/html" title="Getting started with LLMs locally" /><published>2023-04-09T20:00:00+01:00</published><updated>2023-04-09T20:00:00+01:00</updated><id>https://tales.fromprod.com/2023/099/getting-started-with-llms-locally</id><content type="html" xml:base="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html">&lt;h1 id=&quot;getting-started-with-llms-locally&quot;&gt;Getting started with LLMs locally&lt;/h1&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Jira" /><category term="APIs" /><category term="Atlassian" /><summary type="html">Bulk deleting tickets in Jira For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.</summary></entry><entry><title type="html">Getting started with LLMs locally</title><link href="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html" rel="alternate" type="text/html" title="Getting started with LLMs locally" /><published>2023-04-09T20:00:00+01:00</published><updated>2023-04-09T20:00:00+01:00</updated><id>https://tales.fromprod.com/2023/099/getting-started-with-llms-locally</id><content type="html" xml:base="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html">&lt;h1 id=&quot;getting-started-with-llms-locally&quot;&gt;Getting started with LLMs locally&lt;/h1&gt;
 
 &lt;p&gt;So you’ve heard all the hype about Large Language Models (LLM) and want to run one yourself locally. This guide details how&lt;/p&gt;
 
@@ -977,4 +1076,4 @@ This is based on conjecture for Discord, and reading some Slack docs. This is no
 &lt;span class=&quot;c1&quot;&gt;# response.reason Required as Slack will return a 200, even if your message fails due to &quot;msg_blocks_too_long&quot;.
 &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reason&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Nonsense" /><summary type="html">Slackmojis and API limits During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”</summary></entry><entry><title type="html">Welcome to Tales From Prod!</title><link href="https://tales.fromprod.com/2021/215/welcome-to-tales-from-prod.html" rel="alternate" type="text/html" title="Welcome to Tales From Prod!" /><published>2021-08-03T21:00:00+01:00</published><updated>2021-08-03T21:00:00+01:00</updated><id>https://tales.fromprod.com/2021/215/welcome-to-tales-from-prod</id><content type="html" xml:base="https://tales.fromprod.com/2021/215/welcome-to-tales-from-prod.html">&lt;p&gt;This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”&lt;/p&gt;</content><author><name></name></author><summary type="html">This blog is for rants about Kubernetes, Cloud Native applications, DevSecOps and whatever ends up being a “Tale from Prod”</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Nonsense" /><summary type="html">Slackmojis and API limits During a “discussion” on our slack channel about long… thonks, a question occurred - “Just how many slackmojis can be sent in a slack message?”</summary></entry></feed>
