@@ -5,7 +5,7 @@ date:   2023-06-26 20:00:00 -0000
 categories: [Jira, APIs,  Atlassian]
 ---
 # Bulk deleting tickets in Jira
-For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling chnages, and the 10,000s of old tickets are no longer "correct" in the test project.
+For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer "correct" in the test project.
 
 So, you want to clean up the old tickets, so only the new "valid" tickets exist in this test project.
 
@@ -40,13 +40,13 @@ Assuming the following
 * You have a JQL query that matches the issues you want to delete, and ONLY the issues you want to delete and have exported it (URL encoded) as JIRA_JQL
 
 
-Example URL encoded JQL is `project%20%3D%20TOY%20AND%20issuetype%20%3D%20Vulnerability%20ORDER%20BY%20created%20DESC` which matches all vulnerabilty issues in a project called TOY
+Example URL encoded JQL is `project%20%3D%20TOY%20AND%20issuetype%20%3D%20Vulnerability%20ORDER%20BY%20created%20DESC` which matches all vulnerability issues in a project called TOY
 
 ### Final script
 
 OBLIGATORY WARNING - this will delete all issues which match the JQL, and ALL subtasks use with caution!
 
-This script will attempt to delete the issues, with 12 parallel threads. It has zero error handlin or backoff so you are likely to get `429 - Too many requests` and should cancel the script and wait a few minutes before resuming.
+This script will attempt to delete the issues, with 12 parallel threads. It has zero error handling or backoff so you are likely to get `429 - Too many requests` and should cancel the script and wait a few minutes before resuming.
 During this time your user will be unable to use the Jira webapp as well, as it's your user that gets rate limited, not the API token.
 
 You may also have to rerun this script multiple times if you have more than ~ 10,000 issues, as this doesn't follow any pagination.

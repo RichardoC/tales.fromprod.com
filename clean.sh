@@ -8,6 +8,6 @@ mkdir "$PWD/docs/"
 
 source ./choose-builder.sh
 
-_BINARY volume rm jekyll
+$_BINARY volume rm jekyll
 
-_BINARY volume create jekyll
+$_BINARY volume create jekyll
