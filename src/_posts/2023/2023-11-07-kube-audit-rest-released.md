@@ -8,6 +8,8 @@ categories: [Kubernetes, auditing, cost-reduction, public-releases]
 
 After almost a year, I'm happy to announce [kube-audit-rest](https://github.com/RichardoC/kube-audit-rest/tree/main) is ready for use by anyone who wants to give it a go.
 
+It's an API call logger, for use for auditing mutation/creation API requests to Kubernetes where you cannot control the kube-api-server. These can be ingested into your chosen Security information and event management (SIEM) system.
+
 ## How can I play with it?
 
 Try following the [demo](https://github.com/RichardoC/kube-audit-rest/tree/main/examples/full-elastic-stack) with elastic search to get a feel for the capabilities and read the [README](https://github.com/RichardoC/kube-audit-rest/tree/main) which documents the functionality.
