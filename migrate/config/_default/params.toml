@@ -1,21 +1,21 @@
-description = 'A modular Hugo theme to build your next documentation site'
+description = 'Welcome to Richard Finlay Tweed's thoughts on Cloud Native Software, Kubernetes, Production and whatever else he's been tinkering with.'
 
-author = 'Your Name'
-authorURL = 'https://your-site.com/'
+author = 'Richard Finlay Tweed'
+authorURL = 'https://tales.fromprod.com'
 
 currentYear = 2023
 # projectStartYear = 2020
 
-facebookURL = 'https://facebook.com/'
-twitterURL = 'https://www.twitter.com/'
-githubURL = 'https://github.com/'
-youtubeURL = 'https://www.youtube.com/'
+# facebookURL = 'https://facebook.com/'
+# twitterURL = 'https://www.twitter.com/'
+githubURL = 'https://github.com/RichardoC'
+# youtubeURL = 'https://www.youtube.com/'
 
-githubRepo = 'your/repo'
-githubSponsorURL = 'https://github.com/sponsors/'
-buyMeACoffeeURL = 'https://www.buymeacoffee.com/'
+# githubRepo = 'your/repo'
+# githubSponsorURL = 'https://github.com/sponsors/'
+# buyMeACoffeeURL = 'https://www.buymeacoffee.com/'
 
-#googleAdSense = 'ca-pub-xxxxxxxxxxxxxxxx'
+# googleAdSense = 'ca-pub-xxxxxxxxxxxxxxxx'
 
 [algolia]
 [algolia.en]

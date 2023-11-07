@@ -1,8 +1,8 @@
-title = 'Docura'
-baseURL = 'https://docura.github.io/'
+title = 'Tales from Prod'
+baseURL = 'https://tales.fromprod.com/'
 
 defaultContentLanguage = 'en'
-languageCode = 'en-us'
+languageCode = 'en-gb'
 
 googleAnalytics = ''
 
