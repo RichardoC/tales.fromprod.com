@@ -1,4 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-02-25T22:01:02+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Finding secrets on GitLab</title><link href="https://tales.fromprod.com/2024/056/gitlab-secrets.html" rel="alternate" type="text/html" title="Finding secrets on GitLab" /><published>2024-02-25T11:00:00+00:00</published><updated>2024-02-25T11:00:00+00:00</updated><id>https://tales.fromprod.com/2024/056/gitlab-secrets</id><content type="html" xml:base="https://tales.fromprod.com/2024/056/gitlab-secrets.html"><![CDATA[<h1 id="finding-secrets-on-gitlab">Finding secrets on GitLab</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-03-07T22:58:33+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
+
+<p>This assumes you followed <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt">https://help.openai.com/en/articles/8554397-creating-a-gpt</a> and have already generated “instructions” for the GPT.</p>
+
+<p>First get the cloudquery docs
+<code class="language-plaintext highlighter-rouge">git clone git@github.com:cloudquery/cloudquery.git</code></p>
+
+<p>Get the cloudquery tables files as these have the relevant schemas and put them in a temporary directory for upload</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> /tmp/docs
+find <span class="nb">.</span> <span class="nt">-type</span> d <span class="nt">-name</span> <span class="s2">"tables"</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">cp</span> <span class="nt">-r</span> <span class="o">{}</span>/ /tmp/docs/
+</code></pre></div></div>
+<p>We now have the markdown we want in /tmp/docs/tables</p>
+
+<p>Unfortunately you can only upload 20 files, so we need to cat all these together</p>
+
+<p><code class="language-plaintext highlighter-rouge">cat * &gt; ../schemas.md</code></p>
+
+<p>After that, we need to teach the bot about GoogleSQL as it doesn’t understand it, so copy all the docs from <a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax">https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax</a> and put those into another file called <code class="language-plaintext highlighter-rouge">googlesql.txt</code>.</p>
+
+<p>Now upload these two files (schema.md and googlesql.txt) as “knowledge”</p>
+
+<p>Update your prompt to tell your bot to only use the schema and SQL details that are in its knowledge.</p>
+
+<p>Below is an example of what I used</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+CloudQuery Crafter is designed to handle requests for creating SQL queries based on specific data needs, such as finding all EC2 instances with a public IP. It will access and interpret relevant table schemas from it's knowledge to ensure accurate query generation. For each request, CloudQuery Crafter will provide detailed explanations and the complete SQL query, focusing on clarity and efficiency. It's tailored for users ranging from beginners to experts in SQL, aiming to facilitate their database querying process. CloudQuery Crafter prioritizes providing optimized, ready-to-use queries, including all necessary details such as 'SELECT' fields and 'WHERE' conditions to meet the user's specific request. CloudQuery Crafter should ensure they are providing the correct SQL for the database in use, for example postgres or Bigquery. CloudQuery Crafter should not guess the table schemas and instead rely on the knowledge every time. CloudQuery Crafter can also use queries on https://kmcquade.com/cloudquery/#ec2-instances-with-public-ips to guide it.
+Do not invent any tables. If they are not mentioned in CloudQuery Crafter's knowledge they do not exist.
+Unless told otherwise, use GoogleSQL SQL dialect which is documented in CloudQuery Crafter's knowledge.
+</code></pre></div></div>
+
+<p>This GPT can be used at <a href="https://chat.openai.com/g/g-2guyuhcpP-cloudquery-crafter">https://chat.openai.com/g/g-2guyuhcpP-cloudquery-crafter</a></p>
+
+<p>If you’ve any issues or ideas for improvements, please let me know.</p>]]></content><author><name></name></author><category term="ChatGPT" /><category term="cloudquery" /><summary type="html"><![CDATA[Making a custom GPT with chatgpt for cloudquery data]]></summary></entry><entry><title type="html">Finding secrets on GitLab</title><link href="https://tales.fromprod.com/2024/056/gitlab-secrets.html" rel="alternate" type="text/html" title="Finding secrets on GitLab" /><published>2024-02-25T11:00:00+00:00</published><updated>2024-02-25T11:00:00+00:00</updated><id>https://tales.fromprod.com/2024/056/gitlab-secrets</id><content type="html" xml:base="https://tales.fromprod.com/2024/056/gitlab-secrets.html"><![CDATA[<h1 id="finding-secrets-on-gitlab">Finding secrets on GitLab</h1>
 
 <p>Everyone’s been there before, you included something you shouldn’t have in a commit so you undo the commit and force push.</p>
 
@@ -857,198 +891,4 @@ This is based on conjecture for Discord, and reading some Slack docs. This is no
 <p>Same protections as when you send a message, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policies</a> and setting context using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML#security_considerations">innerHTML</a> (in the case of Discord.)</p>
 
 <h2 id="tldr">TLDR</h2>
-<p>They don’t run the preview HTTP requests from your machine, and only provide a well documented but uncommon (for infrastructure) set of tags.</p>]]></content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Discord" /><category term="Security" /><summary type="html"><![CDATA[How Slack and Discord prevent you scanning Infrastructure with link previews]]></summary></entry><entry><title type="html">Managing Google Groups via the API, aka what they don’t want you to do!</title><link href="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html" rel="alternate" type="text/html" title="Managing Google Groups via the API, aka what they don’t want you to do!" /><published>2021-08-11T03:00:00+01:00</published><updated>2021-08-11T03:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/managing-google-groups-via-api</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/managing-google-groups-via-api.html"><![CDATA[<h1 id="managing-google-groups-via-the-api-despite-their-best-efforts">Managing Google Groups via the API, despite their best efforts</h1>
-
-<p><strong> Better version available <a href="/2022/011/improved-managing-google-groups.html">here</a> </strong></p>
-
-<p>Google have made it difficult to do this, they somewhat document two different APIs to achieve this, with limited success. This is especially true if you want to use a service account rather than a user API token for the management.</p>
-
-<ul>
-  <li><a href="https://developers.google.com/admin-sdk/directory/v1/guides/manage-groups">Using the directory API</a></li>
-  <li><a href="https://cloud.google.com/identity/docs/how-to/create-dynamic-groups">Using the Cloud Identity APIs - newer and seems to be preferred going forward</a></li>
-</ul>
-
-<p>At the time of writing, these are not sufficiently detailed to do more than work out those are the APIs to use. That’s where this guide comes in.</p>
-
-<h2 id="what-this-will-help-you-achieve">What this will help you achieve</h2>
-
-<p>A golang binary which manages the membership of a Google Group for you. The steps will likely apply to the other language client libraries</p>
-
-<h2 id="prerequisites">Prerequisites</h2>
-<ul>
-  <li>Google Cloud Identity Premium</li>
-  <li>A paid for Google Workspace</li>
-  <li>A Google cloud Service Account (SA)
-    <ul>
-      <li>An API key for that SA</li>
-      <li>The email address of that SA</li>
-      <li>This SA requires <strong>no permissions at all</strong> in the cloud console</li>
-    </ul>
-  </li>
-  <li>The magic “Customer ID”
-    <ul>
-      <li>TThis can only be obtained by a workspace admin , via the steps on <a href="https://support.google.com/a/answer/10070793?hl=en">https://support.google.com/a/answer/10070793?hl=en</a></li>
-    </ul>
-  </li>
-  <li>The google group you wish to manage
-    <ul>
-      <li>You should add the SA’s email address as an “OWNER” of that group, and change the subscription to “no emails” as it can’t receive them.</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="dependencies">Dependencies</h3>
-<ul>
-  <li>A source of email addresses to add to your group</li>
-  <li>The <a href="https://pkg.go.dev/google.golang.org/api@v0.51.0/cloudidentity/v1">cloud identity client library</a></li>
-  <li>The <a href="https://pkg.go.dev/google.golang.org/api@v0.52.0/option">Google API options library</a></li>
-</ul>
-
-<p>The following is example code and won’t compile without changes, and lacks niceties like error handling and retrying in the face of inevitable errors.</p>
-
-<p>This should provide a clearer understanding of the hierarchy of the Google Groups data model.</p>
-
-<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
-
-<span class="k">import</span> <span class="p">(</span>
-	<span class="c">//Whatever other deps you need go here</span>
-
-	<span class="n">cloudidentity</span> <span class="s">"google.golang.org/api/cloudidentity/v1"</span>
-	<span class="n">goption</span> <span class="s">"google.golang.org/api/option"</span>
-<span class="p">)</span>
-
-<span class="c">// Variables to replace in this sample (nonworking) code</span>
-<span class="c">// CXXXXXXXX -&gt; Your customer ID</span>
-<span class="c">// requiredGroup@example.com -&gt; The email address of the google group you care about</span>
-<span class="c">// "a@a.com", "b@a.com" -&gt; The actual list of emails you want added</span>
-<span class="c">// addDelta -&gt; A function to say which emails need added to the group based on current emails</span>
-<span class="c">// removeDelta -&gt; A function to say which emails need removed from the group based on current emails</span>
-
-<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-
-	<span class="c">// Create your goptions from your credential file.</span>
-	<span class="c">// This is the Service Account Key you downloaded during</span>
-	<span class="c">// The prerequisites.</span>
-	<span class="n">goptions</span> <span class="o">:=</span> <span class="n">goption</span><span class="o">.</span><span class="n">WithCredentialsFile</span><span class="p">(</span><span class="s">"/some/file/location.json"</span><span class="p">)</span>
-
-	<span class="n">ctx</span> <span class="o">:=</span> <span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">()</span>
-	<span class="n">cis</span> <span class="o">:=</span> <span class="n">cloudidentity</span><span class="o">.</span><span class="n">NewService</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">goptions</span><span class="p">)</span>
-
-	<span class="c">// Next you'll want to get the group you're interested in</span>
-	<span class="c">// The only way I found was to get all accessible groups</span>
-	<span class="c">// Then filter for the relevant email address</span>
-
-	<span class="n">groupsService</span> <span class="o">:=</span> <span class="n">cloudidentity</span><span class="o">.</span><span class="n">NewGroupsService</span><span class="p">(</span><span class="n">cis</span><span class="p">)</span>
-	<span class="n">gsl</span> <span class="o">:=</span> <span class="n">groupsService</span><span class="o">.</span><span class="n">List</span><span class="p">()</span>
-	<span class="c">// Replace CXXXXXXXX with the customer ID</span>
-	<span class="c">// you got during prerequisites</span>
-	<span class="n">gsl</span><span class="o">.</span><span class="n">Parent</span><span class="p">(</span><span class="s">"customers/CXXXXXXXX"</span><span class="p">)</span>
-	<span class="n">listedGroupsResponse</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">gsl</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
-	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-		<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="n">listedGroups</span> <span class="o">:=</span> <span class="n">listedGroupsResponse</span><span class="o">.</span><span class="n">Groups</span>
-
-	<span class="c">// The email address of the Group is actually the "GroupKey.Id"</span>
-	<span class="c">// logging out the first email address as we'll pretend that's what we want</span>
-	<span class="c">// Rather than taking the first element, you would loop through and select</span>
-	<span class="c">// the one you want</span>
-
-	<span class="k">var</span> <span class="n">relevantGroup</span> <span class="o">*</span><span class="n">cloudidentity</span><span class="o">.</span><span class="n">Group</span>
-	<span class="n">found</span> <span class="o">:=</span> <span class="no">false</span>
-
-	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">group</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">listedGroups</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">GroupKey</span><span class="o">.</span><span class="n">Id</span> <span class="o">==</span> <span class="s">"requiredGroup@example.com"</span> <span class="p">{</span>
-			<span class="n">relevantGroup</span> <span class="o">=</span> <span class="n">group</span>
-			<span class="n">found</span> <span class="o">=</span> <span class="no">true</span>
-			<span class="k">break</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
-		<span class="n">log</span><span class="o">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">"Group not found"</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="n">log</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="s">"Email address of group was %+v"</span><span class="p">,</span> <span class="n">group</span><span class="o">.</span><span class="n">GroupKey</span><span class="o">.</span><span class="n">Id</span><span class="p">)</span>
-
-	<span class="c">// Now to get the membership of the group, so we can see the emails of the current members</span>
-
-	<span class="n">gms</span> <span class="o">:=</span> <span class="n">cloudidentity</span><span class="o">.</span><span class="n">NewGroupsMembershipsService</span><span class="p">(</span><span class="n">cis</span><span class="p">)</span>
-
-	<span class="c">// Response containing list of memberships</span>
-	<span class="n">lmr</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">gms</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">groupName</span><span class="p">)</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
-	<span class="c">// Pulling out just the memberships</span>
-	<span class="n">currentMemberships</span> <span class="o">:=</span> <span class="n">lmr</span><span class="o">.</span><span class="n">Memberships</span>
-
-	<span class="k">var</span> <span class="n">currentEmails</span> <span class="p">[]</span><span class="kt">string</span>
-
-	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">member</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">currentMemberships</span> <span class="p">{</span>
-		<span class="c">// The EntityKey == PreferredMemberKey == the user email</span>
-		<span class="n">email</span> <span class="o">:=</span> <span class="n">member</span><span class="o">.</span><span class="n">PreferredMemberKey</span><span class="o">.</span><span class="n">Id</span>
-		<span class="n">currentEmails</span> <span class="o">=</span> <span class="nb">append</span><span class="p">(</span><span class="n">currentEmails</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="n">desiredEmails</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"a@a.com"</span><span class="p">,</span> <span class="s">"b@a.com"</span><span class="p">}</span>
-
-	<span class="c">//The following functions aren't defined, you need to define this logic yourself</span>
-
-	<span class="c">// Example if you wish to only add the new emails</span>
-	<span class="c">// Rather than deal with 409 which you get</span>
-	<span class="c">// if the email is already a member</span>
-	<span class="n">additionalEmails</span> <span class="o">:=</span> <span class="n">addDelta</span><span class="p">(</span><span class="n">desiredEmails</span><span class="p">,</span> <span class="n">currentEmails</span><span class="p">)</span>
-	<span class="c">// Example if you wish to remove any members who shouldn't be there</span>
-	<span class="n">emailsToRemove</span> <span class="o">:=</span> <span class="n">removeDelta</span><span class="p">(</span><span class="n">desiredEmails</span><span class="p">,</span> <span class="n">currentEmails</span><span class="p">)</span>
-
-	<span class="c">// Now to add the new members</span>
-
-	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">email</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">additionalEmails</span> <span class="p">{</span>
-		<span class="n">key</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">cloudidentity</span><span class="o">.</span><span class="n">EntityKey</span><span class="p">{</span><span class="n">Id</span><span class="o">:</span> <span class="n">email</span><span class="p">}</span>
-		<span class="n">roles</span> <span class="o">:=</span> <span class="p">[]</span><span class="o">*</span><span class="n">cloudidentity</span><span class="o">.</span><span class="n">MembershipRole</span><span class="p">{</span><span class="o">&amp;</span><span class="n">cloudidentity</span><span class="o">.</span><span class="n">MembershipRole</span><span class="p">{</span><span class="n">Name</span><span class="o">:</span> <span class="s">"MEMBER"</span><span class="p">}}</span>
-		<span class="c">// Despite the docs saying it's Member by default, we must explicitly set it</span>
-		<span class="c">// Or you will get ERROR: googleapi: Error 400: resource.roles must be specified, badRequest</span>
-		<span class="c">// when trying to create the membership</span>
-
-		<span class="n">mem</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">cloudidentity</span><span class="o">.</span><span class="n">Membership</span><span class="p">{</span><span class="n">PreferredMemberKey</span><span class="o">:</span> <span class="n">key</span><span class="p">,</span> <span class="n">Roles</span><span class="o">:</span> <span class="n">roles</span><span class="p">}</span>
-
-		<span class="c">// This part youll want to make retriable</span>
-		<span class="c">// Any 409's are "fine" as it means the member already exists</span>
-		<span class="c">// Using the "Name" found earlier as it's annoying to create due to format</span>
-		<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">gms</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">relevantGroup</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">mem</span><span class="p">)</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
-		<span class="n">errStr</span> <span class="o">:=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprint</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">errStr</span><span class="p">,</span> <span class="s">"Error 409"</span><span class="p">)</span> <span class="p">{</span>
-			<span class="n">log</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-			<span class="k">continue</span>
-		<span class="p">}</span>
-
-	<span class="p">}</span>
-
-	<span class="c">// Now to remove the extra members</span>
-
-	<span class="c">// Have a horrible loop as there doesn't seem to be a nice way to get a membership ID...</span>
-	<span class="c">// MembershipLookupCall doesn't exist :(</span>
-
-	<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">email</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">emailsForRemoval</span> <span class="p">{</span>
-
-		<span class="n">found</span> <span class="o">:=</span> <span class="no">false</span>
-
-		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">Membership</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">currentMemberships</span> <span class="p">{</span>
-			<span class="k">if</span> <span class="n">Membership</span><span class="o">.</span><span class="n">PreferredMemberKey</span><span class="o">.</span><span class="n">Id</span> <span class="o">==</span> <span class="n">email</span> <span class="p">{</span>
-				<span class="n">found</span> <span class="o">=</span> <span class="no">true</span>
-				<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">gms</span><span class="o">.</span><span class="n">Delete</span><span class="p">(</span><span class="n">Membership</span><span class="o">.</span><span class="n">Name</span><span class="p">)</span><span class="o">.</span><span class="n">Do</span><span class="p">()</span>
-				<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-					<span class="n">e</span> <span class="o">:=</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Errorf</span><span class="p">(</span><span class="s">"Encountered error while deleting membership %+v"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-					<span class="n">log</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-					<span class="k">continue</span>
-				<span class="p">}</span>
-			<span class="p">}</span>
-		<span class="p">}</span>
-		<span class="k">if</span> <span class="o">!</span><span class="n">found</span> <span class="p">{</span>
-			<span class="n">log</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-			<span class="k">continue</span>
-		<span class="p">}</span>
-
-	<span class="p">}</span>
-
-<span class="p">}</span>
-
-</code></pre></div></div>]]></content><author><name></name></author><category term="Google" /><category term="APIs" /><category term="Golang" /><category term="Go" /><summary type="html"><![CDATA[Managing Google Groups via the API, despite their best efforts]]></summary></entry></feed>
+<p>They don’t run the preview HTTP requests from your machine, and only provide a well documented but uncommon (for infrastructure) set of tags.</p>]]></content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Discord" /><category term="Security" /><summary type="html"><![CDATA[How Slack and Discord prevent you scanning Infrastructure with link previews]]></summary></entry></feed>
