@@ -1,4 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-03-07T22:58:33+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-03-22T22:44:06+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
+
+<p><strong>Warning</strong>
+This is not officially supported by Google, and could be considered against their <a href="https://support.google.com/meet/answer/9847091">terms of service (specifically “System interference”)</a> so follow this guide at your own risk.</p>
+
+<p><strong>I accept no responsibility for how anyone chooses to use this. As always - Don’t be a pain</strong></p>
+
+<h2 id="requirements">Requirements</h2>
+
+<ul>
+  <li>An mp4 video which you have the rights to use</li>
+  <li>A browser where you can edit a page’s HTML</li>
+  <li>Some patience</li>
+</ul>
+
+<h2 id="guide">Guide</h2>
+
+<ul>
+  <li>Join a Google Meet call</li>
+  <li>click the menu (three vertical dots)</li>
+  <li>select Apply visual effects</li>
+  <li>Use inspector on the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
+  <li>You should then see something like <code class="language-plaintext highlighter-rouge">&lt;input type="file" jsname="tif8Pe" jsaction="change:E7zRc" accept="image/jpeg, image/png, image/webp" style="display: none;"&gt;</code> in the HTML
+    <ul>
+      <li>edit this to include <code class="language-plaintext highlighter-rouge">video/mp4</code></li>
+    </ul>
+  </li>
+  <li>Click the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
+  <li>Select your mp4 video</li>
+</ul>
+
+<p>Congratulations, you’ve now set a video as your background</p>
+
+<h2 id="dirty-javascript-hacks-to-do-this">Dirty javascript hacks to do this</h2>
+
+<p>** Warning ** This is GPT generated, run at your own risk</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Find the first &lt;input&gt; element with the specific attributes</span>
+<span class="kd">const</span> <span class="nx">inputFile</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">input[type="file"][accept*="image/jpeg"], input[type="file"][accept*="image/png"], input[type="file"][accept*="image/webp"]</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">inputFile</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Get the current accept attribute value</span>
+    <span class="kd">const</span> <span class="nx">currentAcceptValue</span> <span class="o">=</span> <span class="nx">inputFile</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">accept</span><span class="dl">'</span><span class="p">);</span>
+    <span class="c1">// Check if "video/mp4" is already included, if not, add it</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">currentAcceptValue</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="dl">'</span><span class="s1">video/mp4</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">inputFile</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">accept</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nx">currentAcceptValue</span><span class="p">}</span><span class="s2">, video/mp4`</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="steps-to-using-this-javascript">Steps to using this javascript</h2>
+
+<ul>
+  <li>Join a Google Meet call</li>
+  <li>Open the developer console</li>
+  <li>paste in that javascript and run it</li>
+  <li>Click the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
+  <li>Select your mp4 video</li>
+</ul>
+
+<p>Congratulations, you’ve now set a video as your background</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
 
 <p>This assumes you followed <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt">https://help.openai.com/en/articles/8554397-creating-a-gpt</a> and have already generated “instructions” for the GPT.</p>
 
@@ -866,29 +926,4 @@ kubegres-controller-manager-75b6765589-kvr97      1/2     ContainerCreating   0 
 </code></pre></div></div>
 
 <h2 id="conclusions">Conclusions</h2>
-<p>Don’t run x86 on Pis, especially not on kubernetes! They just aren’t fast enough (yet)</p>]]></content><author><name></name></author><category term="Kubernetes" /><category term="QEMU" /><summary type="html"><![CDATA[Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!]]></summary></entry><entry><title type="html">How Slack and Discord prevent you scanning Infrastructure with link previews</title><link href="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html" rel="alternate" type="text/html" title="How Slack and Discord prevent you scanning Infrastructure with link previews" /><published>2021-08-11T20:00:00+01:00</published><updated>2021-08-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews</id><content type="html" xml:base="https://tales.fromprod.com/2021/223/how-slack-and-discord-stop-scanning-previews.html"><![CDATA[<h1 id="how-slack-and-discord-prevent-you-scanning-infrastructure-with-link-previews">How Slack and Discord prevent you scanning Infrastructure with link previews</h1>
-
-<p><strong>NOTE</strong>
-This is based on conjecture for Discord, and reading some Slack docs. This is not based on statements from them.</p>
-
-<h2 id="why-should-i-care-about-these-nice-previews">Why should I care about these nice previews?</h2>
-<p>They’re running an HTTP GET from some machine somewhere, and then presenting some returned data from any source in a webpage… Sounds ripe for stored XSS/SSRF/recon/general shenanigans, doesn’t it? <a href="https://elbs.medium.com/1-000-ssrf-in-slack-7737935d3884">1</a>,<a href="https://hackerone.com/reports/381129">2</a>,<a href="https://hackerone.com/reports/61312">3</a>,<a href="https://gitlab.com/gitlab-org/gitlab/-/issues/28487">4</a></p>
-
-<h2 id="how-they-prevent-you-scanning-the-network-around-the-receiver">How they prevent you scanning the network around the receiver</h2>
-
-<p>They do the link loading server side, and then cache it for all clients [<a href="https://api.slack.com/robots#link-expanding">5</a>]. This means the network calls come from the service servers, not the receiver which rules this out, phew!</p>
-
-<p>This is different to client side link loading (which is a <em>bad</em> idea, see <a href="https://www.perimeterx.com/tech-blog/2020/whatsapp-fs-read-vuln-disclosure/">part 3</a>)</p>
-
-<h2 id="how-do-they-prevent-you-scanning-their-own-infra">How do they prevent you scanning their own infra?</h2>
-<p>Say for example they are on AWS, you can get their servers to run any GET commands you want, even to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">AWS metadata service</a> which can be used for <a href="https://www.shellntel.com/blog/2019/8/27/aws-metadata-endpoint-how-to-not-get-pwned-like-capital-one">kill chains</a>. That sounds fun right? (Not actually, please don’t do this without permission)</p>
-
-<p>So, why doesn’t this matter? They only return the information they found in specific tags <a href="https://api.slack.com/robots#link-expanding">5</a> which rules out (probably) every interesting internal API, so you can run a GET but never get the information back.</p>
-
-<p>They may also be running a deny-list but these are never perfect.</p>
-
-<h2 id="how-do-they-stop-you-injecting-random-code-into-the-page">How do they stop you injecting random code into the page</h2>
-<p>Same protections as when you send a message, <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content Security Policies</a> and setting context using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML#security_considerations">innerHTML</a> (in the case of Discord.)</p>
-
-<h2 id="tldr">TLDR</h2>
-<p>They don’t run the preview HTTP requests from your machine, and only provide a well documented but uncommon (for infrastructure) set of tags.</p>]]></content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Discord" /><category term="Security" /><summary type="html"><![CDATA[How Slack and Discord prevent you scanning Infrastructure with link previews]]></summary></entry></feed>
+<p>Don’t run x86 on Pis, especially not on kubernetes! They just aren’t fast enough (yet)</p>]]></content><author><name></name></author><category term="Kubernetes" /><category term="QEMU" /><summary type="html"><![CDATA[Running a Kubernetes native x86_64 application on Raspberry Pis, and why you shouldn’t!]]></summary></entry></feed>
