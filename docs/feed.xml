@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-03-22T22:44:06+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-03-22T22:50:48+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
 
 <p><strong>Warning</strong>
 This is not officially supported by Google, and could be considered against their <a href="https://support.google.com/meet/answer/9847091">terms of service (specifically “System interference”)</a> so follow this guide at your own risk.</p>
 
 <p><strong>I accept no responsibility for how anyone chooses to use this. As always - Don’t be a pain</strong></p>
+
+<p>Don’t worry, only the video is sent from the video rather than the video and the audio</p>
 
 <h2 id="requirements">Requirements</h2>
 
@@ -29,7 +31,8 @@ This is not officially supported by Google, and could be considered against thei
   <li>Select your mp4 video</li>
 </ul>
 
-<p>Congratulations, you’ve now set a video as your background</p>
+<p>Congratulations, you’ve now set a video as your background.
+The video audio is <em>not</em> sent</p>
 
 <h2 id="dirty-javascript-hacks-to-do-this">Dirty javascript hacks to do this</h2>
 
@@ -58,7 +61,8 @@ This is not officially supported by Google, and could be considered against thei
   <li>Select your mp4 video</li>
 </ul>
 
-<p>Congratulations, you’ve now set a video as your background</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
+<p>Congratulations, you’ve now set a video as your background
+The video audio is <em>not</em> sent</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
 
 <p>This assumes you followed <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt">https://help.openai.com/en/articles/8554397-creating-a-gpt</a> and have already generated “instructions” for the GPT.</p>
 

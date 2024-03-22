@@ -11,6 +11,7 @@ This is not officially supported by Google, and could be considered against thei
 
 **I accept no responsibility for how anyone chooses to use this. As always - Don't be a pain**
 
+Don't worry, only the video is sent from the video rather than the video and the audio
 
 ## Requirements
 
@@ -29,7 +30,8 @@ This is not officially supported by Google, and could be considered against thei
 - Click the `Add your own personal background` button
 - Select your mp4 video
 
-Congratulations, you've now set a video as your background
+Congratulations, you've now set a video as your background.
+The video audio is *not* sent
 
 ## Dirty javascript hacks to do this
 
@@ -58,4 +60,4 @@ if (inputFile) {
 - Select your mp4 video
 
 Congratulations, you've now set a video as your background
-
+The video audio is *not* sent
