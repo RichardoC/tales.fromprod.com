@@ -11,7 +11,7 @@ This is not officially supported by Google, and could be considered against thei
 
 **I accept no responsibility for how anyone chooses to use this. As always - Don't be a pain**
 
-Don't worry, only the video is sent from the video rather than the video and the audio
+Don't worry, at this time (2024-03-22) it only uses the video, not the audio channel.
 
 ## Requirements
 
