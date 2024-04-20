@@ -1,36 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-04-20T11:01:11+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using your own hardware for llms</title><link href="https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms.html" rel="alternate" type="text/html" title="Using your own hardware for llms" /><published>2024-04-20T11:00:00+01:00</published><updated>2024-04-20T11:00:00+01:00</updated><id>https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms</id><content type="html" xml:base="https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms.html"><![CDATA[<h1 id="using-your-own-hardware-for-llms">Using your own hardware for llms</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-04-20T23:43:38+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using your own hardware for llms</title><link href="https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms.html" rel="alternate" type="text/html" title="Using your own hardware for llms" /><published>2024-04-20T11:00:00+01:00</published><updated>2024-04-20T11:00:00+01:00</updated><id>https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms</id><content type="html" xml:base="https://tales.fromprod.com/2024/111/using-your-own-hardware-for-llms.html"><![CDATA[<h1 id="using-your-own-hardware-for-llms">Using your own hardware for llms</h1>
 
 <p>Things have come a long way since <a href="/2023/099/getting-started-with-llms-locally.html">this post</a></p>
 
-<p>This article assumes you have a powerful machine (referred to as “server”) and you want to use that for running the models (inference) and want to actually interact with them from another machine (referrred to as “client”).</p>
+<p>This article assumes you have a powerful machine (referred to as “server”) and you want to use that for running the models (inference) and want to actually interact with them from another machine (referred to as “client”).</p>
 
 <h2 id="prerequisites">Prerequisites</h2>
+
 <ul>
-  <li>You’ve installed <a href="https://jan.ai">https://jan.ai</a> on both machines</li>
-  <li>You’ve downloaded whatever model you want to use on the server</li>
-  <li>You have connectivity from your client machine to the server (e.g. firewalls correctly configured)</li>
+  <li>Jan.ai installed on both the server and client machines</li>
+  <li>A specific model of your choice downloaded on the server</li>
+  <li>Network connectivity possible between the client and server (e.g., firewalls configured correctly)</li>
 </ul>
 
 <h2 id="setting-up-the-server">Setting up the server</h2>
 
-<p>Once you’ve installed the models, click on “Local API Server” near the bottom left of the window</p>
+<p>After installing the models in Jan.ai on the server, click on “Local API Server” located near the bottom left corner of the window.</p>
 
-<p>On the hosting page use these settings</p>
+<p>On the hosting page use the following settings</p>
 <ul>
-  <li>select “0.0.0.0” as the host IP</li>
-  <li>use whatever port you want</li>
-  <li>In Model Settings, set the model you wanted to use and have already downloaded</li>
+  <li>Set the host IP to “0.0.0.0”</li>
+  <li>Choose any desired port number</li>
+  <li>In Model Settings, select the model you have already downloaded</li>
+  <li>Click “Start Server” to initiate the local API server.</li>
 </ul>
-
-<p>After this, click “Start Server”</p>
 
 <h2 id="setting-up-the-client">Setting up the client</h2>
 
-<p>First you’ll need to open your jan configuration folder, its location can be found in Settings -&gt; Advanced Settings -&gt; Jan Data Folder</p>
-
-<p>In that folder create a file at the path <code class="language-plaintext highlighter-rouge">models/local-local/model.json</code></p>
-
-<p>With the following content, replacing <code class="language-plaintext highlighter-rouge">$MODEL_ID</code> with the model id that you’re running on the server</p>
+<ul>
+  <li>Navigate to the Jan.ai configuration folder, which can be found in Settings -&gt; Advanced Settings -&gt; Jan Data Folder.</li>
+  <li>Create a file named <code class="language-plaintext highlighter-rouge">model.json</code> at the path <code class="language-plaintext highlighter-rouge">models/local-local/model.json</code>.</li>
+  <li>Add the following content to the <code class="language-plaintext highlighter-rouge">model.json</code> file, replacing <code class="language-plaintext highlighter-rouge">$MODEL_ID</code> with your server’s model ID such as <code class="language-plaintext highlighter-rouge">hermes-pro-7b</code>:</li>
+</ul>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -55,19 +55,25 @@
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>Next, restart the Jan.ai application, and navigate to Settings -&gt; OpenAI Inference Engine</p>
-
-<p>In “Chat Completions Endpoint” Put <code class="language-plaintext highlighter-rouge">http://$IP:$PORT/v1/chat/completions</code> correcting $IP for the IP of your server, and $PORT for the port you chose on the server.</p>
-
-<p>Leave the API key blank or this won’t work.</p>
+<ol>
+  <li>Restart the Jan.ai application on the client machine.</li>
+  <li>Access Settings -&gt; OpenAI Inference Engine and enter <code class="language-plaintext highlighter-rouge">http://$IP:$PORT/v1/chat/completions</code> in the “Chat Completions Endpoint” field, replacing $IP with your server’s IP address and $PORT with the chosen port number on the server. Leave the API key blank or it won’t work.</li>
+</ol>
 
 <h2 id="using-the-model-running-on-your-server">Using the model running on your server</h2>
 
-<p>Create a new thread and from the model drop down on the right Select “remote” and then “local test”</p>
+<p>Using the Model Running on Your Server:</p>
+<ol>
+  <li>Create a new thread in the Jan.ai application on the client machine.</li>
+  <li>In the model dropdown menu on the right, select “remote” and then choose “local test”.</li>
+  <li>Start sending messages as usual and (hopefully) have a faster experience.</li>
+</ol>
 
-<p>Send your messages as usual</p>
+<p>Congratulations, you’re now performing inference on another machine!</p>
 
-<p>Congratulations, you’re now performing inference on another machine!</p>]]></content><author><name></name></author><category term="ML" /><category term="LLMs" /><category term="Jan.ai" /><summary type="html"><![CDATA[Using your own hardware for llms]]></summary></entry><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
+<h2 id="conclusion">Conclusion</h2>
+
+<p>By following these steps, you can utilise your own hardware for LLM usage and enjoy the benefits of running models and interacting with them from a remote machine. Enjoy the improved performance, privacy and flexibility offered by this setup.</p>]]></content><author><name></name></author><category term="ML" /><category term="LLMs" /><category term="Jan.ai" /><summary type="html"><![CDATA[Using your own hardware for llms]]></summary></entry><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
 
 <p><strong>Warning</strong>
 This is not officially supported by Google, and could be considered against their <a href="https://support.google.com/meet/answer/9847091">terms of service (specifically “System interference”)</a> so follow this guide at your own risk.</p>

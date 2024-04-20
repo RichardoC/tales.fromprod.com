@@ -8,32 +8,31 @@ categories: [ML,  LLMs, Jan.ai]
 
 Things have come a long way since [this post]({% post_url 2023/2023-04-09-getting-started-with-llms-locally%})
 
-This article assumes you have a powerful machine (referred to as "server") and you want to use that for running the models (inference) and want to actually interact with them from another machine (referrred to as "client").
+This article assumes you have a powerful machine (referred to as "server") and you want to use that for running the models (inference) and want to actually interact with them from another machine (referred to as "client").
 
 ## Prerequisites
-* You've installed <https://jan.ai> on both machines
-* You've downloaded whatever model you want to use on the server
-* You have connectivity from your client machine to the server (e.g. firewalls correctly configured)
+
+- Jan.ai installed on both the server and client machines
+- A specific model of your choice downloaded on the server
+- Network connectivity possible between the client and server (e.g., firewalls configured correctly)
 
 
 ## Setting up the server
 
-Once you've installed the models, click on "Local API Server" near the bottom left of the window
+After installing the models in Jan.ai on the server, click on "Local API Server" located near the bottom left corner of the window.
 
-On the hosting page use these settings
-* select "0.0.0.0" as the host IP
-* use whatever port you want
-* In Model Settings, set the model you wanted to use and have already downloaded
+On the hosting page use the following settings
+- Set the host IP to "0.0.0.0"
+- Choose any desired port number
+- In Model Settings, select the model you have already downloaded
+- Click "Start Server" to initiate the local API server.
 
-After this, click "Start Server"
 
 ## Setting up the client
 
-First you'll need to open your jan configuration folder, its location can be found in Settings -> Advanced Settings -> Jan Data Folder
-
-In that folder create a file at the path `models/local-local/model.json`
-
-With the following content, replacing `$MODEL_ID` with the model id that you're running on the server
+* Navigate to the Jan.ai configuration folder, which can be found in Settings -> Advanced Settings -> Jan Data Folder.
+* Create a file named `model.json` at the path `models/local-local/model.json`.
+* Add the following content to the `model.json` file, replacing `$MODEL_ID` with your server's model ID such as `hermes-pro-7b`:
 
 ```json
 
@@ -59,17 +58,18 @@ With the following content, replacing `$MODEL_ID` with the model id that you're 
 }
 ```
 
-Next, restart the Jan.ai application, and navigate to Settings -> OpenAI Inference Engine 
-
-In "Chat Completions Endpoint" Put `http://$IP:$PORT/v1/chat/completions` correcting $IP for the IP of your server, and $PORT for the port you chose on the server.
-
-Leave the API key blank or this won't work.
-
+1. Restart the Jan.ai application on the client machine.
+2. Access Settings -> OpenAI Inference Engine and enter `http://$IP:$PORT/v1/chat/completions` in the "Chat Completions Endpoint" field, replacing $IP with your server's IP address and $PORT with the chosen port number on the server. Leave the API key blank or it won't work.
 
 ## Using the model running on your server
 
-Create a new thread and from the model drop down on the right Select "remote" and then "local test"
-
-Send your messages as usual
+Using the Model Running on Your Server:
+1. Create a new thread in the Jan.ai application on the client machine.
+2. In the model dropdown menu on the right, select "remote" and then choose "local test".
+3. Start sending messages as usual and (hopefully) have a faster experience.
 
 Congratulations, you're now performing inference on another machine!
+
+## Conclusion
+
+By following these steps, you can utilise your own hardware for LLM usage and enjoy the benefits of running models and interacting with them from a remote machine. Enjoy the improved performance, privacy and flexibility offered by this setup.
