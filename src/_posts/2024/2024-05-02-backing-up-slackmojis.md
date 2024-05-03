@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Backing up Slack-mojis"
-date:   2021-08-05 20:00:00 -0000
+date:   2024-05-02 20:00:00 -0000
 categories: [Slack, APIs,  Nonsense]
 ---
 # Backing up Slackmojis
