@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-04-21T19:18:32+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">The challenges of using libraries</title><link href="https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries.html" rel="alternate" type="text/html" title="The challenges of using libraries" /><published>2024-04-21T18:00:00+01:00</published><updated>2024-04-21T18:00:00+01:00</updated><id>https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries</id><content type="html" xml:base="https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries.html"><![CDATA[<h1 id="the-challenges-of-using-libraries">The challenges of using libraries</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-05-03T15:44:38+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">The challenges of using libraries</title><link href="https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries.html" rel="alternate" type="text/html" title="The challenges of using libraries" /><published>2024-04-21T18:00:00+01:00</published><updated>2024-04-21T18:00:00+01:00</updated><id>https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries</id><content type="html" xml:base="https://tales.fromprod.com/2024/112/the-challenges-of-using-libraries.html"><![CDATA[<h1 id="the-challenges-of-using-libraries">The challenges of using libraries</h1>
 
 <p>With the Jia Tan saga and the <a href="https://en.wikipedia.org/wiki/XZ_Utils_backdoor">xz utils backdoor</a> bringing wider attention to the risks of supply chain tampering, I figured it was worth putting a few numbers to the scale of this challenge.</p>
 
@@ -290,7 +290,62 @@ Unless told otherwise, use GoogleSQL SQL dialect which is documented in CloudQue
 
 <h2 id="original-idea">Original idea</h2>
 
-<p>This was based on the work by Neodyme where they used this technique to find secrets on <a href="https://neodyme.io/en/blog/github_secrets/">GitHub</a></p>]]></content><author><name></name></author><category term="APIs" /><category term="git" /><summary type="html"><![CDATA[Finding secrets on GitLab]]></summary></entry><entry><title type="html">Pass through JSON logs with vector or filebeat</title><link href="https://tales.fromprod.com/2023/305/pass-through-json-logs.html" rel="alternate" type="text/html" title="Pass through JSON logs with vector or filebeat" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/pass-through-json-logs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/pass-through-json-logs.html"><![CDATA[<h1 id="pass-through-json-logs-with-vector-or-filebeat">Pass through JSON logs with vector or filebeat</h1>
+<p>This was based on the work by Neodyme where they used this technique to find secrets on <a href="https://neodyme.io/en/blog/github_secrets/">GitHub</a></p>]]></content><author><name></name></author><category term="APIs" /><category term="git" /><summary type="html"><![CDATA[Finding secrets on GitLab]]></summary></entry><entry><title type="html">Misusing kubeconfigs</title><link href="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html" rel="alternate" type="text/html" title="Misusing kubeconfigs" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/misusing-kubeconfigs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html"><![CDATA[<h1 id="misusing-kubeconfigs">Misusing kubeconfigs</h1>
+
+<p>When you use kubectl to do something on a cluster, it iterates through each file listed in the KUBECONFIG environment variable and it uses the first one that matches. This can be a problem if you have multiple contexts with the same name as it’ll choose the first one it finds rather than the one you expected.</p>
+
+<h2 id="auth-provider">auth-provider</h2>
+
+<p>These can be use to provision access tokens when required, https://kubernetes.io/docs/reference/access-authn-authz/authentication/#client-go-credential-plugins</p>
+
+<p>minikube kubectl –ssh  –  get ns</p>
+
+<p>minikube kubectl –ssh –  create ns example-admin
+minikube kubectl –ssh –  –namespace example-admin create sa example-admin</p>
+
+<p>minikube kubectl –ssh –  create clusterrolebinding example-admin-binding –clusterrole=cluster-admin  –serviceaccount=example-admin:example-admin</p>
+
+<p>minikube kubectl –ssh –  –names pace example-admin create token example-admin –duration 10m</p>
+
+<p>Turn this in to a blog post</p>
+
+<hr />
+<p>apiVersion: v1
+clusters:</p>
+<ul>
+  <li>cluster:
+  certificate-authority: /home/rtweed/.minikube/ca.crt
+  extensions:
+    <ul>
+      <li>extension:
+  last-update: Thu, 16 Nov 2023 17:17:01 GMT
+  provider: minikube.sigs.k8s.io
+  version: v1.30.1
+name: cluster_info
+  server: https://192.168.39.120:8443
+name: minikube-manual
+contexts:</li>
+    </ul>
+  </li>
+  <li>context:
+  cluster: minikube-manual
+  user: minikube-manual
+name: minikube-manual
+current-context: minikube-manual
+kind: Config
+preferences: {}
+users:</li>
+  <li>name: minikube-manual
+user:
+  auth-provider:
+    config:
+      cmd-args: kubectl –ssh –  –namespace example-admin create token example-admin
+        –duration 10m -ojson
+      cmd-path: minikube
+      expiry-key: ‘{.status.expirationTimestamp}’
+      token-key: ‘{.status.token}’
+    name: gcp # magic to make this work</li>
+</ul>]]></content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html"><![CDATA[Misusing kubeconfigs]]></summary></entry><entry><title type="html">Pass through JSON logs with vector or filebeat</title><link href="https://tales.fromprod.com/2023/305/pass-through-json-logs.html" rel="alternate" type="text/html" title="Pass through JSON logs with vector or filebeat" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/pass-through-json-logs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/pass-through-json-logs.html"><![CDATA[<h1 id="pass-through-json-logs-with-vector-or-filebeat">Pass through JSON logs with vector or filebeat</h1>
 
 <p>Say you are using an application that emits JSON formatted logs, with one log per line in the log file, and you want to store these in ElasticSearch and view them natively in kibana - how would you manage this?</p>
 
@@ -597,56 +652,4 @@ outervpn.example.com. 60 IN	A	192.0.0.240
 <ul>
   <li><code class="language-plaintext highlighter-rouge">Route Allowed IPs</code> is actually in the <code class="language-plaintext highlighter-rouge">Peer Configuration</code> of the WireGuard interface settings on Luci rather than the interface itself. This must be set to true for the routes to be created properly</li>
   <li><code class="language-plaintext highlighter-rouge">MTU</code> being misconfigured on each interface is a common reason for slowdowns/random latency. Ensure that the MTU of your first tunnel is at most (line MTU - 80) and the second tunnel is at most (first tunnel MTU - 80). 80 obtained from <a href="https://projectcalico.docs.tigera.io/networking/mtu#determine-mtu-size">here</a>. This is particularly relevant as WireGuard sets the <code class="language-plaintext highlighter-rouge">Don't Fragment</code> bit on its packets, which can cause high packetloss.</li>
-</ul>]]></content><author><name></name></author><category term="OpenWrt" /><category term="VPN" /><category term="WireGuard" /><summary type="html"><![CDATA[VPN over VPN on Openwrt on one device]]></summary></entry><entry><title type="html">Why LIST is a scary permission on Kubernetes</title><link href="https://tales.fromprod.com/2022/202/Why-Listing-Is-Scary_On-K8s.html" rel="alternate" type="text/html" title="Why LIST is a scary permission on Kubernetes" /><published>2022-07-21T20:00:00+01:00</published><updated>2022-07-21T20:00:00+01:00</updated><id>https://tales.fromprod.com/2022/202/Why-Listing-Is-Scary_On-K8s</id><content type="html" xml:base="https://tales.fromprod.com/2022/202/Why-Listing-Is-Scary_On-K8s.html"><![CDATA[<h1 id="why-list-is-a-scary-permission-on-kubernetes">Why LIST is a scary permission on Kubernetes</h1>
-
-<p>The list response contains all items in full, not just their name. This means the <code class="language-plaintext highlighter-rouge">list</code> permission should never be given to a role that doesn’t already have the <code class="language-plaintext highlighter-rouge">get</code> permission.</p>
-
-<h2 id="example-misuse">Example misuse</h2>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="c"># Create example A, which can only list secrets in the default namespace</span>
-<span class="c"># It does not have the GET permission</span>
-kubectl create serviceaccount only-list-secrets-sa
-kubectl create role only-list-secrets-role <span class="nt">--verb</span><span class="o">=</span>list <span class="nt">--resource</span><span class="o">=</span>secrets
-kubectl create rolebinding only-list-secrets-default-ns <span class="nt">--role</span><span class="o">=</span>only-list-secrets-role <span class="nt">--serviceaccount</span><span class="o">=</span>default:only-list-secrets-sa
-<span class="c"># Now to impersonate that service account</span>
-kubectl proxy &amp;
-<span class="c"># Create a secret to get</span>
-kubectl create secret generic abc
-<span class="c"># Prove we cannot get that secret</span>
-curl http://127.0.0.1:8001/api/v1/namespaces/default/secrets/abc <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="si">$(</span>kubectl <span class="nt">-n</span> default get secrets <span class="nt">-ojson</span> | jq <span class="s1">'.items[]| select(.metadata.annotations."kubernetes.io/service-account.name"=="only-list-secrets-sa")| .data.token'</span> | <span class="nb">tr</span> <span class="nt">-d</span> <span class="s1">'"'</span> | <span class="nb">base64</span> <span class="nt">-d</span><span class="si">)</span><span class="s2">"</span>
-<span class="o">{</span>
-  <span class="s2">"kind"</span>: <span class="s2">"Status"</span>,
-  <span class="s2">"apiVersion"</span>: <span class="s2">"v1"</span>,
-  <span class="s2">"metadata"</span>: <span class="o">{</span>
-  <span class="o">}</span>,
-  <span class="s2">"status"</span>: <span class="s2">"Failure"</span>,
-  <span class="s2">"message"</span>: <span class="s2">"secrets </span><span class="se">\"</span><span class="s2">abc</span><span class="se">\"</span><span class="s2"> is forbidden: User </span><span class="se">\"</span><span class="s2">system:serviceaccount:default:only-list-secrets-sa</span><span class="se">\"</span><span class="s2"> cannot get resource </span><span class="se">\"</span><span class="s2">secrets</span><span class="se">\"</span><span class="s2"> in API group </span><span class="se">\"\"</span><span class="s2"> in the namespace </span><span class="se">\"</span><span class="s2">default</span><span class="se">\"</span><span class="s2">"</span>,
-  <span class="s2">"reason"</span>: <span class="s2">"Forbidden"</span>,
-  <span class="s2">"details"</span>: <span class="o">{</span>
-    <span class="s2">"name"</span>: <span class="s2">"abc"</span>,
-    <span class="s2">"kind"</span>: <span class="s2">"secrets"</span>
-  <span class="o">}</span>,
-  <span class="s2">"code"</span>: 403
-<span class="o">}</span>
-<span class="c"># Now to get all secrets in the default namespace, despite not having "get" permission</span>
-curl http://127.0.0.1:8001/api/v1/namespaces/default/secrets?limit<span class="o">=</span>500 <span class="nt">-H</span> <span class="s2">"Authorization: Bearer </span><span class="si">$(</span>kubectl <span class="nt">-n</span> default get secrets <span class="nt">-ojson</span> | jq <span class="s1">'.items[]| select(.metadata.annotations."kubernetes.io/service-account.name"=="only-list-secrets-sa")| .data.token'</span> | <span class="nb">tr</span> <span class="nt">-d</span> <span class="s1">'"'</span> | <span class="nb">base64</span> <span class="nt">-d</span><span class="si">)</span><span class="s2">"</span>
-<span class="o">{</span>
-  <span class="s2">"kind"</span>: <span class="s2">"SecretList"</span>,
-  <span class="s2">"apiVersion"</span>: <span class="s2">"v1"</span>,
-  <span class="s2">"metadata"</span>: <span class="o">{</span>
-    <span class="s2">"selfLink"</span>: <span class="s2">"/api/v1/namespaces/default/secrets"</span>,
-    <span class="s2">"resourceVersion"</span>: <span class="s2">"17718246"</span>
-  <span class="o">}</span>,
-  <span class="s2">"items"</span>: <span class="o">[</span>
-  REDACTED : REDACTED
-  <span class="o">]</span>
-<span class="o">}</span>
-<span class="c"># Cleanup</span>
-kubectl delete serviceaccount only-list-secrets-sa
-kubectl delete role only-list-secrets-role <span class="nt">--verb</span><span class="o">=</span>list <span class="nt">--resource</span><span class="o">=</span>secrets
-kubectl delete rolebinding only-list-secrets-default-ns <span class="nt">--role</span><span class="o">=</span>only-list-secrets-role <span class="nt">--serviceaccount</span><span class="o">=</span>default:only-list-secrets-sa
-kubectl delete secret abc
-<span class="c"># Kill backgrounded kubectl proxy</span>
-<span class="nb">kill</span> <span class="s2">"%</span><span class="si">$(</span><span class="nb">jobs</span> | <span class="nb">grep</span> <span class="s2">"kubectl proxy"</span> | <span class="nb">cut</span> <span class="nt">-d</span> <span class="o">[</span> <span class="nt">-f</span> 2| <span class="nb">cut</span> <span class="nt">-d</span> <span class="o">]</span> <span class="nt">-f</span> 1<span class="si">)</span><span class="s2">"</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="Kubernetes" /><category term="APIs" /><summary type="html"><![CDATA[Why LIST is a scary permission on Kubernetes]]></summary></entry></feed>
+</ul>]]></content><author><name></name></author><category term="OpenWrt" /><category term="VPN" /><category term="WireGuard" /><summary type="html"><![CDATA[VPN over VPN on Openwrt on one device]]></summary></entry></feed>
