@@ -1,4 +1,144 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-05-03T15:52:48+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Backing up Slack-mojis</title><link href="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html" rel="alternate" type="text/html" title="Backing up Slack-mojis" /><published>2024-05-02T21:00:00+01:00</published><updated>2024-05-02T21:00:00+01:00</updated><id>https://tales.fromprod.com/2024/123/backing-up-slackmojis</id><content type="html" xml:base="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html"><![CDATA[<h1 id="backing-up-slackmojis">Backing up Slackmojis</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-05-06T15:10:51+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Making a self hosted link summariser</title><link href="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html" rel="alternate" type="text/html" title="Making a self hosted link summariser" /><published>2024-05-05T20:00:00+01:00</published><updated>2024-05-05T20:00:00+01:00</updated><id>https://tales.fromprod.com/2024/126/self-hosted-link-summariser</id><content type="html" xml:base="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html"><![CDATA[<h1 id="making-a-self-hosted-link-summariser-using-llms">Making a self hosted link summariser using LLMs</h1>
+
+<p>If you use Reddit or Lemmy you are likely to be familiar with those bots which summarise news links and comment the result. I decided to make one of these which uses an LLM to do the summarisation</p>
+
+<h2 id="step-1-get-the-websites-text">Step 1: Get the website’s text</h2>
+
+<p>For this you want to get the page’s HTML, and remove anything that won’t help the bot such as javascript, CSS, images or videos. You’ll also want to get rid of excessive spaces or newlines as they’ll take up tokens that could be used for more words</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">func</span> <span class="n">standardizeSpaces</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="n">strings</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">strings</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s">" "</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">scrapeSite</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Failed to get site"</span><span class="p">,</span> <span class="s">"site"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+	<span class="n">doc</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">goquery</span><span class="o">.</span><span class="n">NewDocumentFromReader</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Failed to get site body"</span><span class="p">,</span> <span class="s">"site"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
+	<span class="p">}</span>
+
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"img"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+	<span class="c">// We don't care about images, we only want the text on the site</span>
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"picture"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+	<span class="c">// We don't care about scripts, we only want the text on the site</span>
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"script"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+	<span class="c">// We don't care about css, we only want the text on the site</span>
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"style"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+	<span class="c">// We don't care about videos, we only want the text on the site</span>
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"video"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+
+	<span class="c">// There's unlikely to be anything we want in these</span>
+	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"noscript"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
+	<span class="p">})</span>
+
+	<span class="c">// remove excess newlines etc</span>
+	<span class="n">bdyText</span> <span class="o">:=</span> <span class="n">standardizeSpaces</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">Text</span><span class="p">())</span>
+	<span class="n">slog</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">bdyText</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">bdyText</span><span class="p">,</span> <span class="n">err</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="step-2-use-the-llm-to-summarise-the-text">Step 2: Use the LLM to summarise the text</h2>
+
+<p>For this you’ll need to truncate the content from the site if it’s too long, and send it over to the LLM, with a prompt and “thought” that it should do this.</p>
+
+<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">func</span> <span class="n">doSummarisation</span><span class="p">(</span><span class="n">token</span> <span class="kt">string</span><span class="p">,</span> <span class="n">maxTokens</span> <span class="kt">int</span><span class="p">,</span> <span class="n">server</span> <span class="kt">string</span><span class="p">,</span> <span class="n">model</span> <span class="kt">string</span><span class="p">,</span> <span class="n">siteText</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">summary</span> <span class="kt">string</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">lengthOfDataToSend</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">siteText</span><span class="p">)</span>
+
+	<span class="c">// Just a rule of thumb</span>
+	<span class="n">likelyMaximumLengthAccepted</span> <span class="o">:=</span> <span class="m">2</span> <span class="o">*</span> <span class="n">maxTokens</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">siteText</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">2</span><span class="o">*</span><span class="n">likelyMaximumLengthAccepted</span> <span class="p">{</span>
+		<span class="n">lengthOfDataToSend</span> <span class="o">=</span> <span class="m">2</span> <span class="o">*</span> <span class="n">likelyMaximumLengthAccepted</span>
+	<span class="p">}</span>
+
+	<span class="n">aiClient</span> <span class="o">:=</span> <span class="n">openai</span><span class="o">.</span><span class="n">DefaultConfig</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+	<span class="n">aiClient</span><span class="o">.</span><span class="n">BaseURL</span> <span class="o">=</span> <span class="n">server</span>
+	<span class="n">client</span> <span class="o">:=</span> <span class="n">openai</span><span class="o">.</span><span class="n">NewClientWithConfig</span><span class="p">(</span><span class="n">aiClient</span><span class="p">)</span>
+
+	<span class="n">stream</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">client</span><span class="o">.</span><span class="n">CreateChatCompletionStream</span><span class="p">(</span>
+		<span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span>
+		<span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionRequest</span><span class="p">{</span>
+			<span class="n">Model</span><span class="o">:</span> <span class="n">model</span><span class="p">,</span>
+			<span class="n">Messages</span><span class="o">:</span> <span class="p">[]</span><span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionMessage</span><span class="p">{</span>
+				<span class="p">{</span><span class="n">Role</span><span class="o">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatMessageRoleSystem</span><span class="p">,</span>
+					<span class="n">Content</span><span class="o">:</span> <span class="s">"You are an expert at summarising text in a concise manner for intelligent social media users."</span><span class="p">,</span>
+				<span class="p">},</span>
+				<span class="p">{</span>
+					<span class="n">Role</span><span class="o">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatMessageRoleUser</span><span class="p">,</span>
+					<span class="n">Content</span><span class="o">:</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"Summarise the following text using the fewest possible words</span><span class="se">\n</span><span class="s">, %s"</span><span class="p">,</span>
+						<span class="n">siteText</span><span class="p">[</span><span class="o">:</span><span class="n">lengthOfDataToSend</span><span class="o">-</span><span class="m">1</span><span class="p">]),</span>
+				<span class="p">},</span>
+			<span class="p">},</span>
+			<span class="n">Stream</span><span class="o">:</span>           <span class="no">true</span><span class="p">,</span>
+			<span class="n">Stop</span><span class="o">:</span>             <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"&lt;|end_of_text|&gt;"</span><span class="p">,</span> <span class="s">"&lt;|eot_id|&gt;"</span><span class="p">},</span>
+			<span class="n">Temperature</span><span class="o">:</span>      <span class="m">0.7</span><span class="p">,</span>
+			<span class="n">TopP</span><span class="o">:</span>             <span class="m">0.95</span><span class="p">,</span>
+			<span class="n">MaxTokens</span><span class="o">:</span>        <span class="n">maxTokens</span><span class="p">,</span>
+			<span class="n">FrequencyPenalty</span><span class="o">:</span> <span class="m">0.0</span><span class="p">,</span>
+			<span class="n">PresencePenalty</span><span class="o">:</span>  <span class="m">0.0</span><span class="p">,</span>
+		<span class="p">},</span>
+	<span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with ChatCompletionStream for summariser"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="n">stream</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+	<span class="k">var</span> <span class="n">summaryBuilder</span> <span class="n">strings</span><span class="o">.</span><span class="n">Builder</span>
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="k">var</span> <span class="n">response</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionStreamResponse</span>
+		<span class="n">response</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">Recv</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">errors</span><span class="o">.</span><span class="n">Is</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">slog</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Finished receiving response from LLM"</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="no">nil</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with ChatCompletionStream for summariser"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">err</span>
+		<span class="p">}</span>
+		<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">Choices</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">.</span><span class="n">Delta</span><span class="o">.</span><span class="n">Content</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with writing stream to summary"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">err</span>
+		<span class="p">}</span>
+
+	<span class="p">}</span>
+	<span class="c">// Never get here</span>
+
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<h2 id="the-code">The code</h2>
+
+<p>Full version of this code available at <a href="https://github.com/RichardoC/personal-webpage-summariser">https://github.com/RichardoC/personal-webpage-summariser</a></p>
+
+<p>Better versions exist such as <a href="https://github.com/RikudouSage/LemmyAutoTldrBot">https://github.com/RikudouSage/LemmyAutoTldrBot</a></p>]]></content><author><name></name></author><category term="Golang" /><category term="Go" /><category term="APIs" /><category term="ML" /><category term="LLMs" /><summary type="html"><![CDATA[Making a self hosted link summariser using LLMs]]></summary></entry><entry><title type="html">Backing up Slack-mojis</title><link href="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html" rel="alternate" type="text/html" title="Backing up Slack-mojis" /><published>2024-05-02T21:00:00+01:00</published><updated>2024-05-02T21:00:00+01:00</updated><id>https://tales.fromprod.com/2024/123/backing-up-slackmojis</id><content type="html" xml:base="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html"><![CDATA[<h1 id="backing-up-slackmojis">Backing up Slackmojis</h1>
 
 <p>Recently a slack instance I’m on broke through the 11,000 slackmoji barrier. Given this was a significant usage of people’s time I figured it was worth backing these up in case of a disaster</p>
 
@@ -555,80 +695,4 @@ During this time your user will be unable to use the Jira webapp as well, as it�
 </span><span class="go">14054 completed
 14050 completed
 </span><span class="c">...
-</span></code></pre></div></div>]]></content><author><name></name></author><category term="Jira" /><category term="APIs" /><category term="Atlassian" /><summary type="html"><![CDATA[Bulk deleting tickets in Jira For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.]]></summary></entry><entry><title type="html">Getting started with LLMs locally</title><link href="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html" rel="alternate" type="text/html" title="Getting started with LLMs locally" /><published>2023-04-09T20:00:00+01:00</published><updated>2023-04-09T20:00:00+01:00</updated><id>https://tales.fromprod.com/2023/099/getting-started-with-llms-locally</id><content type="html" xml:base="https://tales.fromprod.com/2023/099/getting-started-with-llms-locally.html"><![CDATA[<h1 id="getting-started-with-llms-locally">Getting started with LLMs locally</h1>
-
-<p>So you’ve heard all the hype about Large Language Models (LLM) and want to run one yourself locally. This guide details how</p>
-
-<h2 id="why-would-i-want-to-run-it-locally">Why would I want to run it locally?</h2>
-
-<ul>
-  <li>You want to peer behind the curtain of what’s actually happening</li>
-  <li>You don’t want you prompts to be sent to a third party</li>
-  <li>You want to test the LLM with sensitive intellectual property</li>
-  <li>Why not?</li>
-</ul>
-
-<h2 id="prerequisites">Prerequisites</h2>
-
-<ul>
-  <li>Ubuntu (ish)</li>
-  <li>Huge amounts of ram, or a huge <a href="https://help.ubuntu.com/community/SwapFaq">swapfile/swap</a> partition. 32GB+ is commonly required</li>
-  <li>Python experience</li>
-  <li>A fast internet connection</li>
-  <li>50GB+ free storage space</li>
-</ul>
-
-<h2 id="getting-started-guide">Getting started guide</h2>
-
-<p>Install <a href="https://docs.docker.com/engine/install/debian/">Docker</a></p>
-
-<p>If you have an nvidia GPU configured with cuda you might be able to follow <a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html">https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html</a> to use GPU acceleration.</p>
-
-<p>Install git and git lfs and set it up.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>git git-lfs
-git lfs <span class="nb">install</span>
-</code></pre></div></div>
-
-<p>Download the docker image with all the tools you need, this is ~ 10GB</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull huggingface/transformers-all-latest-gpu
-</code></pre></div></div>
-
-<p>Discover the model you want to play with on Hugging Face such as <a href="https://huggingface.co/cerebras/Cerebras-GPT-2.7B">https://huggingface.co/cerebras/Cerebras-GPT-2.7B</a></p>
-
-<p>You can download it by cloning the git repo (~11GB)</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://huggingface.co/cerebras/Cerebras-GPT-2.7B
-</code></pre></div></div>
-
-<p>Now to run the model</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run <span class="nt">-it</span> <span class="nt">--rm</span>  <span class="nt">-v</span> <span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>:/model docker.io/huggingface/transformers-all-latest-gpu
-<span class="c"># From now all commands are inside the container</span>
-<span class="nb">cd</span> /model
-<span class="c"># start a python interpreter to use</span>
-python3
-<span class="c"># from now all commands are inside the python interpreter</span>
-</code></pre></div></div>
-
-<h3 id="actually-playing-with-the-model">Actually playing with the model</h3>
-
-<p>Now for the Python, in the REPL terminal.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This stage will take a while as it loads the model into ram, and may lead to it getting OOMK
-</span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForCausalLM</span>
-<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s">"./Cerebras-GPT-2.7B"</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s">"./Cerebras-GPT-2.7B"</span><span class="p">)</span>
-
-<span class="c1"># convenience function to wrap the steps from prompt to reponse
-</span><span class="k">def</span> <span class="nf">model_on_prompt</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s">"pt"</span><span class="p">)</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">num_beams</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                        <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">early_stopping</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-                        <span class="n">no_repeat_ngram_size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">text_output</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">.</span><span class="n">batch_decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">text_output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-<span class="c1"># Now to run the model on your prompt
-</span><span class="n">model_on_prompt</span><span class="p">(</span><span class="s">"What can I use LLMs for?"</span><span class="p">)</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="ML" /><category term="Python" /><category term="Docker" /><summary type="html"><![CDATA[Getting started with LLMs locally]]></summary></entry></feed>
+</span></code></pre></div></div>]]></content><author><name></name></author><category term="Jira" /><category term="APIs" /><category term="Atlassian" /><summary type="html"><![CDATA[Bulk deleting tickets in Jira For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.]]></summary></entry></feed>
