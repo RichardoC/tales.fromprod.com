@@ -30,7 +30,6 @@ Congratulations, without installing *anything* you've managed to make something 
 
 Apple don't give you a way to disable AppleScript so I'm not aware of a way to prevent this functionality.
 
-
 ### Sample code
 
 Please only use this for innocent fun, where you have permission.
