@@ -1,4 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-05-06T15:10:51+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Making a self hosted link summariser</title><link href="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html" rel="alternate" type="text/html" title="Making a self hosted link summariser" /><published>2024-05-05T20:00:00+01:00</published><updated>2024-05-05T20:00:00+01:00</updated><id>https://tales.fromprod.com/2024/126/self-hosted-link-summariser</id><content type="html" xml:base="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html"><![CDATA[<h1 id="making-a-self-hosted-link-summariser-using-llms">Making a self hosted link summariser using LLMs</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-06-11T22:59:13+01:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Recording what you see on macOS - no external dependencies</title><link href="https://tales.fromprod.com/2024/163/apple-screen-recorder.html" rel="alternate" type="text/html" title="Recording what you see on macOS - no external dependencies" /><published>2024-06-11T20:00:00+01:00</published><updated>2024-06-11T20:00:00+01:00</updated><id>https://tales.fromprod.com/2024/163/apple-screen-recorder</id><content type="html" xml:base="https://tales.fromprod.com/2024/163/apple-screen-recorder.html"><![CDATA[<h1 id="recording-what-you-see-on-macos---no-external-dependencies">Recording what you see on macOS - no external dependencies</h1>
+
+<p>Without installing <strong>anything</strong> you can automatically record all text shown on screen on macOS and do whatever you want on it.</p>
+
+<p>This is published for informational purposes, and to illustrate how difficult “data loss prevention” is, when the very OS you’re using is working against you.</p>
+
+<p>I wish I’d published this before the whole <a href="https://support.microsoft.com/en-gb/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c">Windows Recall thing</a> but hindsight is 20/20.</p>
+
+<h2 id="applescript">AppleScript</h2>
+
+<p>Built in to macOS is <code class="language-plaintext highlighter-rouge">script editor</code> and <code class="language-plaintext highlighter-rouge">automator</code> which can use a proprietary scripting language called <code class="language-plaintext highlighter-rouge">AppleScript</code> which can be used to do everything a mac or iOS app can do, with a few extra niceties. In my opinion it’s very ugly and hard to use as it tries to act like natural prose rather than be an actual compute  language. One example is using <code class="language-plaintext highlighter-rouge">class's method</code> rather than class.method.</p>
+
+<p>The <a href="https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html">documentation</a> is very out of date, though it still works so you’ll have to find information on <a href="https://www.macscripter.net">forums.</a></p>
+
+<h2 id="so-what">So what?</h2>
+
+<ul>
+  <li>Open spotlight</li>
+  <li>Open “script editor”</li>
+  <li>Paste the code below in the window and save it</li>
+  <li>Click “Run this script” button which looks like a play button</li>
+  <li>See that all text on your screen is now in the script output window.</li>
+</ul>
+
+<p>Congratulations, without installing <em>anything</em> you’ve managed to make something which can recover all text that shows on your macOS display.</p>
+
+<p>Apple don’t give you a way to disable AppleScript so I’m not aware of a way to prevent this functionality.</p>
+
+<h3 id="sample-code">Sample code</h3>
+
+<p>Please only use this for innocent fun, where you have permission.</p>
+
+<p>This snippet is provided under an <a href="https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt">MIT license</a> and I hold no responsibility for how you choose to use it.</p>
+
+<div class="language-applescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">
+</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"AppKit"</span><span class="w">
+</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"Foundation"</span><span class="w">
+</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"Vision"</span><span class="w">
+</span><span class="nv">use</span><span class="w"> </span><span class="nv">scripting</span><span class="w"> </span><span class="nv">additions</span><span class="w">
+
+
+
+</span><span class="c1">-- based on https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/ReadandWriteFiles.html</span><span class="w">
+</span><span class="k">on</span> <span class="nv">writeTextToFile</span><span class="p">(</span><span class="nv">theText</span><span class="p">,</span><span class="w"> </span><span class="nv">theFile</span><span class="p">,</span><span class="w"> </span><span class="nv">overwriteExistingContent</span><span class="p">)</span><span class="w">
+	</span><span class="k">try</span><span class="w">
+
+		</span><span class="c1">-- Convert the file to a string</span><span class="w">
+		</span><span class="k">set</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="k">as </span><span class="nc">string</span><span class="w">
+
+		</span><span class="c1">-- Open the file for writing</span><span class="w">
+		</span><span class="k">set</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">open for access</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nb">write</span><span class="w"> </span><span class="nv">permission</span><span class="w">
+
+		</span><span class="c1">-- Clear the file if content should be overwritten</span><span class="w">
+		</span><span class="k">if</span><span class="w"> </span><span class="nv">overwriteExistingContent</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">set eof</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="mi">0</span><span class="w">
+
+		</span><span class="c1">-- Write the new content to the file</span><span class="w">
+		</span><span class="nb">write</span><span class="w"> </span><span class="nv">theText</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="nv">starting</span><span class="w"> </span><span class="nb">at</span><span class="w"> </span><span class="nv">eof</span><span class="w">
+
+		</span><span class="c1">-- Close the file</span><span class="w">
+		</span><span class="nb">close access</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w">
+
+		</span><span class="c1">-- Return a boolean indicating that writing was successful</span><span class="w">
+		</span><span class="nb">return</span><span class="w"> </span><span class="nb">true</span><span class="w">
+
+		</span><span class="c1">-- Handle a write error</span><span class="w">
+	</span><span class="nb">on</span><span class="w"> </span><span class="k">error</span><span class="w">
+
+		</span><span class="c1">-- Close the file</span><span class="w">
+		</span><span class="k">try</span><span class="w">
+			</span><span class="nb">close access</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">theFile</span><span class="w">
+		</span><span class="k">end</span><span class="w"> </span><span class="k">try</span><span class="w">
+
+		</span><span class="c1">-- Return a boolean indicating that writing failed</span><span class="w">
+		</span><span class="nb">return</span><span class="w"> </span><span class="nb">false</span><span class="w">
+	</span><span class="k">end</span><span class="w"> </span><span class="k">try</span><span class="w">
+</span><span class="k">end</span><span class="w"> </span><span class="nv">writeTextToFile</span><span class="w">
+
+</span><span class="c1">-- based on https://www.macscripter.net/t/image-png-to-text-through-applescript/74490/6</span><span class="w">
+</span><span class="k">on</span> <span class="nv">getScreenText</span><span class="p">()</span><span class="w">
+	</span><span class="nb">do shell script</span><span class="w"> </span><span class="s2">"screencapture -c "</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">thePasteboard</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">NSPasteboard</span>'s <span class="nv">generalPasteboard</span><span class="p">()</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">imageData</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">thePasteboard</span>'s <span class="nv">dataForType</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSPasteboardTypeTIFF</span><span class="p">)</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">requestHandler</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">VNImageRequestHandler</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">initWithData</span><span class="p">:</span><span class="nv">imageData</span><span class="w"> </span><span class="nv">options</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSDictionary</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">init</span><span class="p">())</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">theRequest</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">VNRecognizeTextRequest</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">init</span><span class="p">()</span><span class="w">
+	</span><span class="nv">requestHandler</span>'s <span class="nv">performRequests</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSArray</span>'s <span class="nv">arrayWithObject</span><span class="p">:(</span><span class="nv">theRequest</span><span class="p">))</span><span class="w"> </span><span class="err">|</span><span class="k">error</span><span class="err">|</span><span class="p">:(</span><span class="nb">missing value</span><span class="p">)</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">theResults</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theRequest</span>'s <span class="nv">results</span><span class="p">()</span><span class="w">
+	</span><span class="k">set</span><span class="w"> </span><span class="nv">theText</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="p">{}</span><span class="w">
+	</span><span class="k">repeat</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nv">observation</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">theResults</span><span class="w">
+		</span><span class="nb">copy</span><span class="w"> </span><span class="p">((</span><span class="nb">first</span><span class="w"> </span><span class="nb">item</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="nv">observation</span>'s <span class="nv">topCandidates</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span>'s <span class="err">|</span><span class="nv">string</span><span class="err">|</span><span class="p">()</span><span class="w"> </span><span class="k">as </span><span class="nc">text</span><span class="p">)</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nv">theText</span><span class="w">
+	</span><span class="k">end</span><span class="w"> </span><span class="k">repeat</span><span class="w">
+	</span><span class="nb">return</span><span class="w"> </span><span class="nv">theText</span><span class="w">
+</span><span class="k">end</span><span class="w"> </span><span class="nv">getScreenText</span><span class="w">
+
+</span><span class="k">on</span> <span class="nb">run</span><span class="w"> </span><span class="p">(</span><span class="nv">argv</span><span class="p">)</span><span class="w">
+	</span><span class="nv">getScreenText</span><span class="p">()</span><span class="w">
+</span><span class="k">end</span><span class="w"> </span><span class="nb">run</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>This version does not continue to run, nor write the captured text to a file or send it to a server so isn’t currently much use for much more than a proof of concept.</p>
+
+<p>This version doesn’t work in automator for reasons I don’t understand, so you can’t easily trigger it from a key press.</p>
+
+<p>It uses <code class="language-plaintext highlighter-rouge">screencapture</code> by shelling out, so this is quite easy to detect. I’m sure there are ways to do a screenshot more directly which would avoid this obvious detection. This can probably be avoided by using <a href="https://developer.apple.com/documentation/screencapturekit/scshareablecontent/3916733-getshareablecontentwithcompletio?language=objc">ScreenCaptureKit</a> but I couldn’t work out the syntax in AppleScript.</p>]]></content><author><name></name></author><category term="macOS" /><category term="APIs" /><category term="Machine Learning" /><summary type="html"><![CDATA[Recording what you see on macOS - no external dependencies]]></summary></entry><entry><title type="html">Making a self hosted link summariser</title><link href="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html" rel="alternate" type="text/html" title="Making a self hosted link summariser" /><published>2024-05-05T20:00:00+01:00</published><updated>2024-05-05T20:00:00+01:00</updated><id>https://tales.fromprod.com/2024/126/self-hosted-link-summariser</id><content type="html" xml:base="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html"><![CDATA[<h1 id="making-a-self-hosted-link-summariser-using-llms">Making a self hosted link summariser using LLMs</h1>
 
 <p>If you use Reddit or Lemmy you are likely to be familiar with those bots which summarise news links and comment the result. I decided to make one of these which uses an LLM to do the summarisation</p>
 
@@ -482,7 +586,62 @@ Unless told otherwise, use GoogleSQL SQL dialect which is documented in CloudQue
 
 <h2 id="original-idea">Original idea</h2>
 
-<p>This was based on the work by Neodyme where they used this technique to find secrets on <a href="https://neodyme.io/en/blog/github_secrets/">GitHub</a></p>]]></content><author><name></name></author><category term="APIs" /><category term="git" /><summary type="html"><![CDATA[Finding secrets on GitLab]]></summary></entry><entry><title type="html">Pass through JSON logs with vector or filebeat</title><link href="https://tales.fromprod.com/2023/305/pass-through-json-logs.html" rel="alternate" type="text/html" title="Pass through JSON logs with vector or filebeat" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/pass-through-json-logs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/pass-through-json-logs.html"><![CDATA[<h1 id="pass-through-json-logs-with-vector-or-filebeat">Pass through JSON logs with vector or filebeat</h1>
+<p>This was based on the work by Neodyme where they used this technique to find secrets on <a href="https://neodyme.io/en/blog/github_secrets/">GitHub</a></p>]]></content><author><name></name></author><category term="APIs" /><category term="git" /><summary type="html"><![CDATA[Finding secrets on GitLab]]></summary></entry><entry><title type="html">Misusing kubeconfigs</title><link href="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html" rel="alternate" type="text/html" title="Misusing kubeconfigs" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/misusing-kubeconfigs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html"><![CDATA[<h1 id="misusing-kubeconfigs">Misusing kubeconfigs</h1>
+
+<p>When you use kubectl to do something on a cluster, it iterates through each file listed in the KUBECONFIG environment variable and it uses the first one that matches. This can be a problem if you have multiple contexts with the same name as it’ll choose the first one it finds rather than the one you expected.</p>
+
+<h2 id="auth-provider">auth-provider</h2>
+
+<p>These can be use to provision access tokens when required, https://kubernetes.io/docs/reference/access-authn-authz/authentication/#client-go-credential-plugins</p>
+
+<p>minikube kubectl –ssh  –  get ns</p>
+
+<p>minikube kubectl –ssh –  create ns example-admin
+minikube kubectl –ssh –  –namespace example-admin create sa example-admin</p>
+
+<p>minikube kubectl –ssh –  create clusterrolebinding example-admin-binding –clusterrole=cluster-admin  –serviceaccount=example-admin:example-admin</p>
+
+<p>minikube kubectl –ssh –  –names pace example-admin create token example-admin –duration 10m</p>
+
+<p>Turn this in to a blog post</p>
+
+<hr />
+<p>apiVersion: v1
+clusters:</p>
+<ul>
+  <li>cluster:
+  certificate-authority: /home/rtweed/.minikube/ca.crt
+  extensions:
+    <ul>
+      <li>extension:
+  last-update: Thu, 16 Nov 2023 17:17:01 GMT
+  provider: minikube.sigs.k8s.io
+  version: v1.30.1
+name: cluster_info
+  server: https://192.168.39.120:8443
+name: minikube-manual
+contexts:</li>
+    </ul>
+  </li>
+  <li>context:
+  cluster: minikube-manual
+  user: minikube-manual
+name: minikube-manual
+current-context: minikube-manual
+kind: Config
+preferences: {}
+users:</li>
+  <li>name: minikube-manual
+user:
+  auth-provider:
+    config:
+      cmd-args: kubectl –ssh –  –namespace example-admin create token example-admin
+        –duration 10m -ojson
+      cmd-path: minikube
+      expiry-key: ‘{.status.expirationTimestamp}’
+      token-key: ‘{.status.token}’
+    name: gcp # magic to make this work</li>
+</ul>]]></content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html"><![CDATA[Misusing kubeconfigs]]></summary></entry><entry><title type="html">Pass through JSON logs with vector or filebeat</title><link href="https://tales.fromprod.com/2023/305/pass-through-json-logs.html" rel="alternate" type="text/html" title="Pass through JSON logs with vector or filebeat" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/pass-through-json-logs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/pass-through-json-logs.html"><![CDATA[<h1 id="pass-through-json-logs-with-vector-or-filebeat">Pass through JSON logs with vector or filebeat</h1>
 
 <p>Say you are using an application that emits JSON formatted logs, with one log per line in the log file, and you want to store these in ElasticSearch and view them natively in kibana - how would you manage this?</p>
 
@@ -581,118 +740,4 @@ Unless told otherwise, use GoogleSQL SQL dialect which is documented in CloudQue
       <span class="na">target</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span> <span class="c1"># will place the json in the root object</span>
 </code></pre></div></div>
 
-<p>My best guess is that it needs to do this in two operations rather than one, hence the snippet above.</p>]]></content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html"><![CDATA[Pass through JSON logs with vector or filebeat]]></summary></entry><entry><title type="html">Misusing kubeconfigs</title><link href="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html" rel="alternate" type="text/html" title="Misusing kubeconfigs" /><published>2023-11-01T11:00:00+00:00</published><updated>2023-11-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2023/305/misusing-kubeconfigs</id><content type="html" xml:base="https://tales.fromprod.com/2023/305/misusing-kubeconfigs.html"><![CDATA[<h1 id="misusing-kubeconfigs">Misusing kubeconfigs</h1>
-
-<p>When you use kubectl to do something on a cluster, it iterates through each file listed in the KUBECONFIG environment variable and it uses the first one that matches. This can be a problem if you have multiple contexts with the same name as it’ll choose the first one it finds rather than the one you expected.</p>
-
-<h2 id="auth-provider">auth-provider</h2>
-
-<p>These can be use to provision access tokens when required, https://kubernetes.io/docs/reference/access-authn-authz/authentication/#client-go-credential-plugins</p>
-
-<p>minikube kubectl –ssh  –  get ns</p>
-
-<p>minikube kubectl –ssh –  create ns example-admin
-minikube kubectl –ssh –  –namespace example-admin create sa example-admin</p>
-
-<p>minikube kubectl –ssh –  create clusterrolebinding example-admin-binding –clusterrole=cluster-admin  –serviceaccount=example-admin:example-admin</p>
-
-<p>minikube kubectl –ssh –  –names pace example-admin create token example-admin –duration 10m</p>
-
-<p>Turn this in to a blog post</p>
-
-<hr />
-<p>apiVersion: v1
-clusters:</p>
-<ul>
-  <li>cluster:
-  certificate-authority: /home/rtweed/.minikube/ca.crt
-  extensions:
-    <ul>
-      <li>extension:
-  last-update: Thu, 16 Nov 2023 17:17:01 GMT
-  provider: minikube.sigs.k8s.io
-  version: v1.30.1
-name: cluster_info
-  server: https://192.168.39.120:8443
-name: minikube-manual
-contexts:</li>
-    </ul>
-  </li>
-  <li>context:
-  cluster: minikube-manual
-  user: minikube-manual
-name: minikube-manual
-current-context: minikube-manual
-kind: Config
-preferences: {}
-users:</li>
-  <li>name: minikube-manual
-user:
-  auth-provider:
-    config:
-      cmd-args: kubectl –ssh –  –namespace example-admin create token example-admin
-        –duration 10m -ojson
-      cmd-path: minikube
-      expiry-key: ‘{.status.expirationTimestamp}’
-      token-key: ‘{.status.token}’
-    name: gcp # magic to make this work</li>
-</ul>]]></content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html"><![CDATA[Misusing kubeconfigs]]></summary></entry><entry><title type="html">Bulk deleting tickets in Jira</title><link href="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html" rel="alternate" type="text/html" title="Bulk deleting tickets in Jira" /><published>2023-06-26T21:00:00+01:00</published><updated>2023-06-26T21:00:00+01:00</updated><id>https://tales.fromprod.com/2023/177/bulk-deleting-in-jira</id><content type="html" xml:base="https://tales.fromprod.com/2023/177/bulk-deleting-in-jira.html"><![CDATA[<h1 id="bulk-deleting-tickets-in-jira">Bulk deleting tickets in Jira</h1>
-<p>For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.</p>
-
-<p>So, you want to clean up the old tickets, so only the new “valid” tickets exist in this test project.</p>
-
-<h2 id="approach-1---use-the-bulk-edit-functionality">Approach 1 - use the bulk edit functionality</h2>
-
-<p>Jira has a <a href="https://confluence.atlassian.com/jirasoftwareserver/editing-multiple-issues-at-the-same-time-939938937.html">bulk edit functionality</a>, that can be used for deleting issues. Unfortunately it only allows 1,000 issues at a time but surely running that 10 ish times is fine… right?</p>
-
-<h3 id="problem">Problem</h3>
-
-<p>It takes 12 minutes to delete the 1,000 issues. Sitting here for multiple hours triggering bulk delete through the UI isn’t how you want to spend you day.</p>
-
-<h2 id="approach-2---use-the-apis">Approach 2 - use the APIs</h2>
-
-<p>Atlassian have many APIs for Jira, and <a href="https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-delete">reasonable docs</a> for them as well!</p>
-
-<h3 id="the-good">The good</h3>
-
-<ul>
-  <li>Jira has APIs</li>
-</ul>
-
-<h3 id="the-bad">The bad</h3>
-
-<ul>
-  <li>Jira doesn’t have a <a href="https://community.developer.atlassian.com/t/jira-rest-api-endpoint-for-bulk-delete-issues/55806">bulk delete API</a></li>
-  <li>Jira won’t necessarily give you all matching issues from an issue search API call, depending on how much data is in each issue</li>
-</ul>
-
-<h3 id="the-how">The how</h3>
-
-<p>Assuming the following</p>
-<ul>
-  <li>Your atlassian cloud instance URL is <a href="https://example.atlassian.net">https://example.atlassian.net</a></li>
-  <li>You’re using bash on a *nix</li>
-  <li>You have issued a JIRA API token from <a href="https://id.atlassian.com/manage-profile/security">https://id.atlassian.com/manage-profile/security</a> and exported it as JIRA_API_TOKEN in your shell</li>
-  <li>You’ve exported your atlassian user email as JIRA_EMAIL</li>
-  <li>You have a JQL query that matches the issues you want to delete, and ONLY the issues you want to delete and have exported it (URL encoded) as JIRA_JQL</li>
-</ul>
-
-<p>Example URL encoded JQL is <code class="language-plaintext highlighter-rouge">project%20%3D%20TOY%20AND%20issuetype%20%3D%20Vulnerability%20ORDER%20BY%20created%20DESC</code> which matches all vulnerability issues in a project called TOY</p>
-
-<h3 id="final-script">Final script</h3>
-
-<p>OBLIGATORY WARNING - this will delete all issues which match the JQL, and ALL subtasks use with caution!</p>
-
-<p>This script will attempt to delete the issues, with 12 parallel threads. It has zero error handling or backoff so you are likely to get <code class="language-plaintext highlighter-rouge">429 - Too many requests</code> and should cancel the script and wait a few minutes before resuming.
-During this time your user will be unable to use the Jira webapp as well, as it’s your user that gets rate limited, not the API token.</p>
-
-<p>You may also have to rerun this script multiple times if you have more than ~ 10,000 issues, as this doesn’t follow any pagination.</p>
-
-<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">curl --request GET \
-</span><span class="gp">  --url "https://example.atlassian.net/rest/api/3/search?maxResults=20000&amp;fields=id&amp;jql=$</span>JIRA_JQL<span class="s2">"  </span><span class="se">\</span><span class="s2">
-</span><span class="gp">  --user "$</span><span class="s2">JIRA_EMAIL:</span><span class="nv">$JIRA_API_TOKEN</span><span class="s2">"</span> <span class="se">\</span>
-<span class="gp">  --header 'Accept: application/json' | jq -r '.issues[].id'  | xargs -P12 -I{} bash -c 'curl --request DELETE   --url 'https://example.atlassian.net/rest/api/3/issue/{}?deleteSubtasks=true'  --user "$</span>JIRA_EMAIL:<span class="nv">$JIRA_API_TOKEN</span><span class="s2">" &amp;&amp; echo "</span><span class="o">{}</span> completed<span class="s2">" || echo "</span><span class="o">{}</span> failed<span class="s2">"'
-</span><span class="go">14054 completed
-14050 completed
-</span><span class="c">...
-</span></code></pre></div></div>]]></content><author><name></name></author><category term="Jira" /><category term="APIs" /><category term="Atlassian" /><summary type="html"><![CDATA[Bulk deleting tickets in Jira For the sake of argument, say your automation developers have a test project for testing their tooling which automatically raises a jira ticket when it finds something a human needs to deal with. This is fantastic, until a few months later when the tooling changes, and the 10,000s of old tickets are no longer “correct” in the test project.]]></summary></entry></feed>
+<p>My best guess is that it needs to do this in two operations rather than one, hence the snippet above.</p>]]></content><author><name></name></author><category term="JSON" /><category term="logging" /><category term="ElasticSearch" /><summary type="html"><![CDATA[Pass through JSON logs with vector or filebeat]]></summary></entry></feed>
