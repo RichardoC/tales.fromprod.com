@@ -1,8 +1,5 @@
 #!/bin/bash
 
-source JEKYLL_VERSION.sh
-
-
 export _BINARY="docker"
 
 # if [ -x "$(command -v lima)" ]; then

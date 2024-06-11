@@ -1,0 +1,11 @@
+
+
+docs/
+docs-tmp/
+src/
+
+*
+*/*
+
+!Gemfile
+!Gemfile.lock
