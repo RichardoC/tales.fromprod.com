@@ -12,7 +12,7 @@ This is published for informational purposes, and to illustrate how difficult "d
 
 I wish I'd published this before the whole [Windows Recall thing](https://support.microsoft.com/en-gb/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c) but hindsight is 20/20.
 
-## Applescript
+## AppleScript
 
 Built in to macOS is `script editor` and `automator` which can use a proprietary scripting language called `AppleScript` which can be used to do everything a mac or iOS app can do, with a few extra niceties. In my opinion it's very ugly and hard to use as it tries to act like natural prose rather than be an actual compute  language. One example is using `class's method` rather than class.method.
 
@@ -28,8 +28,7 @@ The [documentation](https://developer.apple.com/library/archive/documentation/Ap
 
 Congratulations, without installing *anything* you've managed to make something which can recover all text that shows on your macOS display.
 
-Apple don't give you a way to disable applescript so I'm not aware of a way to prevent this functionality.
-
+Apple don't give you a way to disable AppleScript so I'm not aware of a way to prevent this functionality.
 
 ### Sample code
 
@@ -108,4 +107,4 @@ This version does not continue to run, nor write the captured text to a file or 
 
 This version doesn't work in automator for reasons I don't understand, so you can't easily trigger it from a key press.
 
-It uses `screencapture` by shelling out, so this is quite easy to detect. I'm sure there are ways to do a screenshot more directly which would avoid this obvious detection.
+It uses `screencapture` by shelling out, so this is quite easy to detect. I'm sure there are ways to do a screenshot more directly which would avoid this obvious detection. This can probably be avoided by using [ScreenCaptureKit](https://developer.apple.com/documentation/screencapturekit/scshareablecontent/3916733-getshareablecontentwithcompletio?language=objc) but I couldn't work out the syntax in AppleScript.
