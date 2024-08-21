@@ -1,4 +1,4 @@
-FROM ruby:3.3.1-alpine3.20
+FROM ruby:3.3.4-alpine3.20@sha256:9fc2d9dd146a47fddcf2b69e3174d92ee1a654fbbe73f97b858505394748ac6e
 
 # Based on https://github.com/rockstorm101/jekyll-docker/blob/master/Dockerfile
 
@@ -10,8 +10,8 @@ COPY $GEMFILE_DIR/Gemfile* $GEMFILE_DIR/packages* .
 # Install build dependencies
 RUN set -eux; \
     apk add --no-cache --virtual build-deps \
-        build-base \
-        zlib-dev make \
+    build-base \
+    zlib-dev make \
     ;
 
 # Install Bundler
@@ -19,8 +19,8 @@ RUN set -eux; gem install bundler
 
 # Install extra packages if needed
 RUN set -eux; \
-	if [ -e packages ]; then \
-	    cat packages | apk add --no-cache --virtual extra-pkgs; \
+    if [ -e packages ]; then \
+    cat packages | apk add --no-cache --virtual extra-pkgs; \
     fi
 
 # Install gems from `Gemfile` via Bundler
