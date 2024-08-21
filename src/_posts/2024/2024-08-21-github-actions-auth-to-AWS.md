@@ -62,7 +62,7 @@ jobs:
 
     steps:
 
-	 # Do your building before
+	  # Do your building before
       - name: Configure initial AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -120,7 +120,7 @@ const githubAuthProvider = new cdk.aws_iam.OpenIdConnectProvider(
 
 This is an example from typescript using the [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html), within a CDK Stack
 
-This would allow all github workflows for all repo in your Github Organisation `example-org` to assume suitable tagged roles
+This would allow all github workflows for all repos in your Github Organisation `example-org` to assume suitably tagged roles, regardless of account.
 
 ```typescript
 const githubActionsRole = new cdk.aws_iam.Role(this, "GithubActionsRole", {
@@ -172,7 +172,13 @@ const githubActionsRole = new cdk.aws_iam.Role(
       new cdk.aws_iam.ArnPrincipal(
         "arn:aws:sts::0000000000:assumed-role/GithubRole/GitHubActions"
       ),
-      {} // Able to add conditions here to limit to specific repos / workflows
+      {
+        // Able to add conditions here to limit to specific repos / workflows
+        StringLike: {
+          "token.actions.githubusercontent.com:sub":
+            "repo:example-org/repo-frontend/*", // This allows workflows from only the `repo-frontend` repo in the example-org organisation to assume the role via the chaining.
+        },
+      }
     ),
   }
 );
@@ -184,5 +190,3 @@ cdk.Tags.of(githubActionsRole).add(
 
 // now actually add the permissions you want this role to have
 ```
-
-
