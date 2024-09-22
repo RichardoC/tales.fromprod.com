@@ -342,9 +342,9 @@ You should be able to see any movement/firm bumps you gave to the device during 
 
 This is showing the frequencies present in the audio signal, for this test there's a peak at ~ 30Hz, with various other peaks which reduce rapidly above 50Hz.
 
-<img src="/static/2024-09-22-esp32-failed-audio-recorder/Frequency-Spectrum.png" alt="A frequency diagram showing a peak at approximately 30Hz, with various other speaks tapering off rapidly above 100Hz"  width="720" />
+<img src="/static/2024-09-22-esp32-failed-audio-recorder/Frequency-Spectrum.png" alt="A frequency diagram showing a peak at approximately 30Hz, with various other speaks tapering off rapidly above 60Hz"  width="720" />
 
-I interpret this as the accelerometer (and my recording script) having a decreasing sensitivity as the frequency increases, and almost no sensitivity above 100Hz.
+I interpret this as the accelerometer (and my recording script) having a decreasing sensitivity as the frequency increases, and almost no sensitivity above 60Hz.
 
 Given human speech typically falls in the [range 90 - 255Hz](https://en.wikipedia.org/wiki/Voice_frequency) this "recorder" won't be able to capture speech.
 
