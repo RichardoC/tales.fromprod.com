@@ -5,7 +5,8 @@ FROM ruby:3.3.5-alpine3.20@sha256:0bf4169697f44df52cea27b0ceb1a3b715b168625b7c40
 ENV SETUPDIR=/setup
 WORKDIR ${SETUPDIR}
 ARG GEMFILE_DIR=.
-COPY $GEMFILE_DIR/Gemfile* $GEMFILE_DIR/packages* .
+COPY $GEMFILE_DIR/Gemfile* ./
+# COPY $GEMFILE_DIR/packages/* ./
 
 # Install build dependencies
 RUN set -eux; \
