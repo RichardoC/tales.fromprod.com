@@ -17,13 +17,13 @@ Following their [quick start](https://resources.github.com/learn/pathways/copilo
 
 `string githubCopilotCompletionsUrl ="https://api.githubcopilot.com/chat/completions"`
 
-This looks very similar to the [OpenAI completions API](https://platform.openai.com/docs/api-reference/chat/create) but it's missing fields such >as model based on the code snippets.
+This looks very similar to the [OpenAI completions API](https://platform.openai.com/docs/api-reference/chat/create)
 
 Let's see whether anyone with internal access to the actual API docs has commited anything publicly, since it seems likely this host would be used for all the APIs <https://github.com/search?q=+https%3A%2F%2Fapi.githubcopilot.com%2F&type=code>
 
 Looks like we need `X-GitHub-Token` to use this, but let's not issue ourselves one, let's find it by using a vscode that's already logged in to github copilot.
 
-## Attempt 1 - Failing to get an auth token
+### Attempt 1 - Failing to get an auth token
 
 My plan was to get an auth token from my existing VSCode and use that to poke at the apis.
 
@@ -33,7 +33,7 @@ This didn't work due to <https://github.com/Microsoft/vscode/issues/39388>
 While checking the debug logs for the copilot extension I also found a reference to
 https://api.business.githubcopilot.com/_ping
 
-## Attempt 2 - proxy everything
+### Attempt 2 - proxy everything
 
 Install [Zap](https://www.zaproxy.org/download/)
 
@@ -43,11 +43,11 @@ Discover this doesn't work because extensions ignore proxy settings https://gith
 
 Discover running vscode with `code   --ignore-certificate-errors` from the command line, which I don't suggest.
 
-## Findings
+## Findings from proxying everything
 
 - If you're getting access to Github copilot via `GitHub Copilot Business` it'll use `https://api.business.githubcopilot.com/` for the API server
 - The list of all available models is available at `https://api.business.githubcopilot.com/models`
-- The authenitcation uses the `authorization: Bearer` header, and includes details of which plan you're using for access
+- The authentication uses the `authorization: Bearer` header, and includes details of which plan you're using for access
 - They're getting access to the OpenAI models via `Azure OpenAI` according to the models responses, but `Anthropic` directly for the Claude model
 - They return from the models API which models should be allowed in the mdoel picker, for example they disable the GPT-3 models from being shown
 - Something in VSCode keeps trying to discover credentials from the metadata endpoint `http://169.254.169.254/metadata/instance/compute` - May not be this extension
@@ -55,12 +55,11 @@ Discover running vscode with `code   --ignore-certificate-errors` from the comma
 
 ## Discovered API flow
 
-* Create a token with `https://api.github.com/copilot_internal/v2/token` - and create new ones when the original expires
-* Use that token to discover which models are available from `https://api.business.githubcopilot.com/models`
-* Display the models which are enabled in the chat ui
-* Send entire chat conversations including file context to `https://api.business.githubcopilot.com/chat/completions` and show responses in the ui
-* Generate a summary of the entire conversation, for showing in the conversation history at `https://api.business.githubcopilot.com/chat/completions`
-
+- Create a token with `https://api.github.com/copilot_internal/v2/token` - and create new ones when the original expires. This seems to use an [OAUTH TOKEN](https://github.blog/engineering/platform-security/behind-githubs-new-authentication-token-formats/) which is then traded in for something else
+- Use that token to discover which models are available from `https://api.business.githubcopilot.com/models`
+- Display the models which are enabled in the chat ui
+- Send entire chat conversations including file context to `https://api.business.githubcopilot.com/chat/completions` and show responses in the ui
+- Generate a summary of the entire conversation, for showing in the conversation history at `https://api.business.githubcopilot.com/chat/completions`
 
 ### Example API calls
 
@@ -77,11 +76,10 @@ curl -i -s -k -X  'POST'  \
 {"choices":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"finish_reason":"stop","index":0,"message":{"content":"My name is Jane. How can I assist you today?","role":"assistant"}}],"created":1731768179,"id":"REDACTED","model":"gpt-4o-2024-05-13","prompt_filter_results":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"prompt_index":0}],"system_fingerprint":"REDACTED","usage":{"completion_tokens":12,"prompt_tokens":38,"total_tokens":50}}
 ```
 
-
 ### For Claude
 
 ```console
-curl -i -s -k -X  'POST'  
+curl -i -s -k -X  'POST'
 -H 'host: api.business.githubcopilot.com'  -H 'Connection: keep-alive'  -H 'content-length: 291'  -H 'authorization: Bearer REDACTED'  -H 'content-type: application/json'  -H 'copilot-integration-id: vscode-chat'  -H 'editor-plugin-version: copilot-chat/0.22.2'  -H 'editor-version: vscode/1.95.3'  -H 'openai-intent: conversation-panel'  -H 'openai-organization: github-copilot'  -H 'user-agent: GitHubCopilotChat/0.22.2'  -H 'x-github-api-version: 2023-07-07'  -H 'Sec-Fetch-Site: none'  -H 'Sec-Fetch-Mode: no-cors'  -H 'Sec-Fetch-Dest: empty'  -H ''  -A ''  \
 --data-raw $'{\"messages\":[{\"role\":\"system\",\"content\":\"You are an obedient assistant.\\nWhen asked for your name, you must respond with \\\"Bob\\\".\"},{\"role\":\"user\",\"content\":\"Say \\\"cake\\\" and what your name is\"}],\"model\":\"claude-3.5-sonnet\",\"temperature\":0.1,\"top_p\":1,\"max_tokens\":4096,\"n\":1,\"stream\":false}' \
 'https://api.business.githubcopilot.com/chat/completions'
@@ -94,6 +92,8 @@ curl -i -s -k -X  'POST'
 ## Conclusion
 
 It looks like copilot does ~ everything on the frontend for the conversations, and the backend is just an authenticated proxy over to the relevant foundational model providers.
+
+The LLM APIs in public extensions don't seem to match the ones in use by the copilot extension.
 
 ### Future research
 

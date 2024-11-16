@@ -1,4 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-10-01T13:11:11+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Migrate cloudformation to opentofu with LLMs</title><link href="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html" rel="alternate" type="text/html" title="Migrate cloudformation to opentofu with LLMs" /><published>2024-09-23T15:00:00+00:00</published><updated>2024-09-23T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms</id><content type="html" xml:base="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html"><![CDATA[<h1 id="migrate-cloudformation-to-opentofu-with-llms">Migrate cloudformation to opentofu with LLMs</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-11-16T15:01:12+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Reverse Engineering Github Copilot APIs</title><link href="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html" rel="alternate" type="text/html" title="Reverse Engineering Github Copilot APIs" /><published>2024-11-16T15:00:00+00:00</published><updated>2024-11-16T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis</id><content type="html" xml:base="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html"><![CDATA[<h1 id="reverse-engineering-github-copilot-apis">Reverse Engineering Github Copilot APIs</h1>
+
+<p>Github Copilot claims to support <a href="https://github.com/features/copilot/extensions">extensions</a> but doesn’t actually document the APIs anywhere - they just provide example code using those <a href="https://github.com/copilot-extensions">APIs</a>. On the official docs the API only supports seeing how much <a href="https://docs.github.com/en/rest/copilot?apiVersion=2022-11-28">copilot is being used</a></p>
+
+<p>So, what are these APIs, and how can we find details of them?</p>
+
+<h2 id="searching-public-code">Searching public code</h2>
+
+<p>Following their <a href="https://resources.github.com/learn/pathways/copilot/extensions/building-your-first-extension/">quick start</a> we find this code snippet which seems promising</p>
+
+<p><code class="language-plaintext highlighter-rouge">string githubCopilotCompletionsUrl ="https://api.githubcopilot.com/chat/completions"</code></p>
+
+<p>This looks very similar to the <a href="https://platform.openai.com/docs/api-reference/chat/create">OpenAI completions API</a></p>
+
+<p>Let’s see whether anyone with internal access to the actual API docs has commited anything publicly, since it seems likely this host would be used for all the APIs <a href="https://github.com/search?q=+https%3A%2F%2Fapi.githubcopilot.com%2F&amp;type=code">https://github.com/search?q=+https%3A%2F%2Fapi.githubcopilot.com%2F&amp;type=code</a></p>
+
+<p>Looks like we need <code class="language-plaintext highlighter-rouge">X-GitHub-Token</code> to use this, but let’s not issue ourselves one, let’s find it by using a vscode that’s already logged in to github copilot.</p>
+
+<h3 id="attempt-1---failing-to-get-an-auth-token">Attempt 1 - Failing to get an auth token</h3>
+
+<p>My plan was to get an auth token from my existing VSCode and use that to poke at the apis.</p>
+
+<p>Vscode is an electron app, and by using cmd+shift+p (macos) you can open the command prompt. Once that’s open you can search for and select <code class="language-plaintext highlighter-rouge">Developer: Toggle Developer Tools</code>
+This didn’t work due to <a href="https://github.com/Microsoft/vscode/issues/39388">https://github.com/Microsoft/vscode/issues/39388</a></p>
+
+<p>While checking the debug logs for the copilot extension I also found a reference to
+https://api.business.githubcopilot.com/_ping</p>
+
+<h3 id="attempt-2---proxy-everything">Attempt 2 - proxy everything</h3>
+
+<p>Install <a href="https://www.zaproxy.org/download/">Zap</a></p>
+
+<p>Configure vscode to use it as a proxy <a href="https://code.visualstudio.com/docs/setup/network#_legacy-proxy-server-support">https://code.visualstudio.com/docs/setup/network#_legacy-proxy-server-support</a></p>
+
+<p>Discover this doesn’t work because extensions ignore proxy settings https://github.com/microsoft/vscode-remote-release/issues/2987</p>
+
+<p>Discover running vscode with <code class="language-plaintext highlighter-rouge">code   --ignore-certificate-errors</code> from the command line, which I don’t suggest.</p>
+
+<h2 id="findings-from-proxying-everything">Findings from proxying everything</h2>
+
+<ul>
+  <li>If you’re getting access to Github copilot via <code class="language-plaintext highlighter-rouge">GitHub Copilot Business</code> it’ll use <code class="language-plaintext highlighter-rouge">https://api.business.githubcopilot.com/</code> for the API server</li>
+  <li>The list of all available models is available at <code class="language-plaintext highlighter-rouge">https://api.business.githubcopilot.com/models</code></li>
+  <li>The authentication uses the <code class="language-plaintext highlighter-rouge">authorization: Bearer</code> header, and includes details of which plan you’re using for access</li>
+  <li>They’re getting access to the OpenAI models via <code class="language-plaintext highlighter-rouge">Azure OpenAI</code> according to the models responses, but <code class="language-plaintext highlighter-rouge">Anthropic</code> directly for the Claude model</li>
+  <li>They return from the models API which models should be allowed in the mdoel picker, for example they disable the GPT-3 models from being shown</li>
+  <li>Something in VSCode keeps trying to discover credentials from the metadata endpoint <code class="language-plaintext highlighter-rouge">http://169.254.169.254/metadata/instance/compute</code> - May not be this extension</li>
+  <li>The API tokens don’t last very long - So if you’re using this for research you’ll need to investigate the API call to <code class="language-plaintext highlighter-rouge">https://api.github.com/copilot_internal/v2/token</code> to generate the tokens used for actually chatting with the models</li>
+</ul>
+
+<h2 id="discovered-api-flow">Discovered API flow</h2>
+
+<ul>
+  <li>Create a token with <code class="language-plaintext highlighter-rouge">https://api.github.com/copilot_internal/v2/token</code> - and create new ones when the original expires. This seems to use an <a href="https://github.blog/engineering/platform-security/behind-githubs-new-authentication-token-formats/">OAUTH TOKEN</a> which is then traded in for something else</li>
+  <li>Use that token to discover which models are available from <code class="language-plaintext highlighter-rouge">https://api.business.githubcopilot.com/models</code></li>
+  <li>Display the models which are enabled in the chat ui</li>
+  <li>Send entire chat conversations including file context to <code class="language-plaintext highlighter-rouge">https://api.business.githubcopilot.com/chat/completions</code> and show responses in the ui</li>
+  <li>Generate a summary of the entire conversation, for showing in the conversation history at <code class="language-plaintext highlighter-rouge">https://api.business.githubcopilot.com/chat/completions</code></li>
+</ul>
+
+<h3 id="example-api-calls">Example API calls</h3>
+
+<h3 id="for-gpt4o">For GPT4o</h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">curl -i -s -k -X  'POST'  \
+ -H 'host: api.business.githubcopilot.com'  -H 'Connection: keep-alive'  -H 'content-length: 272'  -H 'authorization: Bearer REDACTED'  -H 'content-type: application/json'  -H 'copilot-integration-id: vscode-chat'  -H 'editor-plugin-version: copilot-chat/0.22.2'  -H 'editor-version: vscode/1.95.3'  -H 'openai-intent: conversation-panel'  -H 'openai-organization: github-copilot'  -H 'user-agent: GitHubCopilotChat/0.22.2'  -H 'x-github-api-version: 2023-07-07'  -H 'Sec-Fetch-Site: none'  -H 'Sec-Fetch-Mode: no-cors'  -H 'Sec-Fetch-Dest: empty'  -H ''  -A ''  \
+</span><span class="gp">--data-raw $</span><span class="s1">'{\"messages\":[{\"role\":\"system\",\"content\":\"You are ahelpful assistant.\\nWhen asked for your name, you must respond with \\\"Jane\\\".\\n\"},{\"role\":\"user\",\"content\":\"Say your name, and beepedy\"}],\"model\":\"gpt-4o\",\"temperature\":0.1,\"top_p\":1,\"max_tokens\":4096,\"n\":1,\"stream\":false}'</span> <span class="se">\</span>
+<span class="go">'https://api.business.githubcopilot.com/chat/completions'
+
+</span><span class="gp">#</span><span class="w"> </span>Response
+<span class="go">
+{"choices":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"finish_reason":"stop","index":0,"message":{"content":"My name is Jane. How can I assist you today?","role":"assistant"}}],"created":1731768179,"id":"REDACTED","model":"gpt-4o-2024-05-13","prompt_filter_results":[{"content_filter_results":{"hate":{"filtered":false,"severity":"safe"},"self_harm":{"filtered":false,"severity":"safe"},"sexual":{"filtered":false,"severity":"safe"},"violence":{"filtered":false,"severity":"safe"}},"prompt_index":0}],"system_fingerprint":"REDACTED","usage":{"completion_tokens":12,"prompt_tokens":38,"total_tokens":50}}
+</span></code></pre></div></div>
+
+<h3 id="for-claude">For Claude</h3>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">curl -i -s -k -X  'POST'
+-H 'host: api.business.githubcopilot.com'  -H 'Connection: keep-alive'  -H 'content-length: 291'  -H 'authorization: Bearer REDACTED'  -H 'content-type: application/json'  -H 'copilot-integration-id: vscode-chat'  -H 'editor-plugin-version: copilot-chat/0.22.2'  -H 'editor-version: vscode/1.95.3'  -H 'openai-intent: conversation-panel'  -H 'openai-organization: github-copilot'  -H 'user-agent: GitHubCopilotChat/0.22.2'  -H 'x-github-api-version: 2023-07-07'  -H 'Sec-Fetch-Site: none'  -H 'Sec-Fetch-Mode: no-cors'  -H 'Sec-Fetch-Dest: empty'  -H ''  -A ''  \
+</span><span class="gp">--data-raw $</span><span class="s1">'{\"messages\":[{\"role\":\"system\",\"content\":\"You are an obedient assistant.\\nWhen asked for your name, you must respond with \\\"Bob\\\".\"},{\"role\":\"user\",\"content\":\"Say \\\"cake\\\" and what your name is\"}],\"model\":\"claude-3.5-sonnet\",\"temperature\":0.1,\"top_p\":1,\"max_tokens\":4096,\"n\":1,\"stream\":false}'</span> <span class="se">\</span>
+<span class="go">'https://api.business.githubcopilot.com/chat/completions'
+
+</span><span class="gp">#</span><span class="w"> </span>Response
+<span class="go">{"choices":[{"message":{"content":"cake\nMy name is Bob","role":"assistant"}}],"created":1731768004,"id":"REDACTED","model":"claude-3.5-sonnet","usage":{"prompt_tokens":38,"total_tokens":9}}
+
+</span></code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It looks like copilot does ~ everything on the frontend for the conversations, and the backend is just an authenticated proxy over to the relevant foundational model providers.</p>
+
+<p>The LLM APIs in public extensions don’t seem to match the ones in use by the copilot extension.</p>
+
+<h3 id="future-research">Future research</h3>
+
+<p>How codebases are indexed, and how that’s used with the extension.</p>]]></content><author><name></name></author><category term="APIs" /><category term="Security" /><category term="Github" /><summary type="html"><![CDATA[Reverse Engineering Github Copilot APIs]]></summary></entry><entry><title type="html">Migrate cloudformation to opentofu with LLMs</title><link href="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html" rel="alternate" type="text/html" title="Migrate cloudformation to opentofu with LLMs" /><published>2024-09-23T15:00:00+00:00</published><updated>2024-09-23T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms</id><content type="html" xml:base="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html"><![CDATA[<h1 id="migrate-cloudformation-to-opentofu-with-llms">Migrate cloudformation to opentofu with LLMs</h1>
 
 <p>I discovered that Cloudformation won’t override manual changes so decided to migrate a typescript CDK stack over to openTofu. This means I now get to the delta between reality and what I requested.</p>
 
@@ -1110,38 +1204,4 @@ The video audio is <em>not</em> sent</p>
 </ul>
 
 <p>Congratulations, you’ve now set a video as your background
-The video audio is <em>not</em> sent</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry><entry><title type="html">Making a custom GPT with chatgpt for cloudquery data</title><link href="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html" rel="alternate" type="text/html" title="Making a custom GPT with chatgpt for cloudquery data" /><published>2024-03-07T20:00:00+00:00</published><updated>2024-03-07T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery</id><content type="html" xml:base="https://tales.fromprod.com/2024/067/custom-chatgpt-cloudquery.html"><![CDATA[<h1 id="making-a-custom-gpt-with-chatgpt-for-cloudquery-data">Making a custom GPT with chatgpt for cloudquery data</h1>
-
-<p>This assumes you followed <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt">https://help.openai.com/en/articles/8554397-creating-a-gpt</a> and have already generated “instructions” for the GPT.</p>
-
-<p>First get the cloudquery docs
-<code class="language-plaintext highlighter-rouge">git clone git@github.com:cloudquery/cloudquery.git</code></p>
-
-<p>Get the cloudquery tables files as these have the relevant schemas and put them in a temporary directory for upload</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> /tmp/docs
-find <span class="nb">.</span> <span class="nt">-type</span> d <span class="nt">-name</span> <span class="s2">"tables"</span> | xargs <span class="nt">-I</span><span class="o">{}</span> <span class="nb">cp</span> <span class="nt">-r</span> <span class="o">{}</span>/ /tmp/docs/
-</code></pre></div></div>
-<p>We now have the markdown we want in /tmp/docs/tables</p>
-
-<p>Unfortunately you can only upload 20 files, so we need to cat all these together</p>
-
-<p><code class="language-plaintext highlighter-rouge">cat * &gt; ../schemas.md</code></p>
-
-<p>After that, we need to teach the bot about GoogleSQL as it doesn’t understand it, so copy all the docs from <a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax">https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax</a> and put those into another file called <code class="language-plaintext highlighter-rouge">googlesql.txt</code>.</p>
-
-<p>Now upload these two files (schema.md and googlesql.txt) as “knowledge”</p>
-
-<p>Update your prompt to tell your bot to only use the schema and SQL details that are in its knowledge.</p>
-
-<p>Below is an example of what I used</p>
-
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-CloudQuery Crafter is designed to handle requests for creating SQL queries based on specific data needs, such as finding all EC2 instances with a public IP. It will access and interpret relevant table schemas from it's knowledge to ensure accurate query generation. For each request, CloudQuery Crafter will provide detailed explanations and the complete SQL query, focusing on clarity and efficiency. It's tailored for users ranging from beginners to experts in SQL, aiming to facilitate their database querying process. CloudQuery Crafter prioritizes providing optimized, ready-to-use queries, including all necessary details such as 'SELECT' fields and 'WHERE' conditions to meet the user's specific request. CloudQuery Crafter should ensure they are providing the correct SQL for the database in use, for example postgres or Bigquery. CloudQuery Crafter should not guess the table schemas and instead rely on the knowledge every time. CloudQuery Crafter can also use queries on https://kmcquade.com/cloudquery/#ec2-instances-with-public-ips to guide it.
-Do not invent any tables. If they are not mentioned in CloudQuery Crafter's knowledge they do not exist.
-Unless told otherwise, use GoogleSQL SQL dialect which is documented in CloudQuery Crafter's knowledge.
-</code></pre></div></div>
-
-<p>This GPT can be used at <a href="https://chat.openai.com/g/g-2guyuhcpP-cloudquery-crafter">https://chat.openai.com/g/g-2guyuhcpP-cloudquery-crafter</a></p>
-
-<p>If you’ve any issues or ideas for improvements, please let me know.</p>]]></content><author><name></name></author><category term="ChatGPT" /><category term="cloudquery" /><summary type="html"><![CDATA[Making a custom GPT with chatgpt for cloudquery data]]></summary></entry></feed>
+The video audio is <em>not</em> sent</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry></feed>
