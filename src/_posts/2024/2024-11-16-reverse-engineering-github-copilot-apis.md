@@ -60,6 +60,7 @@ Discover running vscode with `code   --ignore-certificate-errors` from the comma
 - Display the models which are enabled in the chat ui
 - Send entire chat conversations including file context to `https://api.business.githubcopilot.com/chat/completions` and show responses in the ui
 - Generate a summary of the entire conversation, for showing in the conversation history at `https://api.business.githubcopilot.com/chat/completions`
+- If you ask it about the workspace in a repo that's been indexed, it'll send you question to <https://api.business.githubcopilot.com/search/code> with the relevant repo reference and returns... Nothing in my experience. It'll also send over the your question, and some file content to <https://api.business.githubcopilot.com/embeddings> Presumably to then select the relevant parts of the files to generate a response.
 
 ### Example API calls
 
