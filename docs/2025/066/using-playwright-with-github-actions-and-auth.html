@@ -1,0 +1,142 @@
+<!DOCTYPE html> <html lang="en-US"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <link rel="stylesheet" href="/assets/css/just-the-docs-default.css"> <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet"> <style id="jtd-nav-activation"> .site-nav ul li a { background-image: none; } </style> <script src="/assets/js/vendor/lunr.min.js"></script> <script src="/assets/js/just-the-docs.js"></script> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="icon" href="/favicon.ico" type="image/x-icon"> <!-- Begin Jekyll SEO tag v2.8.0 --> <title>Using Playwright with Github Actions and Auth | Tales from Prod</title> <meta name="generator" content="Jekyll v3.10.0" /> <meta property="og:title" content="Using Playwright with Github Actions and Auth" /> <meta property="og:locale" content="en_US" /> <meta name="description" content="Using Playwright with Github Actions and Auth" /> <meta property="og:description" content="Using Playwright with Github Actions and Auth" /> <link rel="canonical" href="https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html" /> <meta property="og:url" content="https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html" /> <meta property="og:site_name" content="Tales from Prod" /> <meta property="og:type" content="article" /> <meta property="article:published_time" content="2025-03-07T12:00:00+00:00" /> <meta name="twitter:card" content="summary" /> <meta property="twitter:title" content="Using Playwright with Github Actions and Auth" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-03-07T12:00:00+00:00","datePublished":"2025-03-07T12:00:00+00:00","description":"Using Playwright with Github Actions and Auth","headline":"Using Playwright with Github Actions and Auth","mainEntityOfPage":{"@type":"WebPage","@id":"https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html"},"url":"https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html"}</script> <!-- End Jekyll SEO tag --> </head> <body> <a class="skip-to-main" href="#main-content">Skip to main content</a> <svg xmlns="http://www.w3.org/2000/svg" class="d-none"> <symbol id="svg-link" viewBox="0 0 24 24"> <title>Link</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"> <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path> </svg> </symbol> <symbol id="svg-menu" viewBox="0 0 24 24"> <title>Menu</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"> <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line> </svg> </symbol> <symbol id="svg-arrow-right" viewBox="0 0 24 24"> <title>Expand</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"> <polyline points="9 18 15 12 9 6"></polyline> </svg> </symbol> <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE --> <symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"> <title id="svg-external-link-title">(external link)</title> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line> </symbol> <symbol id="svg-doc" viewBox="0 0 24 24"> <title>Document</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"> <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline> </svg> </symbol> <symbol id="svg-search" viewBox="0 0 24 24"> <title>Search</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> </symbol> <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md --> <symbol id="svg-copy" viewBox="0 0 16 16"> <title>Copy</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/> </svg> </symbol> <symbol id="svg-copied" viewBox="0 0 16 16"> <title>Copied</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/> </svg> </symbol> </svg> <div class="side-bar"> <div class="site-header" role="banner"> <a href="/" class="site-title lh-tight"> Tales from Prod </a> <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false"> <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg> </button> </div> <nav aria-label="Main" id="site-nav" class="site-nav"> <ul class="nav-list"><li class="nav-list-item"><a href="/about/" class="nav-list-link">About</a></li><li class="nav-list-item"><a href="/" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/categories/" class="nav-list-link">Categories</a></li><li class="nav-list-item"><a href="/useful-resources.html" class="nav-list-link">Useful resources</a></li></ul> </nav> <footer class="site-footer"> This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll. </footer> </div> <div class="main" id="top"> <div id="main-header" class="main-header"> <div class="search" role="search"> <div class="search-input-wrap"> <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search Tales from Prod" aria-label="Search Tales from Prod" autocomplete="off"> <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label> </div> <div id="search-results" class="search-results"></div> </div> </div> <div class="main-content-wrap"> <div id="main-content" class="main-content"> <main> <h1 id="using-playwright-with-github-actions-and-auth"> <a href="#using-playwright-with-github-actions-and-auth" class="anchor-heading" aria-labelledby="using-playwright-with-github-actions-and-auth"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Using Playwright with Github Actions and Auth </h1> <p>You’ve got a webapp now and want to make sure it works. You’ve done the right thing of requiring auth for all users and <a href="https://en.wikipedia.org/wiki/Time-based_one-time_password">TOTP</a> so your bots also have to use this.</p> <p>You’ve chosen playwright, and are wondering how to make</p> <ul> <li>The various browsers use the same cookies/session for auth</li> <li>avoid having to download all the various browsers every time</li> </ul> <h2 id="configuration"> <a href="#configuration" class="anchor-heading" aria-labelledby="configuration"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Configuration </h2> <p>TOTPs can only be used, and for a limited time period (it’s in the name)</p> <p>Due to this, we want to authenticate once, and then re-use those cookies/etc for the various browsers for this bot user</p> <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// e2e-tests/external-users/auth.setup.ts</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">test</span> <span class="k">as</span> <span class="nx">setup</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">promises</span> <span class="k">as</span> <span class="nx">fs</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">path</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">login</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../lib/login</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">authFile</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">external-users.auth.json</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nx">setup</span><span class="p">(</span><span class="dl">"</span><span class="s2">authenticate</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">({</span> <span class="nx">page</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// login is my custom function to do all the authentication/totp goodness based on https://playwrightsolutions.com/playwright-login-test-with-2-factor-authentication-2fa-enabled/</span>
+  <span class="c1">// login will still need to have a backoff in case multiple github actions run at the same time, and deal with retries</span>
+  <span class="k">await</span> <span class="nx">login</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span> <span class="dl">"</span><span class="s2">USERNAME</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">EMAIL</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">PASSWORD</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">TOTP_SEED</span><span class="dl">"</span><span class="p">);</span>
+
+  <span class="k">await</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">authFile</span><span class="p">),</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}).</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{});</span>
+
+  <span class="c1">// Save out the cookies/etc for use by *all* browsers</span>
+  <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">context</span><span class="p">().</span><span class="nx">storageState</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">authFile</span> <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div> <p>Now for the actual playwright configuration, main useful part is <code class="language-plaintext highlighter-rouge">dependencies: ["setup"],</code> and <code class="language-plaintext highlighter-rouge">storageState: "e2e-tests/external-users/external-users.auth.json",</code> which means the auth is only done once and then re-used by the other browsers</p> <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// playwright.config.ts</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">defineConfig</span><span class="p">,</span> <span class="nx">devices</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="cm">/**
+ * See https://playwright.dev/docs/test-configuration.
+ */</span>
+<span class="c1">// eslint-disable-next-line no-restricted-exports</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+  <span class="na">testDir</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./e2e-tests</span><span class="dl">"</span><span class="p">,</span>
+  <span class="cm">/* Run tests in files in parallel */</span>
+  <span class="na">fullyParallel</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="cm">/* Fail the build on CI if you accidentally left test.only in the source code. */</span>
+  <span class="na">forbidOnly</span><span class="p">:</span> <span class="o">!!</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CI</span><span class="p">,</span>
+  <span class="cm">/* Retry on CI only */</span>
+  <span class="na">retries</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CI</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="c1">// 10 minutes since LLMs can be slow</span>
+  <span class="na">timeout</span><span class="p">:</span> <span class="mi">600000</span><span class="p">,</span>
+  <span class="cm">/* Reporter to use. See https://playwright.dev/docs/test-reporters */</span>
+  <span class="na">reporter</span><span class="p">:</span> <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">,</span>
+  <span class="cm">/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */</span>
+  <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+    <span class="cm">/* Base URL to use in actions like `await page.goto('/')`. */</span>
+    <span class="c1">// baseURL: 'http://127.0.0.1:3000',</span>
+
+    <span class="cm">/* Record trace for failed tests. See https://playwright.dev/docs/trace-viewer */</span>
+    <span class="na">trace</span><span class="p">:</span> <span class="dl">"</span><span class="s2">retain-on-failure</span><span class="dl">"</span><span class="p">,</span>
+
+    <span class="c1">// Record video for failed tests</span>
+    <span class="na">video</span><span class="p">:</span> <span class="dl">"</span><span class="s2">retain-on-failure</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+
+  <span class="cm">/* Configure projects for major browsers */</span>
+  <span class="na">projects</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">,</span> <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/.*</span><span class="se">\.</span><span class="sr">setup</span><span class="se">\.</span><span class="sr">ts/</span> <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-chromium</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Chrome</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-firefox</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Firefox</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-webkit</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Safari</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+<span class="p">});</span>
+</code></pre></div></div> <h2 id="caching-and-github-actions"> <a href="#caching-and-github-actions" class="anchor-heading" aria-labelledby="caching-and-github-actions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Caching and Github Actions </h2> <p>Here is my customised version of the initial playwright Github Action. The main change is</p> <ul> <li>Cache the browsers downloaded, based on playwright version and configuration</li> </ul> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Scheduled Playwright Tests</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">schedule</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s2">"</span><span class="s">*/30</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span> <span class="c1"># Run every 30 minutes</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span> <span class="pi">{}</span>
+<span class="na">concurrency</span><span class="pi">:</span>
+  <span class="na">group</span><span class="pi">:</span> <span class="s">playwright</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">test</span><span class="pi">:</span>
+    <span class="na">timeout-minutes</span><span class="pi">:</span> <span class="m">15</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-node@v4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">node-version</span><span class="pi">:</span> <span class="s">lts/*</span>
+          <span class="na">cache</span><span class="pi">:</span> <span class="s2">"</span><span class="s">npm"</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install dependencies</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npm ci</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get installed Playwright version</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-version</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" &gt;&gt; $GITHUB_ENV</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get hashed Playwright configuration</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">echo "PLAYWRIGHT_CONFIG_HASH=$(node -e "console.log(require('crypto').createHash('sha256').update(require('fs').readFileSync('./playwright.config.ts', 'utf8')).digest('hex'))")" &gt;&gt; $GITHUB_ENV</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Restore cached playwright binaries</span>
+        <span class="c1"># From https://playwrightsolutions.com/playwright-github-action-to-cache-the-browser-binaries/</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/cache/restore@v4</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-read-cache</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">~/.cache/ms-playwright</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install Playwright Browsers</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright install --with-deps</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache Playwright Browsers</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">steps.playwright-read-cache.outputs.cache-hit != 'true'</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/cache/save@v4</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-write-cache</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">~/.cache/ms-playwright</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run Playwright tests</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright test</span>
+        <span class="na">env</span><span class="pi">:</span>
+          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">$</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v4</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">playwright-report</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">playwright-report/</span>
+          <span class="na">retention-days</span><span class="pi">:</span> <span class="m">8</span>
+</code></pre></div></div> </main> <hr> <footer> <p class="text-small text-grey-dk-100 mb-0">Copyright &copy; 2025 Richard Finlay Tweed. All rights reserved. All views expressed are my own</p> </footer> </div> </div> <div class="search-overlay"></div> </div> </body> </html>

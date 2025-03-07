@@ -20,7 +20,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://tales.fromprod.com" # the base hostname & protocol for your site, e.g. http://example.com
-github_username:  RichardoC
+github_username: RichardoC
 destination: docs
 
 # Build settings
@@ -50,4 +50,4 @@ timezone: Europe/London
 color_scheme: "dark"
 search_enabled: true
 heading_anchors: true
-footer_content: "Copyright &copy; 2024 Richard Finlay Tweed. All rights reserved. All views expressed are my own"
+footer_content: "Copyright &copy; 2025 Richard Finlay Tweed. All rights reserved. All views expressed are my own"

@@ -1,4 +1,176 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2024-11-16T15:33:52+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Reverse Engineering Github Copilot APIs</title><link href="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html" rel="alternate" type="text/html" title="Reverse Engineering Github Copilot APIs" /><published>2024-11-16T15:00:00+00:00</published><updated>2024-11-16T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis</id><content type="html" xml:base="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html"><![CDATA[<h1 id="reverse-engineering-github-copilot-apis">Reverse Engineering Github Copilot APIs</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-03-07T14:08:03+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Using Playwright with Github Actions and Auth</title><link href="https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html" rel="alternate" type="text/html" title="Using Playwright with Github Actions and Auth" /><published>2025-03-07T12:00:00+00:00</published><updated>2025-03-07T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth</id><content type="html" xml:base="https://tales.fromprod.com/2025/066/using-playwright-with-github-actions-and-auth.html"><![CDATA[<h1 id="using-playwright-with-github-actions-and-auth">Using Playwright with Github Actions and Auth</h1>
+
+<p>You’ve got a webapp now and want to make sure it works. You’ve done the right thing of requiring auth for all users and <a href="https://en.wikipedia.org/wiki/Time-based_one-time_password">TOTP</a> so your bots also have to use this.</p>
+
+<p>You’ve chosen playwright, and are wondering how to make</p>
+
+<ul>
+  <li>The various browsers use the same cookies/session for auth</li>
+  <li>avoid having to download all the various browsers every time</li>
+</ul>
+
+<h2 id="configuration">Configuration</h2>
+
+<p>TOTPs can only be used, and for a limited time period (it’s in the name)</p>
+
+<p>Due to this, we want to authenticate once, and then re-use those cookies/etc for the various browsers for this bot user</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// e2e-tests/external-users/auth.setup.ts</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">test</span> <span class="k">as</span> <span class="nx">setup</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">promises</span> <span class="k">as</span> <span class="nx">fs</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">path</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span> <span class="nx">login</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../lib/login</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">authFile</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">external-users.auth.json</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nx">setup</span><span class="p">(</span><span class="dl">"</span><span class="s2">authenticate</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">({</span> <span class="nx">page</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// login is my custom function to do all the authentication/totp goodness based on https://playwrightsolutions.com/playwright-login-test-with-2-factor-authentication-2fa-enabled/</span>
+  <span class="c1">// login will still need to have a backoff in case multiple github actions run at the same time, and deal with retries</span>
+  <span class="k">await</span> <span class="nx">login</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span> <span class="dl">"</span><span class="s2">USERNAME</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">EMAIL</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">PASSWORD</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">TOTP_SEED</span><span class="dl">"</span><span class="p">);</span>
+
+  <span class="k">await</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">authFile</span><span class="p">),</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}).</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{});</span>
+
+  <span class="c1">// Save out the cookies/etc for use by *all* browsers</span>
+  <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">context</span><span class="p">().</span><span class="nx">storageState</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">authFile</span> <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Now for the actual playwright configuration, main useful part is <code class="language-plaintext highlighter-rouge">dependencies: ["setup"],</code> and <code class="language-plaintext highlighter-rouge">storageState: "e2e-tests/external-users/external-users.auth.json",</code> which means the auth is only done once and then re-used by the other browsers</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// playwright.config.ts</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">defineConfig</span><span class="p">,</span> <span class="nx">devices</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="cm">/**
+ * See https://playwright.dev/docs/test-configuration.
+ */</span>
+<span class="c1">// eslint-disable-next-line no-restricted-exports</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+  <span class="na">testDir</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./e2e-tests</span><span class="dl">"</span><span class="p">,</span>
+  <span class="cm">/* Run tests in files in parallel */</span>
+  <span class="na">fullyParallel</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="cm">/* Fail the build on CI if you accidentally left test.only in the source code. */</span>
+  <span class="na">forbidOnly</span><span class="p">:</span> <span class="o">!!</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CI</span><span class="p">,</span>
+  <span class="cm">/* Retry on CI only */</span>
+  <span class="na">retries</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CI</span> <span class="p">?</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="c1">// 10 minutes since LLMs can be slow</span>
+  <span class="na">timeout</span><span class="p">:</span> <span class="mi">600000</span><span class="p">,</span>
+  <span class="cm">/* Reporter to use. See https://playwright.dev/docs/test-reporters */</span>
+  <span class="na">reporter</span><span class="p">:</span> <span class="dl">"</span><span class="s2">html</span><span class="dl">"</span><span class="p">,</span>
+  <span class="cm">/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */</span>
+  <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+    <span class="cm">/* Base URL to use in actions like `await page.goto('/')`. */</span>
+    <span class="c1">// baseURL: 'http://127.0.0.1:3000',</span>
+
+    <span class="cm">/* Record trace for failed tests. See https://playwright.dev/docs/trace-viewer */</span>
+    <span class="na">trace</span><span class="p">:</span> <span class="dl">"</span><span class="s2">retain-on-failure</span><span class="dl">"</span><span class="p">,</span>
+
+    <span class="c1">// Record video for failed tests</span>
+    <span class="na">video</span><span class="p">:</span> <span class="dl">"</span><span class="s2">retain-on-failure</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+
+  <span class="cm">/* Configure projects for major browsers */</span>
+  <span class="na">projects</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">,</span> <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/.*</span><span class="se">\.</span><span class="sr">setup</span><span class="se">\.</span><span class="sr">ts/</span> <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-chromium</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Chrome</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-firefox</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Firefox</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">external-users-webkit</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">use</span><span class="p">:</span> <span class="p">{</span>
+        <span class="p">...</span><span class="nx">devices</span><span class="p">[</span><span class="dl">"</span><span class="s2">Desktop Safari</span><span class="dl">"</span><span class="p">],</span>
+        <span class="na">storageState</span><span class="p">:</span> <span class="dl">"</span><span class="s2">e2e-tests/external-users/external-users.auth.json</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">testMatch</span><span class="p">:</span> <span class="sr">/external-users</span><span class="se">\/</span><span class="sr">.*</span><span class="se">\.</span><span class="sr">spec</span><span class="se">\.</span><span class="sr">ts/</span><span class="p">,</span>
+      <span class="na">dependencies</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">setup</span><span class="dl">"</span><span class="p">],</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="caching-and-github-actions">Caching and Github Actions</h2>
+
+<p>Here is my customised version of the initial playwright Github Action. The main change is</p>
+
+<ul>
+  <li>Cache the browsers downloaded, based on playwright version and configuration</li>
+</ul>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Scheduled Playwright Tests</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">schedule</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s2">"</span><span class="s">*/30</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span> <span class="c1"># Run every 30 minutes</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span> <span class="pi">{}</span>
+<span class="na">concurrency</span><span class="pi">:</span>
+  <span class="na">group</span><span class="pi">:</span> <span class="s">playwright</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">test</span><span class="pi">:</span>
+    <span class="na">timeout-minutes</span><span class="pi">:</span> <span class="m">15</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-node@v4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">node-version</span><span class="pi">:</span> <span class="s">lts/*</span>
+          <span class="na">cache</span><span class="pi">:</span> <span class="s2">"</span><span class="s">npm"</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install dependencies</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npm ci</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get installed Playwright version</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-version</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" &gt;&gt; $GITHUB_ENV</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Get hashed Playwright configuration</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">echo "PLAYWRIGHT_CONFIG_HASH=$(node -e "console.log(require('crypto').createHash('sha256').update(require('fs').readFileSync('./playwright.config.ts', 'utf8')).digest('hex'))")" &gt;&gt; $GITHUB_ENV</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Restore cached playwright binaries</span>
+        <span class="c1"># From https://playwrightsolutions.com/playwright-github-action-to-cache-the-browser-binaries/</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/cache/restore@v4</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-read-cache</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">~/.cache/ms-playwright</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install Playwright Browsers</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright install --with-deps</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache Playwright Browsers</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">steps.playwright-read-cache.outputs.cache-hit != 'true'</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/cache/save@v4</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">playwright-write-cache</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">~/.cache/ms-playwright</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run Playwright tests</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright test</span>
+        <span class="na">env</span><span class="pi">:</span>
+          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">$</span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v4</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">playwright-report</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s">playwright-report/</span>
+          <span class="na">retention-days</span><span class="pi">:</span> <span class="m">8</span>
+</code></pre></div></div>]]></content><author><name></name></author><category term="APIs" /><category term="Playwright" /><category term="Github" /><summary type="html"><![CDATA[Using Playwright with Github Actions and Auth]]></summary></entry><entry><title type="html">Reverse Engineering Github Copilot APIs</title><link href="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html" rel="alternate" type="text/html" title="Reverse Engineering Github Copilot APIs" /><published>2024-11-16T15:00:00+00:00</published><updated>2024-11-16T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis</id><content type="html" xml:base="https://tales.fromprod.com/2024/321/reverse-engineering-github-copilot-apis.html"><![CDATA[<h1 id="reverse-engineering-github-copilot-apis">Reverse Engineering Github Copilot APIs</h1>
 
 <p>Github Copilot claims to support <a href="https://github.com/features/copilot/extensions">extensions</a> but doesn’t actually document the APIs anywhere - they just provide example code using those <a href="https://github.com/copilot-extensions">APIs</a>. On the official docs the API only supports seeing how much <a href="https://docs.github.com/en/rest/copilot?apiVersion=2022-11-28">copilot is being used</a></p>
 
@@ -1141,68 +1313,4 @@ find <span class="nb">.</span> <span class="nt">-type</span> f <span class="nt">
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>By following these steps, you can utilise your own hardware for LLM usage and enjoy the benefits of running models and interacting with them from a remote machine. Enjoy the improved performance, privacy and flexibility offered by this setup.</p>]]></content><author><name></name></author><category term="ML" /><category term="LLMs" /><category term="Jan.ai" /><summary type="html"><![CDATA[Using your own hardware for llms]]></summary></entry><entry><title type="html">Using a video as a Google Meet background</title><link href="https://tales.fromprod.com/2024/082/google-meet-background-videos.html" rel="alternate" type="text/html" title="Using a video as a Google Meet background" /><published>2024-03-22T20:00:00+00:00</published><updated>2024-03-22T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/082/google-meet-background-videos</id><content type="html" xml:base="https://tales.fromprod.com/2024/082/google-meet-background-videos.html"><![CDATA[<h1 id="using-a-video-as-a-google-meet-background">Using a video as a Google Meet background</h1>
-
-<p><strong>Warning</strong>
-This is not officially supported by Google, and could be considered against their <a href="https://support.google.com/meet/answer/9847091">terms of service (specifically “System interference”)</a> so follow this guide at your own risk.</p>
-
-<p><strong>I accept no responsibility for how anyone chooses to use this. As always - Don’t be a pain</strong></p>
-
-<p>Don’t worry, at this time (2024-03-22) it only uses the video, not the audio channel.</p>
-
-<h2 id="requirements">Requirements</h2>
-
-<ul>
-  <li>An mp4 video which you have the rights to use</li>
-  <li>A browser where you can edit a page’s HTML</li>
-  <li>Some patience</li>
-</ul>
-
-<h2 id="guide">Guide</h2>
-
-<ul>
-  <li>Join a Google Meet call</li>
-  <li>click the menu (three vertical dots)</li>
-  <li>select Apply visual effects</li>
-  <li>Use inspector on the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
-  <li>You should then see something like <code class="language-plaintext highlighter-rouge">&lt;input type="file" jsname="tif8Pe" jsaction="change:E7zRc" accept="image/jpeg, image/png, image/webp" style="display: none;"&gt;</code> in the HTML
-    <ul>
-      <li>edit this to include <code class="language-plaintext highlighter-rouge">video/mp4</code></li>
-    </ul>
-  </li>
-  <li>Click the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
-  <li>Select your mp4 video</li>
-</ul>
-
-<p>Congratulations, you’ve now set a video as your background.
-The video audio is <em>not</em> sent</p>
-
-<h2 id="dirty-javascript-hacks-to-do-this">Dirty javascript hacks to do this</h2>
-
-<p>** Warning ** This is GPT generated, run at your own risk</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Find the first &lt;input&gt; element with the specific attributes</span>
-<span class="kd">const</span> <span class="nx">inputFile</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">input[type="file"][accept*="image/jpeg"], input[type="file"][accept*="image/png"], input[type="file"][accept*="image/webp"]</span><span class="dl">'</span><span class="p">);</span>
-
-<span class="k">if</span> <span class="p">(</span><span class="nx">inputFile</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// Get the current accept attribute value</span>
-    <span class="kd">const</span> <span class="nx">currentAcceptValue</span> <span class="o">=</span> <span class="nx">inputFile</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">accept</span><span class="dl">'</span><span class="p">);</span>
-    <span class="c1">// Check if "video/mp4" is already included, if not, add it</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">currentAcceptValue</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="dl">'</span><span class="s1">video/mp4</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nx">inputFile</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">accept</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nx">currentAcceptValue</span><span class="p">}</span><span class="s2">, video/mp4`</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="steps-to-using-this-javascript">Steps to using this javascript</h2>
-
-<ul>
-  <li>Join a Google Meet call</li>
-  <li>Open the developer console</li>
-  <li>paste in that javascript and run it</li>
-  <li>Click the <code class="language-plaintext highlighter-rouge">Add your own personal background</code> button</li>
-  <li>Select your mp4 video</li>
-</ul>
-
-<p>Congratulations, you’ve now set a video as your background
-The video audio is <em>not</em> sent</p>]]></content><author><name></name></author><category term="Google" /><category term="Nonsense" /><summary type="html"><![CDATA[Using a video as a Google Meet background]]></summary></entry></feed>
+<p>By following these steps, you can utilise your own hardware for LLM usage and enjoy the benefits of running models and interacting with them from a remote machine. Enjoy the improved performance, privacy and flexibility offered by this setup.</p>]]></content><author><name></name></author><category term="ML" /><category term="LLMs" /><category term="Jan.ai" /><summary type="html"><![CDATA[Using your own hardware for llms]]></summary></entry></feed>
