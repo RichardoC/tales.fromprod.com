@@ -33,7 +33,7 @@ Yes the caching strategy is pretty terrible, but good enough for this experiment
 
 Code.gs
 
-```appscript
+```javascript
 /**
  * Gmail Add-on for Professional Email Tone Checker
  * Uses Cerebras Qwen2.5 model via OpenAI-compatible API

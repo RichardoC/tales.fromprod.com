@@ -1,159 +1,159 @@
-<!DOCTYPE html> <html lang="en-US"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <link rel="stylesheet" href="/assets/css/just-the-docs-default.css"> <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet"> <style id="jtd-nav-activation"> .site-nav ul li a { background-image: none; } </style> <script src="/assets/js/vendor/lunr.min.js"></script> <script src="/assets/js/just-the-docs.js"></script> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="icon" href="/favicon.ico" type="image/x-icon"> <!-- Begin Jekyll SEO tag v2.8.0 --> <title>Judgement from Gmail | Tales from Prod</title> <meta name="generator" content="Jekyll v3.10.0" /> <meta property="og:title" content="Judgement from Gmail" /> <meta property="og:locale" content="en_US" /> <meta name="description" content="Judgement from Gmail" /> <meta property="og:description" content="Judgement from Gmail" /> <link rel="canonical" href="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" /> <meta property="og:url" content="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" /> <meta property="og:site_name" content="Tales from Prod" /> <meta property="og:type" content="article" /> <meta property="article:published_time" content="2025-06-11T16:00:00+00:00" /> <meta name="twitter:card" content="summary" /> <meta property="twitter:title" content="Judgement from Gmail" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-06-11T16:00:00+00:00","datePublished":"2025-06-11T16:00:00+00:00","description":"Judgement from Gmail","headline":"Judgement from Gmail","mainEntityOfPage":{"@type":"WebPage","@id":"https://tales.fromprod.com/2025/162/judgement-from-gmail.html"},"url":"https://tales.fromprod.com/2025/162/judgement-from-gmail.html"}</script> <!-- End Jekyll SEO tag --> </head> <body> <a class="skip-to-main" href="#main-content">Skip to main content</a> <svg xmlns="http://www.w3.org/2000/svg" class="d-none"> <symbol id="svg-link" viewBox="0 0 24 24"> <title>Link</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"> <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path> </svg> </symbol> <symbol id="svg-menu" viewBox="0 0 24 24"> <title>Menu</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"> <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line> </svg> </symbol> <symbol id="svg-arrow-right" viewBox="0 0 24 24"> <title>Expand</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"> <polyline points="9 18 15 12 9 6"></polyline> </svg> </symbol> <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE --> <symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"> <title id="svg-external-link-title">(external link)</title> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line> </symbol> <symbol id="svg-doc" viewBox="0 0 24 24"> <title>Document</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"> <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline> </svg> </symbol> <symbol id="svg-search" viewBox="0 0 24 24"> <title>Search</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> </symbol> <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md --> <symbol id="svg-copy" viewBox="0 0 16 16"> <title>Copy</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/> </svg> </symbol> <symbol id="svg-copied" viewBox="0 0 16 16"> <title>Copied</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/> </svg> </symbol> </svg> <div class="side-bar"> <div class="site-header" role="banner"> <a href="/" class="site-title lh-tight"> Tales from Prod </a> <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false"> <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg> </button> </div> <nav aria-label="Main" id="site-nav" class="site-nav"> <ul class="nav-list"><li class="nav-list-item"><a href="/about/" class="nav-list-link">About</a></li><li class="nav-list-item"><a href="/" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/categories/" class="nav-list-link">Categories</a></li><li class="nav-list-item"><a href="/useful-resources.html" class="nav-list-link">Useful resources</a></li></ul> </nav> <footer class="site-footer"> This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll. </footer> </div> <div class="main" id="top"> <div id="main-header" class="main-header"> <div class="search" role="search"> <div class="search-input-wrap"> <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search Tales from Prod" aria-label="Search Tales from Prod" autocomplete="off"> <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label> </div> <div id="search-results" class="search-results"></div> </div> </div> <div class="main-content-wrap"> <div id="main-content" class="main-content"> <main> <h1 id="judgement-from-gmail"> <a href="#judgement-from-gmail" class="anchor-heading" aria-labelledby="judgement-from-gmail"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Judgement from Gmail </h1> <p>Say you’re writing an email, and want to make sure it’s not too spicy/unprofessional - in this world of LLMs you can get judgement whenever you want.</p> <p>Google, for whatever reason, haven’t added proper Workspace Gemini support to <a href="https://developers.google.com/apps-script/">Appscript</a> so I’m using Cerebras for this example, since their inference speed is an order of magnitude faster than anything else and I don’t like spending time on emails</p> <h2 id="steps-to-create"> <a href="#steps-to-create" class="anchor-heading" aria-labelledby="steps-to-create"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Steps to create </h2> <ul> <li>Navigate to <a href="https://script.google.com/home">https://script.google.com/home</a> and click <code class="language-plaintext highlighter-rouge">New project</code></li> <li>Change the project name to something meaningful like <code class="language-plaintext highlighter-rouge">IsThisEmailAGoodIdea?</code></li> <li>Paste the Code.gs into the code editor</li> <li>Click the settings cog on the left <ul> <li>tick the “Show ‘appsscript.json’ manifest file in editor”</li> <li>in <code class="language-plaintext highlighter-rouge">Script properties</code> create a property <code class="language-plaintext highlighter-rouge">CEREBRAS_API_KEY</code> with the value of your Cerebras API key</li> </ul> </li> <li>Go back to the editor, and overwrite <code class="language-plaintext highlighter-rouge">appsscript.json</code> with the one below</li> <li>Click “Save project to Drive”</li> <li>Click “Deploy” -&gt; “Test Deployments” then “Application(s): Gmail” -&gt; Install</li> </ul> <h2 id="the-code"> <a href="#the-code" class="anchor-heading" aria-labelledby="the-code"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> The code </h2> <p>To be clear, not sponsored. Just wanted fast inference so I didn’t have to wait to test this out</p> <p>This code was mostly generated by <code class="language-plaintext highlighter-rouge">claude-sonnet-4-20250514</code> via <a href="https://kagi.com/assistant">Kagi Assistant</a></p> <p>Yes the caching strategy is pretty terrible, but good enough for this experiment</p> <p>Code.gs</p><pre><code class="language-appscript">/**
+<!DOCTYPE html> <html lang="en-US"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <link rel="stylesheet" href="/assets/css/just-the-docs-default.css"> <link rel="stylesheet" href="/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet"> <style id="jtd-nav-activation"> .site-nav ul li a { background-image: none; } </style> <script src="/assets/js/vendor/lunr.min.js"></script> <script src="/assets/js/just-the-docs.js"></script> <meta name="viewport" content="width=device-width, initial-scale=1"> <link rel="icon" href="/favicon.ico" type="image/x-icon"> <!-- Begin Jekyll SEO tag v2.8.0 --> <title>Judgement from Gmail | Tales from Prod</title> <meta name="generator" content="Jekyll v3.10.0" /> <meta property="og:title" content="Judgement from Gmail" /> <meta property="og:locale" content="en_US" /> <meta name="description" content="Judgement from Gmail" /> <meta property="og:description" content="Judgement from Gmail" /> <link rel="canonical" href="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" /> <meta property="og:url" content="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" /> <meta property="og:site_name" content="Tales from Prod" /> <meta property="og:type" content="article" /> <meta property="article:published_time" content="2025-06-11T16:00:00+00:00" /> <meta name="twitter:card" content="summary" /> <meta property="twitter:title" content="Judgement from Gmail" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-06-11T16:00:00+00:00","datePublished":"2025-06-11T16:00:00+00:00","description":"Judgement from Gmail","headline":"Judgement from Gmail","mainEntityOfPage":{"@type":"WebPage","@id":"https://tales.fromprod.com/2025/162/judgement-from-gmail.html"},"url":"https://tales.fromprod.com/2025/162/judgement-from-gmail.html"}</script> <!-- End Jekyll SEO tag --> </head> <body> <a class="skip-to-main" href="#main-content">Skip to main content</a> <svg xmlns="http://www.w3.org/2000/svg" class="d-none"> <symbol id="svg-link" viewBox="0 0 24 24"> <title>Link</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"> <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path> </svg> </symbol> <symbol id="svg-menu" viewBox="0 0 24 24"> <title>Menu</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"> <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line> </svg> </symbol> <symbol id="svg-arrow-right" viewBox="0 0 24 24"> <title>Expand</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"> <polyline points="9 18 15 12 9 6"></polyline> </svg> </symbol> <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE --> <symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"> <title id="svg-external-link-title">(external link)</title> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line> </symbol> <symbol id="svg-doc" viewBox="0 0 24 24"> <title>Document</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"> <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline> </svg> </symbol> <symbol id="svg-search" viewBox="0 0 24 24"> <title>Search</title> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"> <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line> </svg> </symbol> <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md --> <symbol id="svg-copy" viewBox="0 0 16 16"> <title>Copy</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/> <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/> </svg> </symbol> <symbol id="svg-copied" viewBox="0 0 16 16"> <title>Copied</title> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16"> <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/> <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/> </svg> </symbol> </svg> <div class="side-bar"> <div class="site-header" role="banner"> <a href="/" class="site-title lh-tight"> Tales from Prod </a> <button id="menu-button" class="site-button btn-reset" aria-label="Toggle menu" aria-pressed="false"> <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg> </button> </div> <nav aria-label="Main" id="site-nav" class="site-nav"> <ul class="nav-list"><li class="nav-list-item"><a href="/about/" class="nav-list-link">About</a></li><li class="nav-list-item"><a href="/" class="nav-list-link">Archive</a></li><li class="nav-list-item"><a href="/categories/" class="nav-list-link">Categories</a></li><li class="nav-list-item"><a href="/useful-resources.html" class="nav-list-link">Useful resources</a></li></ul> </nav> <footer class="site-footer"> This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll. </footer> </div> <div class="main" id="top"> <div id="main-header" class="main-header"> <div class="search" role="search"> <div class="search-input-wrap"> <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search Tales from Prod" aria-label="Search Tales from Prod" autocomplete="off"> <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label> </div> <div id="search-results" class="search-results"></div> </div> </div> <div class="main-content-wrap"> <div id="main-content" class="main-content"> <main> <h1 id="judgement-from-gmail"> <a href="#judgement-from-gmail" class="anchor-heading" aria-labelledby="judgement-from-gmail"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Judgement from Gmail </h1> <p>Say you’re writing an email, and want to make sure it’s not too spicy/unprofessional - in this world of LLMs you can get judgement whenever you want.</p> <p>Google, for whatever reason, haven’t added proper Workspace Gemini support to <a href="https://developers.google.com/apps-script/">Appscript</a> so I’m using Cerebras for this example, since their inference speed is an order of magnitude faster than anything else and I don’t like spending time on emails</p> <h2 id="steps-to-create"> <a href="#steps-to-create" class="anchor-heading" aria-labelledby="steps-to-create"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Steps to create </h2> <ul> <li>Navigate to <a href="https://script.google.com/home">https://script.google.com/home</a> and click <code class="language-plaintext highlighter-rouge">New project</code></li> <li>Change the project name to something meaningful like <code class="language-plaintext highlighter-rouge">IsThisEmailAGoodIdea?</code></li> <li>Paste the Code.gs into the code editor</li> <li>Click the settings cog on the left <ul> <li>tick the “Show ‘appsscript.json’ manifest file in editor”</li> <li>in <code class="language-plaintext highlighter-rouge">Script properties</code> create a property <code class="language-plaintext highlighter-rouge">CEREBRAS_API_KEY</code> with the value of your Cerebras API key</li> </ul> </li> <li>Go back to the editor, and overwrite <code class="language-plaintext highlighter-rouge">appsscript.json</code> with the one below</li> <li>Click “Save project to Drive”</li> <li>Click “Deploy” -&gt; “Test Deployments” then “Application(s): Gmail” -&gt; Install</li> </ul> <h2 id="the-code"> <a href="#the-code" class="anchor-heading" aria-labelledby="the-code"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> The code </h2> <p>To be clear, not sponsored. Just wanted fast inference so I didn’t have to wait to test this out</p> <p>This code was mostly generated by <code class="language-plaintext highlighter-rouge">claude-sonnet-4-20250514</code> via <a href="https://kagi.com/assistant">Kagi Assistant</a></p> <p>Yes the caching strategy is pretty terrible, but good enough for this experiment</p> <p>Code.gs</p> <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Gmail Add-on for Professional Email Tone Checker
  * Uses Cerebras Qwen2.5 model via OpenAI-compatible API
- */
+ */</span>
 
-function onGmailCompose(e) {
-  return createComposeActionCard();
-}
+<span class="kd">function</span> <span class="nx">onGmailCompose</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+<span class="p">}</span>
 
-function createComposeActionCard() {
-  // Check if we have cached results
-  const cachedResult = getCachedAnalysis();
+<span class="kd">function</span> <span class="nx">createComposeActionCard</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Check if we have cached results</span>
+  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nx">getCachedAnalysis</span><span class="p">();</span>
 
-  if (cachedResult) {
-    return createResultCard(cachedResult, true); // true = minimized
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// true = minimized</span>
+  <span class="p">}</span>
 
-  const card = CardService.newCardBuilder()
-    .setHeader(CardService.newCardHeader()
-      .setTitle('Professional Tone Checker')
-      .setImageUrl('https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png'))
-    .addSection(CardService.newCardSection()
-      .addWidget(CardService.newButtonSet()
-        .addButton(CardService.newTextButton()
-          .setText('Check Professional Tone')
-          .setOnClickAction(CardService.newAction()
-            .setFunctionName('checkEmailTone')))))
-    .build();
+  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Checker</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setImageUrl</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+          <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Check Professional Tone</span><span class="dl">'</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
+    <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
 
-  return [card];
-}
+  <span class="k">return</span> <span class="p">[</span><span class="nx">card</span><span class="p">];</span>
+<span class="p">}</span>
 
-function checkEmailTone(e) {
-  try {
-    const emailContent = getEmailContent(e);
+<span class="kd">function</span> <span class="nx">checkEmailTone</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">emailContent</span> <span class="o">=</span> <span class="nx">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
 
-    if (!emailContent.subject &amp;&amp; !emailContent.body) {
-      return createErrorCard('Please add content to your email before checking tone.');
-    }
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Please add content to your email before checking tone.</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    // Create content hash for caching
-    const contentHash = createContentHash(emailContent);
+    <span class="c1">// Create content hash for caching</span>
+    <span class="kd">const</span> <span class="nx">contentHash</span> <span class="o">=</span> <span class="nx">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
 
-    // Check cache first
-    let analysis = getCachedAnalysisByHash(contentHash);
+    <span class="c1">// Check cache first</span>
+    <span class="kd">let</span> <span class="nx">analysis</span> <span class="o">=</span> <span class="nx">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">);</span>
 
-    if (!analysis) {
-      // Analyze with Cerebras if not cached
-      analysis = analyzeWithCerebras(emailContent);
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">analysis</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Analyze with Cerebras if not cached</span>
+      <span class="nx">analysis</span> <span class="o">=</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
 
-      // Cache the result
-      cacheAnalysis(analysis, contentHash);
-    }
+      <span class="c1">// Cache the result</span>
+      <span class="nx">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    return createResultCard(analysis, false); // false = expanded
+    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span> <span class="c1">// false = expanded</span>
 
-  } catch (error) {
-    console.error('Error checking email tone:', error);
-    return createErrorCard('Error analyzing email. Please try again.');
-  }
-}
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error checking email tone:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error analyzing email. Please try again.</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-function toggleResultView(e) {
-  const isMinimized = e.parameters?.minimized === 'true';
-  const cachedResult = getCachedAnalysis();
+<span class="kd">function</span> <span class="nx">toggleResultView</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">isMinimized</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">parameters</span><span class="p">?.</span><span class="nx">minimized</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nx">getCachedAnalysis</span><span class="p">();</span>
 
-  if (cachedResult) {
-    return createResultCard(cachedResult, !isMinimized);
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="o">!</span><span class="nx">isMinimized</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  return createComposeActionCard();
-}
+  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+<span class="p">}</span>
 
-function clearCache(e) {
-  clearUserCache();
-  return createComposeActionCard();
-}
+<span class="kd">function</span> <span class="nx">clearCache</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">clearUserCache</span><span class="p">();</span>
+  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+<span class="p">}</span>
 
-function getEmailContent(e) {
-  const subject = e.formInput?.subject || e.gmail?.subject || '';
-  const body = e.formInput?.body || e.gmail?.body || '';
+<span class="kd">function</span> <span class="nx">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">subject</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">formInput</span><span class="p">?.</span><span class="nx">subject</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">gmail</span><span class="p">?.</span><span class="nx">subject</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">formInput</span><span class="p">?.</span><span class="nx">body</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">gmail</span><span class="p">?.</span><span class="nx">body</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
 
-  return {
-    subject: subject,
-    body: body
-  };
-}
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">subject</span><span class="p">:</span> <span class="nx">subject</span><span class="p">,</span>
+    <span class="na">body</span><span class="p">:</span> <span class="nx">body</span>
+  <span class="p">};</span>
+<span class="p">}</span>
 
-function createContentHash(emailContent) {
-  const content = `${emailContent.subject}|${emailContent.body}`;
-  return Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, content)
-    .map(byte =&gt; (byte + 256) % 256)
-    .map(byte =&gt; byte.toString(16).padStart(2, '0'))
-    .join('');
-}
+<span class="kd">function</span> <span class="nx">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">content</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span><span class="p">}</span><span class="s2">|</span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nx">computeDigest</span><span class="p">(</span><span class="nx">Utilities</span><span class="p">.</span><span class="nx">DigestAlgorithm</span><span class="p">.</span><span class="nx">MD5</span><span class="p">,</span> <span class="nx">content</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">byte</span> <span class="o">+</span> <span class="mi">256</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="nx">byte</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">padStart</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+<span class="p">}</span>
 
-function cacheAnalysis(analysis, contentHash) {
-  const cache = Utilities.getUuid(); // Generate unique cache key per user session
-  const cacheData = {
-    analysis: analysis,
-    contentHash: contentHash,
-    timestamp: new Date().getTime()
-  };
+<span class="kd">function</span> <span class="nx">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">cache</span> <span class="o">=</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nx">getUuid</span><span class="p">();</span> <span class="c1">// Generate unique cache key per user session</span>
+  <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">analysis</span><span class="p">:</span> <span class="nx">analysis</span><span class="p">,</span>
+    <span class="na">contentHash</span><span class="p">:</span> <span class="nx">contentHash</span><span class="p">,</span>
+    <span class="na">timestamp</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
+  <span class="p">};</span>
 
-  try {
-    CacheService.getUserCache().put('email_analysis', JSON.stringify(cacheData), 3600); // 1 hour
-    CacheService.getUserCache().put('current_hash', contentHash, 3600);
-  } catch (error) {
-    console.error('Cache error:', error);
-  }
-}
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">cacheData</span><span class="p">),</span> <span class="mi">3600</span><span class="p">);</span> <span class="c1">// 1 hour</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">,</span> <span class="mi">3600</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-function getCachedAnalysis() {
-  try {
-    const cached = CacheService.getUserCache().get('email_analysis');
-    if (cached) {
-      const cacheData = JSON.parse(cached);
-      // Check if cache is less than 1 hour old
-      if (new Date().getTime() - cacheData.timestamp &lt; 3600000) {
-        return cacheData.analysis;
-      }
-    }
-  } catch (error) {
-    console.error('Cache retrieval error:', error);
-  }
-  return null;
-}
+<span class="kd">function</span> <span class="nx">getCachedAnalysis</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cached</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
+      <span class="c1">// Check if cache is less than 1 hour old</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">&lt;</span> <span class="mi">3600000</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">analysis</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">}</span>
 
-function getCachedAnalysisByHash(contentHash) {
-  try {
-    const cached = CacheService.getUserCache().get('email_analysis');
-    const currentHash = CacheService.getUserCache().get('current_hash');
+<span class="kd">function</span> <span class="nx">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">currentHash</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">);</span>
 
-    if (cached &amp;&amp; currentHash === contentHash) {
-      const cacheData = JSON.parse(cached);
-      return cacheData.analysis;
-    }
-  } catch (error) {
-    console.error('Cache hash retrieval error:', error);
-  }
-  return null;
-}
+    <span class="k">if</span> <span class="p">(</span><span class="nx">cached</span> <span class="o">&amp;&amp;</span> <span class="nx">currentHash</span> <span class="o">===</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">analysis</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache hash retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+<span class="p">}</span>
 
-function clearUserCache() {
-  try {
-    CacheService.getUserCache().removeAll(['email_analysis', 'current_hash']);
-  } catch (error) {
-    console.error('Cache clear error:', error);
-  }
-}
+<span class="kd">function</span> <span class="nx">clearUserCache</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">removeAll</span><span class="p">([</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">]);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache clear error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-function analyzeWithCerebras(emailContent) {
-  const prompt = `Analyze this email for professional tone and business appropriateness:
+<span class="kd">function</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">prompt</span> <span class="o">=</span> <span class="s2">`Analyze this email for professional tone and business appropriateness:
 
-Subject: ${emailContent.subject}
-Body: ${emailContent.body}
+Subject: </span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span><span class="p">}</span><span class="s2">
+Body: </span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">}</span><span class="s2">
 
 Provide analysis in this exact JSON format:
 {
@@ -169,245 +169,245 @@ Focus on:
 - Appropriate formality level
 - Clear communication
 - Respectful tone
-- Business etiquette`;
+- Business etiquette`</span><span class="p">;</span>
 
-  try {
-    const response = callCerebrasAPI(prompt);
-    return parseCerebrasResponse(response);
-  } catch (error) {
-    console.error('Cerebras API error:', error);
-    throw new Error('Failed to analyze email with AI');
-  }
-}
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to analyze email with AI</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-function callCerebrasAPI(prompt) {
-  const apiKey = PropertiesService.getScriptProperties().getProperty('CEREBRAS_API_KEY');
+<span class="kd">function</span> <span class="nx">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">().</span><span class="nx">getProperty</span><span class="p">(</span><span class="dl">'</span><span class="s1">CEREBRAS_API_KEY</span><span class="dl">'</span><span class="p">);</span>
 
-  if (!apiKey) {
-    throw new Error('Cerebras API key not configured');
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">apiKey</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API key not configured</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  const url = 'https://api.cerebras.ai/v1/chat/completions';
+  <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">https://api.cerebras.ai/v1/chat/completions</span><span class="dl">'</span><span class="p">;</span>
 
-  const payload = {
-    model: 'qwen-3-32b',
-    messages: [
-      {
-        role: 'system',
-        content: 'You are a professional communication expert. Analyze emails for business appropriateness and provide constructive feedback in JSON format only.'
-      },
-      {
-        role: 'user',
-        content: prompt
-      }
-    ],
-    max_tokens: 1000,
-    temperature: 0.7,
-    top_p: 0.95
-  };
+  <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">model</span><span class="p">:</span> <span class="dl">'</span><span class="s1">qwen-3-32b</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">messages</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">role</span><span class="p">:</span> <span class="dl">'</span><span class="s1">system</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">content</span><span class="p">:</span> <span class="dl">'</span><span class="s1">You are a professional communication expert. Analyze emails for business appropriateness and provide constructive feedback in JSON format only.</span><span class="dl">'</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">role</span><span class="p">:</span> <span class="dl">'</span><span class="s1">user</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">content</span><span class="p">:</span> <span class="nx">prompt</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="na">max_tokens</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="na">temperature</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+    <span class="na">top_p</span><span class="p">:</span> <span class="mf">0.95</span>
+  <span class="p">};</span>
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    payload: JSON.stringify(payload)
-  };
+  <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">'</span><span class="s1">Authorization</span><span class="dl">'</span><span class="p">:</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="nx">apiKey</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
+      <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">payload</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+  <span class="p">};</span>
 
-  const response = UrlFetchApp.fetch(url, options);
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 
-  if (response.getResponseCode() !== 200) {
-    const errorText = response.getContentText();
-    console.error('API Error Response:', errorText);
-    throw new Error(`API request failed: ${response.getResponseCode()}`);
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getResponseCode</span><span class="p">()</span> <span class="o">!==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">errorText</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">API Error Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">errorText</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">`API request failed: </span><span class="p">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">getResponseCode</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  return JSON.parse(response.getContentText());
-}
+  <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
+<span class="p">}</span>
 
-function parseCerebrasResponse(response) {
-  try {
-    const content = response.choices[0].message.content.trim();
+<span class="kd">function</span> <span class="nx">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
 
-    let jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
-    }
+    <span class="kd">let</span> <span class="nx">jsonMatch</span> <span class="o">=</span> <span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/</span><span class="se">\{[\s\S]</span><span class="sr">*</span><span class="se">\}</span><span class="sr">/</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">jsonMatch</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">jsonMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    return parseTextResponse(content);
+    <span class="k">return</span> <span class="nx">parseTextResponse</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
 
-  } catch (error) {
-    console.error('Parse error:', error);
-    throw new Error('Failed to parse AI response');
-  }
-}
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Parse error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to parse AI response</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-function parseTextResponse(text) {
-  const result = {
-    score: 7,
-    tone: 'Professional',
-    issues: [],
-    suggestions: [],
-    positives: []
-  };
+<span class="kd">function</span> <span class="nx">parseTextResponse</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">score</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="na">tone</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Professional</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">issues</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="na">suggestions</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="na">positives</span><span class="p">:</span> <span class="p">[]</span>
+  <span class="p">};</span>
 
-  const scoreMatch = text.match(/score[:\s]*(\d+)/i);
-  if (scoreMatch) {
-    result.score = Math.min(10, Math.max(1, parseInt(scoreMatch[1])));
-  }
+  <span class="kd">const</span> <span class="nx">scoreMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/score</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">(\d</span><span class="sr">+</span><span class="se">)</span><span class="sr">/i</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">scoreMatch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">score</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">scoreMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">])));</span>
+  <span class="p">}</span>
 
-  const toneMatch = text.match(/tone[:\s]*["\']?([^"\'\n]+)["\']?/i);
-  if (toneMatch) {
-    result.tone = toneMatch[1].trim();
-  }
+  <span class="kd">const</span> <span class="nx">toneMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/tone</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">[</span><span class="sr">"</span><span class="se">\']?([^</span><span class="sr">"</span><span class="se">\'\n]</span><span class="sr">+</span><span class="se">)[</span><span class="sr">"</span><span class="se">\']?</span><span class="sr">/i</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">toneMatch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">tone</span> <span class="o">=</span> <span class="nx">toneMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">trim</span><span class="p">();</span>
+  <span class="p">}</span>
 
-  const issuesSection = text.match(/issues?[:\s]*\[(.*?)\]/is);
-  if (issuesSection) {
-    result.issues = issuesSection[1].split(',').map(s =&gt; s.replace(/["\'\[\]]/g, '').trim()).filter(s =&gt; s);
-  }
+  <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/issues</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">issuesSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">issues</span> <span class="o">=</span> <span class="nx">issuesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  const suggestionsSection = text.match(/suggestions?[:\s]*\[(.*?)\]/is);
-  if (suggestionsSection) {
-    result.suggestions = suggestionsSection[1].split(',').map(s =&gt; s.replace(/["\'\[\]]/g, '').trim()).filter(s =&gt; s);
-  }
+  <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/suggestions</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">=</span> <span class="nx">suggestionsSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  const positivesSection = text.match(/positives?[:\s]*\[(.*?)\]/is);
-  if (positivesSection) {
-    result.positives = positivesSection[1].split(',').map(s =&gt; s.replace(/["\'\[\]]/g, '').trim()).filter(s =&gt; s);
-  }
+  <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/positives</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">positivesSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">positives</span> <span class="o">=</span> <span class="nx">positivesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="p">}</span>
 
-  return result;
-}
+  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
 
-function createResultCard(analysis, isMinimized = false) {
-  const card = CardService.newCardBuilder()
-    .setHeader(CardService.newCardHeader()
-      .setTitle('Professional Tone Analysis'));
+<span class="kd">function</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">isMinimized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Analysis</span><span class="dl">'</span><span class="p">));</span>
 
-  // Always show score and basic info
-  const mainSection = CardService.newCardSection()
-    .addWidget(CardService.newKeyValue()
-      .setTopLabel('Professional Score')
-      .setContent(`${analysis.score}/10`)
-      .setIcon(CardService.Icon.STAR))
-    .addWidget(CardService.newKeyValue()
-      .setTopLabel('Tone Assessment')
-      .setContent(analysis.tone || 'Professional')
-      .setIcon(CardService.Icon.DESCRIPTION));
+  <span class="c1">// Always show score and basic info</span>
+  <span class="kd">const</span> <span class="nx">mainSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newKeyValue</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Score</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">score</span><span class="p">}</span><span class="s2">/10`</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">STAR</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newKeyValue</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Tone Assessment</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">tone</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">Professional</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">DESCRIPTION</span><span class="p">));</span>
 
-  card.addSection(mainSection);
+  <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">mainSection</span><span class="p">);</span>
 
-  if (!isMinimized) {
-    // Add detailed sections when expanded
-    if (analysis.issues &amp;&amp; analysis.issues.length &gt; 0) {
-      const issuesSection = CardService.newCardSection()
-        .setHeader('⚠️ Areas for Improvement');
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Add detailed sections when expanded</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">⚠️ Areas for Improvement</span><span class="dl">'</span><span class="p">);</span>
 
-      analysis.issues.slice(0, 3).forEach(issue =&gt; {
-        if (issue &amp;&amp; issue.trim()) {
-          issuesSection.addWidget(CardService.newTextParagraph()
-            .setText(`• ${issue.trim()}`));
-        }
-      });
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">issue</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">issue</span> <span class="o">&amp;&amp;</span> <span class="nx">issue</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">issuesSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">issue</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
 
-      card.addSection(issuesSection);
-    }
+      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">issuesSection</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    if (analysis.suggestions &amp;&amp; analysis.suggestions.length &gt; 0) {
-      const suggestionsSection = CardService.newCardSection()
-        .setHeader('💡 Suggestions');
+    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">💡 Suggestions</span><span class="dl">'</span><span class="p">);</span>
 
-      analysis.suggestions.slice(0, 3).forEach(suggestion =&gt; {
-        if (suggestion &amp;&amp; suggestion.trim()) {
-          suggestionsSection.addWidget(CardService.newTextParagraph()
-            .setText(`• ${suggestion.trim()}`));
-        }
-      });
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">suggestion</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">suggestion</span> <span class="o">&amp;&amp;</span> <span class="nx">suggestion</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">suggestionsSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">suggestion</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
 
-      card.addSection(suggestionsSection);
-    }
+      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    if (analysis.positives &amp;&amp; analysis.positives.length &gt; 0) {
-      const positivesSection = CardService.newCardSection()
-        .setHeader('✅ Positive Aspects');
+    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">✅ Positive Aspects</span><span class="dl">'</span><span class="p">);</span>
 
-      analysis.positives.slice(0, 3).forEach(positive =&gt; {
-        if (positive &amp;&amp; positive.trim()) {
-          positivesSection.addWidget(CardService.newTextParagraph()
-            .setText(`• ${positive.trim()}`));
-        }
-      });
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">positive</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">positive</span> <span class="o">&amp;&amp;</span> <span class="nx">positive</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">positivesSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">positive</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
 
-      card.addSection(positivesSection);
-    }
-  }
+      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">positivesSection</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
-  // Control buttons
-  const buttonSection = CardService.newCardSection();
-  const buttonSet = CardService.newButtonSet();
+  <span class="c1">// Control buttons</span>
+  <span class="kd">const</span> <span class="nx">buttonSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">buttonSet</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">();</span>
 
-  if (isMinimized) {
-    buttonSet.addButton(CardService.newTextButton()
-      .setText('Show Details')
-      .setOnClickAction(CardService.newAction()
-        .setFunctionName('toggleResultView')
-        .setParameters({minimized: 'true'})));
-  } else {
-    buttonSet.addButton(CardService.newTextButton()
-      .setText('Minimize')
-      .setOnClickAction(CardService.newAction()
-        .setFunctionName('toggleResultView')
-        .setParameters({minimized: 'false'})));
-  }
+  <span class="k">if</span> <span class="p">(</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Show Details</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">})));</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Minimize</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">false</span><span class="dl">'</span><span class="p">})));</span>
+  <span class="p">}</span>
 
-  buttonSet.addButton(CardService.newTextButton()
-    .setText('Analyze Again')
-    .setOnClickAction(CardService.newAction()
-      .setFunctionName('checkEmailTone')))
-    .addButton(CardService.newTextButton()
-      .setText('Clear Cache')
-      .setOnClickAction(CardService.newAction()
-        .setFunctionName('clearCache')));
+  <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Analyze Again</span><span class="dl">'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))</span>
+    <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Clear Cache</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">clearCache</span><span class="dl">'</span><span class="p">)));</span>
 
-  buttonSection.addWidget(buttonSet);
-  card.addSection(buttonSection);
+  <span class="nx">buttonSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">buttonSet</span><span class="p">);</span>
+  <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">buttonSection</span><span class="p">);</span>
 
-  return card.build();
-}
+  <span class="k">return</span> <span class="nx">card</span><span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+<span class="p">}</span>
 
-function createErrorCard(message) {
-  return CardService.newCardBuilder()
-    .setHeader(CardService.newCardHeader()
-      .setTitle('Error'))
-    .addSection(CardService.newCardSection()
-      .addWidget(CardService.newTextParagraph()
-        .setText(message))
-      .addWidget(CardService.newButtonSet()
-        .addButton(CardService.newTextButton()
-          .setText('Try Again')
-          .setOnClickAction(CardService.newAction()
-            .setFunctionName('checkEmailTone')))))
-    .build();
-}
+<span class="kd">function</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">message</span><span class="p">))</span>
+      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">()</span>
+        <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
+          <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Try Again</span><span class="dl">'</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
+            <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
+    <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+<span class="p">}</span>
 
-function testCerebrasAPI() {
-  const testEmail = {
-    subject: 'Test Email',
-    body: 'Hey there! Just wanted to check if we can meet tomorrow. Let me know!'
-  };
+<span class="kd">function</span> <span class="nx">testCerebrasAPI</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">testEmail</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">subject</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Test Email</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">body</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Hey there! Just wanted to check if we can meet tomorrow. Let me know!</span><span class="dl">'</span>
+  <span class="p">};</span>
 
-  try {
-    const result = analyzeWithCerebras(testEmail);
-    console.log('Test result:', result);
-    return result;
-  } catch (error) {
-    console.error('Test failed:', error);
-    return error.toString();
-  }
-}
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">testEmail</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test result:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">error</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-</code></pre><p>appscript.json</p> <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</code></pre></div></div> <p>appscript.json</p> <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"timeZone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Etc/UTC"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"enabledAdvancedServices"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
