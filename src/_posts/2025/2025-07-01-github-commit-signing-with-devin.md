@@ -18,7 +18,7 @@ It assumes that you've installed Devin as a (Github App)[https://docs.devin.ai/i
 - a separate Github account (which probably needs a company email account) ($)
 - Generation of a GPG key, which is added to that Github account ($)
 - a Github license for that account, so it can contribute to your repos ($$)
-- extensive configuration of the Devin machine for each repo, with that special GPGP key ($$)
+- extensive configuration of the Devin machine for each repo, with that special GPG key ($$)
 
 My process doesn't.
 
