@@ -1,4 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-06-11T16:21:59+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Judgement from Gmail</title><link href="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" rel="alternate" type="text/html" title="Judgement from Gmail" /><published>2025-06-11T16:00:00+00:00</published><updated>2025-06-11T16:00:00+00:00</updated><id>https://tales.fromprod.com/2025/162/judgement-from-gmail</id><content type="html" xml:base="https://tales.fromprod.com/2025/162/judgement-from-gmail.html"><![CDATA[<h1 id="judgement-from-gmail">Judgement from Gmail</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-07-01T14:23:47+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Github commit signing with Devin</title><link href="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html" rel="alternate" type="text/html" title="Github commit signing with Devin" /><published>2025-07-01T12:00:00+00:00</published><updated>2025-07-01T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/182/github-commit-signing-with-devin</id><content type="html" xml:base="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html"><![CDATA[<h1 id="github-commit-signing-with-devin">Github commit signing with Devin</h1>
+
+<p>If you’re using Github, and want to use Devin with a repo that requires (signed commits)[https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits] then this guide is for you.</p>
+
+<p>It assumes that you’ve installed Devin as a (Github App)[https://docs.devin.ai/integrations/gh] with write permissions to the relevant repo</p>
+
+<h2 id="why-should-i-follow-this-guide-by-some-person-online">Why should I follow this guide by some person online?</h2>
+
+<p>(The Devin guide)[https://docs.devin.ai/integrations/gh#commit-signing] requires</p>
+
+<ul>
+  <li>a separate Github account (which probably needs a company email account) ($)</li>
+  <li>a Github license for that account, so it can contribute to your repos ($$)</li>
+  <li>extensive configuration of the Devin machine for each repo ($$)</li>
+</ul>
+
+<p>My process doesn’t.</p>
+
+<h2 id="im-sold-how-do-i-do-this">I’m sold, how do I do this?</h2>
+
+<ul>
+  <li>Set up Devin for a repo as usual</li>
+  <li>During “install deps” run <code class="language-plaintext highlighter-rouge">gh extension install kassett/gh-commit</code> to install the Github cli extension that will make the api calls to make the signed commits</li>
+  <li>During <code class="language-plaintext highlighter-rouge">Repo Note</code> add the following notes, replacing YOUR_USER/YOUR_REPO with the real values</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When creating a new branch, ensure to mark that it traces a remote branch
+e.g.
+
+`git checkout -b feat-123-make-fizzbop &amp;&amp; git branch --set-upstream-to=origin/feat-123-make-fizzbop `
+
+When making a commit, use the following commands to make the commit, then pull it down from github. Replace feat-123-make-fizzbop with the real branch name, and the commit message with the desired message. This is required due to github commit signing. If you make commits locally they will *not* be verified and cannot be pushed up.
+
+
+`export GH_REPO="YOUR_USER/YOUR_REPO" ; gh commit -B feat-123-make-fizzbop -A -m "chore: test commits from Devin"`
+
+
+If you require assistance with this command, run `gh commit --help` and inspect the output
+</code></pre></div></div>
+
+<h2 id="why-does-this-work">Why does this work?</h2>
+
+<p>Devin’s machine has the Github cli installed, and this has the permissions of the github app.
+These permissions means that (via the cli) you can ask github to make a commit on your behalf, like the web editor. Github will sign these commits for you by design.</p>
+
+<h2 id="useful-resources">Useful resources</h2>
+
+<ul>
+  <li>The thread that started this all https://github.com/cli/cli/issues/10365#issuecomment-2660677714</li>
+  <li>The actual code making this work <a href="https://github.com/kassett/gh-commit">https://github.com/kassett/gh-commit</a></li>
+</ul>]]></content><author><name></name></author><category term="APIs" /><category term="LLMs" /><summary type="html"><![CDATA[Github commit signing with Devin]]></summary></entry><entry><title type="html">Judgement from Gmail</title><link href="https://tales.fromprod.com/2025/162/judgement-from-gmail.html" rel="alternate" type="text/html" title="Judgement from Gmail" /><published>2025-06-11T16:00:00+00:00</published><updated>2025-06-11T16:00:00+00:00</updated><id>https://tales.fromprod.com/2025/162/judgement-from-gmail</id><content type="html" xml:base="https://tales.fromprod.com/2025/162/judgement-from-gmail.html"><![CDATA[<h1 id="judgement-from-gmail">Judgement from Gmail</h1>
 
 <p>Say you’re writing an email, and want to make sure it’s not too spicy/unprofessional - in this world of LLMs you can get judgement whenever you want.</p>
 
@@ -1709,56 +1759,4 @@ permissions:
 
 <p>Full version of this code available at <a href="https://github.com/RichardoC/personal-webpage-summariser">https://github.com/RichardoC/personal-webpage-summariser</a></p>
 
-<p>Better versions exist such as <a href="https://github.com/RikudouSage/LemmyAutoTldrBot">https://github.com/RikudouSage/LemmyAutoTldrBot</a></p>]]></content><author><name></name></author><category term="Golang" /><category term="Go" /><category term="APIs" /><category term="ML" /><category term="LLMs" /><summary type="html"><![CDATA[Making a self hosted link summariser using LLMs]]></summary></entry><entry><title type="html">Backing up Slack-mojis</title><link href="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html" rel="alternate" type="text/html" title="Backing up Slack-mojis" /><published>2024-05-02T20:00:00+00:00</published><updated>2024-05-02T20:00:00+00:00</updated><id>https://tales.fromprod.com/2024/123/backing-up-slackmojis</id><content type="html" xml:base="https://tales.fromprod.com/2024/123/backing-up-slackmojis.html"><![CDATA[<h1 id="backing-up-slackmojis">Backing up Slackmojis</h1>
-
-<p>Recently a slack instance I’m on broke through the 11,000 slackmoji barrier. Given this was a significant usage of people’s time I figured it was worth backing these up in case of a disaster</p>
-
-<h2 id="to-the-docs">To the docs!</h2>
-
-<p>Slack <a href="https://api.slack.com/methods/emoji.list">document</a> an API which returns all slackmoji names and the URL of their images which are accessible without authentication.</p>
-
-<p>Given this it should be pretty easy to download them all.</p>
-
-<h2 id="findings">Findings</h2>
-
-<p>This code downloads several images a second, and is deliberately unthreaded because this is slow enough not to trigger a rate limit.</p>
-
-<h2 id="sample-code">Sample code</h2>
-<p>Please only use this for innocent fun, where you have permission as you are downloading data from the instance.</p>
-
-<p>This snippet is provided under an <a href="https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt">MIT license</a> and I hold no responsibility for how you choose to use it.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">http.client</span><span class="p">,</span> <span class="n">urllib</span><span class="p">.</span><span class="n">parse</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">,</span> <span class="n">shutil</span><span class="p">,</span> <span class="n">glob</span>
-
-<span class="c1"># Replace
-# TOKEN with your bearer token like xoxc-
-# COOKIE with your browser cookies, you can get this from the network tab
-# FOLDER with the full path that you want the slackmojis to be backed up in
-</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"slack.com"</span><span class="p">)</span>
-
-<span class="n">folder</span> <span class="o">=</span> <span class="s">"FOLDER"</span>
-
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s">"Content-type"</span><span class="p">:</span> <span class="s">"application/json; charset=utf-8"</span><span class="p">,</span> <span class="s">"Authorization"</span><span class="p">:</span> <span class="s">"Bearer TOKEN"</span><span class="p">,</span> <span class="s">"cookie"</span><span class="p">:</span> <span class="s">"COOKIE"</span><span class="p">}</span>
-
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/api/emoji.list"</span><span class="p">,</span>  <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
-
-<span class="n">jsonRepr</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-
-
-<span class="k">for</span> <span class="n">emojiname</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">jsonRepr</span><span class="p">[</span><span class="s">"emoji"</span><span class="p">].</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">emojiname</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">emojiname</span><span class="si">}</span><span class="s">.</span><span class="si">{</span><span class="n">url</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">'.'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">"</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="s">"alias"</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
-        <span class="c1"># Ignoring aliases for now
-</span>        <span class="k">continue</span>
-    <span class="k">with</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>  <span class="k">as</span> <span class="n">u</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="s">'bw+'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">f</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">u</span><span class="p">.</span><span class="n">read</span><span class="p">())</span>
-
-</code></pre></div></div>]]></content><author><name></name></author><category term="Slack" /><category term="APIs" /><category term="Nonsense" /><summary type="html"><![CDATA[Backing up Slackmojis]]></summary></entry></feed>
+<p>Better versions exist such as <a href="https://github.com/RikudouSage/LemmyAutoTldrBot">https://github.com/RikudouSage/LemmyAutoTldrBot</a></p>]]></content><author><name></name></author><category term="Golang" /><category term="Go" /><category term="APIs" /><category term="ML" /><category term="LLMs" /><summary type="html"><![CDATA[Making a self hosted link summariser using LLMs]]></summary></entry></feed>
