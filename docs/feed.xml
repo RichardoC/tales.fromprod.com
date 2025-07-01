@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-07-01T14:23:47+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Github commit signing with Devin</title><link href="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html" rel="alternate" type="text/html" title="Github commit signing with Devin" /><published>2025-07-01T12:00:00+00:00</published><updated>2025-07-01T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/182/github-commit-signing-with-devin</id><content type="html" xml:base="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html"><![CDATA[<h1 id="github-commit-signing-with-devin">Github commit signing with Devin</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-07-01T14:40:18+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Github commit signing with Devin</title><link href="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html" rel="alternate" type="text/html" title="Github commit signing with Devin" /><published>2025-07-01T12:00:00+00:00</published><updated>2025-07-01T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/182/github-commit-signing-with-devin</id><content type="html" xml:base="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html"><![CDATA[<h1 id="github-commit-signing-with-devin">Github commit signing with Devin</h1>
 
 <p>If you’re using Github, and want to use Devin with a repo that requires (signed commits)[https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits] then this guide is for you.</p>
 
@@ -10,8 +10,9 @@
 
 <ul>
   <li>a separate Github account (which probably needs a company email account) ($)</li>
+  <li>Generation of a GPG key, which is added to that Github account ($)</li>
   <li>a Github license for that account, so it can contribute to your repos ($$)</li>
-  <li>extensive configuration of the Devin machine for each repo ($$)</li>
+  <li>extensive configuration of the Devin machine for each repo, with that special GPG key ($$)</li>
 </ul>
 
 <p>My process doesn’t.</p>
