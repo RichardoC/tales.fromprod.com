@@ -1,53 +1,29 @@
 ---
 layout: post
-title: "Get Snyk to accept PRs"
+title: "Get Snyk Code to accept PRs"
 date: 2025-08-14 12:00:00 -0000
 categories: [Security]
 ---
 
-# Github commit signing with Devin
+# Get Snyk Code to accept PRs
 
-If you're using Github, and want to use Devin with a repo that requires (signed commits)[https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits] then this guide is for you.
+Sometimes you need to merge a PR that uses an HTTP server for a test, and Snyk code is configured to block you. Here's a bad way to convince Snyk "no really, this one is fine" in a way that robs your reviewer of making an informed choice about whether to accept the vulnerability.
 
-It assumes that you've installed Devin as a (Github App)[https://docs.devin.ai/integrations/gh] with write permissions to the relevant repo
+## How to make ignore specific issues via .snyk?
 
-## Why should I follow this guide by some person online?
+Tough luck, you can't. You can _only_ ignore files, not snyk code findings. <https://docs.snyk.io/manage-risk/prioritize-issues-for-fixing/ignore-issues/exclude-files-and-ignore-issues-faqs#how-do-i-ignore-issues-and-vulnerabilities-in-code-sast-scans>
 
-(The Devin guide)[https://docs.devin.ai/integrations/gh#commit-signing] requires
-
-- a separate Github account (which probably needs a company email account) ($)
-- a Github license for that account, so it can contribute to your repos ($$)
-- extensive configuration of the Devin machine for each repo ($$)
-
-My process doesn't.
-
-## I'm sold, how do I do this?
-
-- Set up Devin for a repo as usual
-- During "install deps" run `gh extension install kassett/gh-commit` to install the Github cli extension that will make the api calls to make the signed commits
-- During `Repo Note` add the following notes, replacing YOUR_USER/YOUR_REPO with the real values
-
-```
-When creating a new branch, ensure to mark that it traces a remote branch
-e.g.
-
-`git checkout -b feat-123-make-fizzbop && git branch --set-upstream-to=origin/feat-123-make-fizzbop `
-
-When making a commit, use the following commands to make the commit, then pull it down from github. Replace feat-123-make-fizzbop with the real branch name, and the commit message with the desired message. This is required due to github commit signing. If you make commits locally they will *not* be verified and cannot be pushed up.
-
-
-`export GH_REPO="YOUR_USER/YOUR_REPO" ; gh commit -B feat-123-make-fizzbop -A -m "chore: test commits from Devin"`
-
-
-If you require assistance with this command, run `gh commit --help` and inspect the output
+```yaml
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+# unhelpful docs about this file format at https://docs.snyk.io/manage-risk/policies/the-.snyk-file#syntax-of-the-.snyk-file
+version: v1.25.1
+ignore: {} # Can't be used as snyk don't support snyk code findings here
+patch: {}
+exclude:
+  global:
+    - scripts/bad-code.py # You just have to hope there are no other issues in this file
 ```
 
-## Why does this work?
+## Another bad alternative
 
-Devin's machine has the Github cli installed, and this has the permissions of the github app.
-These permissions means that (via the cli) you can ask github to make a commit on your behalf, like the web editor. Github will sign these commits for you by design.
-
-## Useful resources
-
-- The thread that started this all https://github.com/cli/cli/issues/10365#issuecomment-2660677714
-- The actual code making this work <https://github.com/kassett/gh-commit>
+An admin can open the failed Snyk PR check, and click the "Mark as successful in SCM" button. If anything changes in the PR, any issues will be re-detected and an admin will have to click the button _again_

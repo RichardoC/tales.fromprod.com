@@ -1,4 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-07-01T14:40:18+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Github commit signing with Devin</title><link href="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html" rel="alternate" type="text/html" title="Github commit signing with Devin" /><published>2025-07-01T12:00:00+00:00</published><updated>2025-07-01T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/182/github-commit-signing-with-devin</id><content type="html" xml:base="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html"><![CDATA[<h1 id="github-commit-signing-with-devin">Github commit signing with Devin</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-18T13:35:27+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Get Snyk Code to accept PRs</title><link href="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html" rel="alternate" type="text/html" title="Get Snyk Code to accept PRs" /><published>2025-08-14T12:00:00+00:00</published><updated>2025-08-14T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs</id><content type="html" xml:base="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html"><![CDATA[<h1 id="get-snyk-code-to-accept-prs">Get Snyk Code to accept PRs</h1>
+
+<p>Sometimes you need to merge a PR that uses an HTTP server for a test, and Snyk code is configured to block you. Here’s a bad way to convince Snyk “no really, this one is fine” in a way that robs your reviewer of making an informed choice about whether to accept the vulnerability.</p>
+
+<h2 id="how-to-make-ignore-specific-issues-via-snyk">How to make ignore specific issues via .snyk?</h2>
+
+<p>Tough luck, you can’t. You can <em>only</em> ignore files, not snyk code findings. <a href="https://docs.snyk.io/manage-risk/prioritize-issues-for-fixing/ignore-issues/exclude-files-and-ignore-issues-faqs#how-do-i-ignore-issues-and-vulnerabilities-in-code-sast-scans">https://docs.snyk.io/manage-risk/prioritize-issues-for-fixing/ignore-issues/exclude-files-and-ignore-issues-faqs#how-do-i-ignore-issues-and-vulnerabilities-in-code-sast-scans</a></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.</span>
+<span class="c1"># unhelpful docs about this file format at https://docs.snyk.io/manage-risk/policies/the-.snyk-file#syntax-of-the-.snyk-file</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s">v1.25.1</span>
+<span class="na">ignore</span><span class="pi">:</span> <span class="pi">{}</span> <span class="c1"># Can't be used as snyk don't support snyk code findings here</span>
+<span class="na">patch</span><span class="pi">:</span> <span class="pi">{}</span>
+<span class="na">exclude</span><span class="pi">:</span>
+  <span class="na">global</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">scripts/bad-code.py</span> <span class="c1"># You just have to hope there are no other issues in this file</span>
+</code></pre></div></div>
+
+<h2 id="another-bad-alternative">Another bad alternative</h2>
+
+<p>An admin can open the failed Snyk PR check, and click the “Mark as successful in SCM” button. If anything changes in the PR, any issues will be re-detected and an admin will have to click the button <em>again</em></p>]]></content><author><name></name></author><category term="Security" /><summary type="html"><![CDATA[Get Snyk Code to accept PRs]]></summary></entry><entry><title type="html">Github commit signing with Devin</title><link href="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html" rel="alternate" type="text/html" title="Github commit signing with Devin" /><published>2025-07-01T12:00:00+00:00</published><updated>2025-07-01T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/182/github-commit-signing-with-devin</id><content type="html" xml:base="https://tales.fromprod.com/2025/182/github-commit-signing-with-devin.html"><![CDATA[<h1 id="github-commit-signing-with-devin">Github commit signing with Devin</h1>
 
 <p>If you’re using Github, and want to use Devin with a repo that requires (signed commits)[https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits] then this guide is for you.</p>
 
@@ -1620,144 +1640,4 @@ permissions:
 
 <p>This version doesn’t work in automator for reasons I don’t understand, so you can’t easily trigger it from a key press.</p>
 
-<p>It uses <code class="language-plaintext highlighter-rouge">screencapture</code> by shelling out, so this is quite easy to detect. I’m sure there are ways to do a screenshot more directly which would avoid this obvious detection. This can probably be avoided by using <a href="https://developer.apple.com/documentation/screencapturekit/scshareablecontent/3916733-getshareablecontentwithcompletio?language=objc">ScreenCaptureKit</a> but I couldn’t work out the syntax in AppleScript.</p>]]></content><author><name></name></author><category term="macOS" /><category term="APIs" /><category term="Machine Learning" /><summary type="html"><![CDATA[Recording what you see on macOS - no external dependencies]]></summary></entry><entry><title type="html">Making a self hosted link summariser</title><link href="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html" rel="alternate" type="text/html" title="Making a self hosted link summariser" /><published>2024-05-05T19:00:00+00:00</published><updated>2024-05-05T19:00:00+00:00</updated><id>https://tales.fromprod.com/2024/126/self-hosted-link-summariser</id><content type="html" xml:base="https://tales.fromprod.com/2024/126/self-hosted-link-summariser.html"><![CDATA[<h1 id="making-a-self-hosted-link-summariser-using-llms">Making a self hosted link summariser using LLMs</h1>
-
-<p>If you use Reddit or Lemmy you are likely to be familiar with those bots which summarise news links and comment the result. I decided to make one of these which uses an LLM to do the summarisation</p>
-
-<h2 id="step-1-get-the-websites-text">Step 1: Get the website’s text</h2>
-
-<p>For this you want to get the page’s HTML, and remove anything that won’t help the bot such as javascript, CSS, images or videos. You’ll also want to get rid of excessive spaces or newlines as they’ll take up tokens that could be used for more words</p>
-
-<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="k">func</span> <span class="n">standardizeSpaces</span><span class="p">(</span><span class="n">s</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="n">strings</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">strings</span><span class="o">.</span><span class="n">Fields</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s">" "</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="k">func</span> <span class="n">scrapeSite</span><span class="p">(</span><span class="n">url</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">resp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">Get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Failed to get site"</span><span class="p">,</span> <span class="s">"site"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
-	<span class="p">}</span>
-	<span class="k">defer</span> <span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
-
-	<span class="n">doc</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">goquery</span><span class="o">.</span><span class="n">NewDocumentFromReader</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
-
-	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Failed to get site body"</span><span class="p">,</span> <span class="s">"site"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
-	<span class="p">}</span>
-
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"img"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-	<span class="c">// We don't care about images, we only want the text on the site</span>
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"picture"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-	<span class="c">// We don't care about scripts, we only want the text on the site</span>
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"script"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-	<span class="c">// We don't care about css, we only want the text on the site</span>
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"style"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-	<span class="c">// We don't care about videos, we only want the text on the site</span>
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"video"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-
-	<span class="c">// There's unlikely to be anything we want in these</span>
-	<span class="n">doc</span><span class="o">.</span><span class="n">Find</span><span class="p">(</span><span class="s">"noscript"</span><span class="p">)</span><span class="o">.</span><span class="n">Each</span><span class="p">(</span><span class="k">func</span><span class="p">(</span><span class="n">i</span> <span class="kt">int</span><span class="p">,</span> <span class="n">el</span> <span class="o">*</span><span class="n">goquery</span><span class="o">.</span><span class="n">Selection</span><span class="p">)</span> <span class="p">{</span>
-		<span class="n">el</span><span class="o">.</span><span class="n">Remove</span><span class="p">()</span>
-	<span class="p">})</span>
-
-	<span class="c">// remove excess newlines etc</span>
-	<span class="n">bdyText</span> <span class="o">:=</span> <span class="n">standardizeSpaces</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">Text</span><span class="p">())</span>
-	<span class="n">slog</span><span class="o">.</span><span class="n">Info</span><span class="p">(</span><span class="n">bdyText</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">bdyText</span><span class="p">,</span> <span class="n">err</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="step-2-use-the-llm-to-summarise-the-text">Step 2: Use the LLM to summarise the text</h2>
-
-<p>For this you’ll need to truncate the content from the site if it’s too long, and send it over to the LLM, with a prompt and “thought” that it should do this.</p>
-
-<div class="language-golang highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="k">func</span> <span class="n">doSummarisation</span><span class="p">(</span><span class="n">token</span> <span class="kt">string</span><span class="p">,</span> <span class="n">maxTokens</span> <span class="kt">int</span><span class="p">,</span> <span class="n">server</span> <span class="kt">string</span><span class="p">,</span> <span class="n">model</span> <span class="kt">string</span><span class="p">,</span> <span class="n">siteText</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="n">summary</span> <span class="kt">string</span><span class="p">,</span> <span class="n">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-
-	<span class="n">lengthOfDataToSend</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="n">siteText</span><span class="p">)</span>
-
-	<span class="c">// Just a rule of thumb</span>
-	<span class="n">likelyMaximumLengthAccepted</span> <span class="o">:=</span> <span class="m">2</span> <span class="o">*</span> <span class="n">maxTokens</span>
-	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">siteText</span><span class="p">)</span> <span class="o">&gt;</span> <span class="m">2</span><span class="o">*</span><span class="n">likelyMaximumLengthAccepted</span> <span class="p">{</span>
-		<span class="n">lengthOfDataToSend</span> <span class="o">=</span> <span class="m">2</span> <span class="o">*</span> <span class="n">likelyMaximumLengthAccepted</span>
-	<span class="p">}</span>
-
-	<span class="n">aiClient</span> <span class="o">:=</span> <span class="n">openai</span><span class="o">.</span><span class="n">DefaultConfig</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-	<span class="n">aiClient</span><span class="o">.</span><span class="n">BaseURL</span> <span class="o">=</span> <span class="n">server</span>
-	<span class="n">client</span> <span class="o">:=</span> <span class="n">openai</span><span class="o">.</span><span class="n">NewClientWithConfig</span><span class="p">(</span><span class="n">aiClient</span><span class="p">)</span>
-
-	<span class="n">stream</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">client</span><span class="o">.</span><span class="n">CreateChatCompletionStream</span><span class="p">(</span>
-		<span class="n">context</span><span class="o">.</span><span class="n">Background</span><span class="p">(),</span>
-		<span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionRequest</span><span class="p">{</span>
-			<span class="n">Model</span><span class="o">:</span> <span class="n">model</span><span class="p">,</span>
-			<span class="n">Messages</span><span class="o">:</span> <span class="p">[]</span><span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionMessage</span><span class="p">{</span>
-				<span class="p">{</span><span class="n">Role</span><span class="o">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatMessageRoleSystem</span><span class="p">,</span>
-					<span class="n">Content</span><span class="o">:</span> <span class="s">"You are an expert at summarising text in a concise manner for intelligent social media users."</span><span class="p">,</span>
-				<span class="p">},</span>
-				<span class="p">{</span>
-					<span class="n">Role</span><span class="o">:</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatMessageRoleUser</span><span class="p">,</span>
-					<span class="n">Content</span><span class="o">:</span> <span class="n">fmt</span><span class="o">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s">"Summarise the following text using the fewest possible words</span><span class="se">\n</span><span class="s">, %s"</span><span class="p">,</span>
-						<span class="n">siteText</span><span class="p">[</span><span class="o">:</span><span class="n">lengthOfDataToSend</span><span class="o">-</span><span class="m">1</span><span class="p">]),</span>
-				<span class="p">},</span>
-			<span class="p">},</span>
-			<span class="n">Stream</span><span class="o">:</span>           <span class="no">true</span><span class="p">,</span>
-			<span class="n">Stop</span><span class="o">:</span>             <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">"&lt;|end_of_text|&gt;"</span><span class="p">,</span> <span class="s">"&lt;|eot_id|&gt;"</span><span class="p">},</span>
-			<span class="n">Temperature</span><span class="o">:</span>      <span class="m">0.7</span><span class="p">,</span>
-			<span class="n">TopP</span><span class="o">:</span>             <span class="m">0.95</span><span class="p">,</span>
-			<span class="n">MaxTokens</span><span class="o">:</span>        <span class="n">maxTokens</span><span class="p">,</span>
-			<span class="n">FrequencyPenalty</span><span class="o">:</span> <span class="m">0.0</span><span class="p">,</span>
-			<span class="n">PresencePenalty</span><span class="o">:</span>  <span class="m">0.0</span><span class="p">,</span>
-		<span class="p">},</span>
-	<span class="p">)</span>
-
-	<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-		<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with ChatCompletionStream for summariser"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-		<span class="k">return</span> <span class="s">""</span><span class="p">,</span> <span class="n">err</span>
-	<span class="p">}</span>
-	<span class="k">defer</span> <span class="n">stream</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
-
-	<span class="k">var</span> <span class="n">summaryBuilder</span> <span class="n">strings</span><span class="o">.</span><span class="n">Builder</span>
-	<span class="k">for</span> <span class="p">{</span>
-		<span class="k">var</span> <span class="n">response</span> <span class="n">openai</span><span class="o">.</span><span class="n">ChatCompletionStreamResponse</span>
-		<span class="n">response</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">Recv</span><span class="p">()</span>
-		<span class="k">if</span> <span class="n">errors</span><span class="o">.</span><span class="n">Is</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="n">EOF</span><span class="p">)</span> <span class="p">{</span>
-			<span class="n">slog</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">"Finished receiving response from LLM"</span><span class="p">)</span>
-			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="no">nil</span>
-		<span class="p">}</span>
-
-		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-			<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with ChatCompletionStream for summariser"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">err</span>
-		<span class="p">}</span>
-		<span class="n">_</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">WriteString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">Choices</span><span class="p">[</span><span class="m">0</span><span class="p">]</span><span class="o">.</span><span class="n">Delta</span><span class="o">.</span><span class="n">Content</span><span class="p">)</span>
-
-		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
-			<span class="n">slog</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="s">"Error with writing stream to summary"</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
-			<span class="k">return</span> <span class="n">summaryBuilder</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">err</span>
-		<span class="p">}</span>
-
-	<span class="p">}</span>
-	<span class="c">// Never get here</span>
-
-<span class="p">}</span>
-
-</code></pre></div></div>
-
-<h2 id="the-code">The code</h2>
-
-<p>Full version of this code available at <a href="https://github.com/RichardoC/personal-webpage-summariser">https://github.com/RichardoC/personal-webpage-summariser</a></p>
-
-<p>Better versions exist such as <a href="https://github.com/RikudouSage/LemmyAutoTldrBot">https://github.com/RikudouSage/LemmyAutoTldrBot</a></p>]]></content><author><name></name></author><category term="Golang" /><category term="Go" /><category term="APIs" /><category term="ML" /><category term="LLMs" /><summary type="html"><![CDATA[Making a self hosted link summariser using LLMs]]></summary></entry></feed>
+<p>It uses <code class="language-plaintext highlighter-rouge">screencapture</code> by shelling out, so this is quite easy to detect. I’m sure there are ways to do a screenshot more directly which would avoid this obvious detection. This can probably be avoided by using <a href="https://developer.apple.com/documentation/screencapturekit/scshareablecontent/3916733-getshareablecontentwithcompletio?language=objc">ScreenCaptureKit</a> but I couldn’t work out the syntax in AppleScript.</p>]]></content><author><name></name></author><category term="macOS" /><category term="APIs" /><category term="Machine Learning" /><summary type="html"><![CDATA[Recording what you see on macOS - no external dependencies]]></summary></entry></feed>
