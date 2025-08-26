@@ -1,4 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-18T13:35:27+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Get Snyk Code to accept PRs</title><link href="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html" rel="alternate" type="text/html" title="Get Snyk Code to accept PRs" /><published>2025-08-14T12:00:00+00:00</published><updated>2025-08-14T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs</id><content type="html" xml:base="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html"><![CDATA[<h1 id="get-snyk-code-to-accept-prs">Get Snyk Code to accept PRs</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-26T10:11:03+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Charge a Mi Band 4 by hand</title><link href="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html" rel="alternate" type="text/html" title="Charge a Mi Band 4 by hand" /><published>2025-08-24T13:00:00+00:00</published><updated>2025-08-24T13:00:00+00:00</updated><id>https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand</id><content type="html" xml:base="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html"><![CDATA[<h1 id="charge-a-mi-band-4-by-hand">Charge a Mi Band 4 by hand</h1>
+
+<p>You’re on holiday, and forgot to charge your smartwatch before you left. You also forgot your charger. Now what?</p>
+
+<p>You’ve tried to source a spare charger but the watch is so old, that you can only get the replacement from China and that won’t arrive until you leave.</p>
+
+<p>You’ve two options</p>
+
+<ul>
+  <li>Do without, and wait until you return home to charge it</li>
+  <li>Jerry-rig it</li>
+</ul>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>I did this for fun, and accepted I might break my watch. I offer no guarantees that this will work - and every expectation it might break your watch.</p>
+
+<p>On your head be it! I accept no responsibility for anything that happens from reading/following this guide!</p>
+
+<h2 id="jerry-rigging-it">Jerry-rigging it</h2>
+
+<p>The charger just passes 5V to the watch. There doesn’t appear to be any active circuitry in it. Given this, if we know the polarity we can just directly connect 5V</p>
+
+<h3 id="polarity">Polarity</h3>
+
+<p>Below is some ascii art of the <em>bottom</em> of the watch
+From my testing, the right contact (in this orientation) is where +5V should go, and the left contact (in this orientation) is where the 0V should go</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    _______
+    |     |
+    |  _  |
+    | | | |
+    | |_| |
+    |     |
+0V  | o o | +5V
+    |_____|
+</code></pre></div></div>
+
+<h3 id="what-should-i-use-for-the-charger-ports">What should I use for the charger ports?</h3>
+
+<p>Cut the end of an old USB cable, and use the positive/neutral wires… Or in my case use an old PSP charger I found, and put wires in to it to get the 5V/0 since it’s labeled nicely.</p>
+
+<h3 id="how-do-i-hold-the-wires-in-place">How do I hold the wires in place?</h3>
+
+<p>Manually, I’m sure there’s a better way to do it. I didn’t find one with what I had available.</p>]]></content><author><name></name></author><category term="Hardware" /><category term="Nonsense" /><summary type="html"><![CDATA[Charge a Mi Band 4 by hand]]></summary></entry><entry><title type="html">Get Snyk Code to accept PRs</title><link href="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html" rel="alternate" type="text/html" title="Get Snyk Code to accept PRs" /><published>2025-08-14T12:00:00+00:00</published><updated>2025-08-14T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs</id><content type="html" xml:base="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html"><![CDATA[<h1 id="get-snyk-code-to-accept-prs">Get Snyk Code to accept PRs</h1>
 
 <p>Sometimes you need to merge a PR that uses an HTTP server for a test, and Snyk code is configured to block you. Here’s a bad way to convince Snyk “no really, this one is fine” in a way that robs your reviewer of making an informed choice about whether to accept the vulnerability.</p>
 
@@ -792,7 +836,7 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install Playwright Browsers</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright install --with-deps</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache Playwright Browsers</span>
@@ -802,16 +846,16 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run Playwright tests</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright test</span>
         <span class="na">env</span><span class="pi">:</span>
-          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">${{ secrets.USERNAME }}</span>
+          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">${{ secrets.EMAIL }}</span>
+          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">${{ secrets.PASSWORD }}</span>
+          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">${{ secrets.TOTP_SEED }}</span>
       <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v4</span>
-        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">${{ !cancelled() }}</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">playwright-report</span>
           <span class="na">path</span><span class="pi">:</span> <span class="s">playwright-report/</span>
@@ -1536,108 +1580,4 @@ permissions:
 <span class="p">);</span>
 
 <span class="c1">// now actually add the permissions you want this role to have</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="GitHub" /><summary type="html"><![CDATA[Authenticating to AWS from GitHub actions for multiple AWS accounts]]></summary></entry><entry><title type="html">Recording what you see on macOS - no external dependencies</title><link href="https://tales.fromprod.com/2024/163/apple-screen-recorder.html" rel="alternate" type="text/html" title="Recording what you see on macOS - no external dependencies" /><published>2024-06-11T19:00:00+00:00</published><updated>2024-06-11T19:00:00+00:00</updated><id>https://tales.fromprod.com/2024/163/apple-screen-recorder</id><content type="html" xml:base="https://tales.fromprod.com/2024/163/apple-screen-recorder.html"><![CDATA[<h1 id="recording-what-you-see-on-macos---no-external-dependencies">Recording what you see on macOS - no external dependencies</h1>
-
-<p>Without installing <strong>anything</strong> you can automatically record all text shown on screen on macOS and do whatever you want on it.</p>
-
-<p>This is published for informational purposes, and to illustrate how difficult “data loss prevention” is, when the very OS you’re using is working against you.</p>
-
-<p>I wish I’d published this before the whole <a href="https://support.microsoft.com/en-gb/windows/retrace-your-steps-with-recall-aa03f8a0-a78b-4b3e-b0a1-2eb8ac48701c">Windows Recall thing</a> but hindsight is 20/20.</p>
-
-<h2 id="applescript">AppleScript</h2>
-
-<p>Built in to macOS is <code class="language-plaintext highlighter-rouge">script editor</code> and <code class="language-plaintext highlighter-rouge">automator</code> which can use a proprietary scripting language called <code class="language-plaintext highlighter-rouge">AppleScript</code> which can be used to do everything a mac or iOS app can do, with a few extra niceties. In my opinion it’s very ugly and hard to use as it tries to act like natural prose rather than be an actual compute  language. One example is using <code class="language-plaintext highlighter-rouge">class's method</code> rather than class.method.</p>
-
-<p>The <a href="https://developer.apple.com/library/archive/documentation/AppleScript/Conceptual/AppleScriptLangGuide/introduction/ASLR_intro.html">documentation</a> is very out of date, though it still works so you’ll have to find information on <a href="https://www.macscripter.net">forums.</a></p>
-
-<h2 id="so-what">So what?</h2>
-
-<ul>
-  <li>Open spotlight</li>
-  <li>Open “script editor”</li>
-  <li>Paste the code below in the window and save it</li>
-  <li>Click “Run this script” button which looks like a play button</li>
-  <li>See that all text on your screen is now in the script output window.</li>
-</ul>
-
-<p>Congratulations, without installing <em>anything</em> you’ve managed to make something which can recover all text that shows on your macOS display.</p>
-
-<p>Apple don’t give you a way to disable AppleScript so I’m not aware of a way to prevent this functionality.</p>
-
-<h3 id="sample-code">Sample code</h3>
-
-<p>Please only use this for innocent fun, where you have permission.</p>
-
-<p>This snippet is provided under an <a href="https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt">MIT license</a> and I hold no responsibility for how you choose to use it.</p>
-
-<div class="language-applescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">
-</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"AppKit"</span><span class="w">
-</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"Foundation"</span><span class="w">
-</span><span class="nv">use</span><span class="w"> </span><span class="nv">framework</span><span class="w"> </span><span class="s2">"Vision"</span><span class="w">
-</span><span class="nv">use</span><span class="w"> </span><span class="nv">scripting</span><span class="w"> </span><span class="nv">additions</span><span class="w">
-
-
-
-</span><span class="c1">-- based on https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/ReadandWriteFiles.html</span><span class="w">
-</span><span class="k">on</span> <span class="nv">writeTextToFile</span><span class="p">(</span><span class="nv">theText</span><span class="p">,</span><span class="w"> </span><span class="nv">theFile</span><span class="p">,</span><span class="w"> </span><span class="nv">overwriteExistingContent</span><span class="p">)</span><span class="w">
-	</span><span class="k">try</span><span class="w">
-
-		</span><span class="c1">-- Convert the file to a string</span><span class="w">
-		</span><span class="k">set</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="k">as </span><span class="nc">string</span><span class="w">
-
-		</span><span class="c1">-- Open the file for writing</span><span class="w">
-		</span><span class="k">set</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">open for access</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">theFile</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nb">write</span><span class="w"> </span><span class="nv">permission</span><span class="w">
-
-		</span><span class="c1">-- Clear the file if content should be overwritten</span><span class="w">
-		</span><span class="k">if</span><span class="w"> </span><span class="nv">overwriteExistingContent</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">set eof</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="mi">0</span><span class="w">
-
-		</span><span class="c1">-- Write the new content to the file</span><span class="w">
-		</span><span class="nb">write</span><span class="w"> </span><span class="nv">theText</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w"> </span><span class="nv">starting</span><span class="w"> </span><span class="nb">at</span><span class="w"> </span><span class="nv">eof</span><span class="w">
-
-		</span><span class="c1">-- Close the file</span><span class="w">
-		</span><span class="nb">close access</span><span class="w"> </span><span class="nv">theOpenedFile</span><span class="w">
-
-		</span><span class="c1">-- Return a boolean indicating that writing was successful</span><span class="w">
-		</span><span class="nb">return</span><span class="w"> </span><span class="nb">true</span><span class="w">
-
-		</span><span class="c1">-- Handle a write error</span><span class="w">
-	</span><span class="nb">on</span><span class="w"> </span><span class="k">error</span><span class="w">
-
-		</span><span class="c1">-- Close the file</span><span class="w">
-		</span><span class="k">try</span><span class="w">
-			</span><span class="nb">close access</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">theFile</span><span class="w">
-		</span><span class="k">end</span><span class="w"> </span><span class="k">try</span><span class="w">
-
-		</span><span class="c1">-- Return a boolean indicating that writing failed</span><span class="w">
-		</span><span class="nb">return</span><span class="w"> </span><span class="nb">false</span><span class="w">
-	</span><span class="k">end</span><span class="w"> </span><span class="k">try</span><span class="w">
-</span><span class="k">end</span><span class="w"> </span><span class="nv">writeTextToFile</span><span class="w">
-
-</span><span class="c1">-- based on https://www.macscripter.net/t/image-png-to-text-through-applescript/74490/6</span><span class="w">
-</span><span class="k">on</span> <span class="nv">getScreenText</span><span class="p">()</span><span class="w">
-	</span><span class="nb">do shell script</span><span class="w"> </span><span class="s2">"screencapture -c "</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">thePasteboard</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">NSPasteboard</span>'s <span class="nv">generalPasteboard</span><span class="p">()</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">imageData</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">thePasteboard</span>'s <span class="nv">dataForType</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSPasteboardTypeTIFF</span><span class="p">)</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">requestHandler</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">VNImageRequestHandler</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">initWithData</span><span class="p">:</span><span class="nv">imageData</span><span class="w"> </span><span class="nv">options</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSDictionary</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">init</span><span class="p">())</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">theRequest</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nb">current application</span>'s <span class="nv">VNRecognizeTextRequest</span>'s <span class="nv">alloc</span><span class="p">()</span>'s <span class="nv">init</span><span class="p">()</span><span class="w">
-	</span><span class="nv">requestHandler</span>'s <span class="nv">performRequests</span><span class="p">:(</span><span class="nb">current application</span>'s <span class="nv">NSArray</span>'s <span class="nv">arrayWithObject</span><span class="p">:(</span><span class="nv">theRequest</span><span class="p">))</span><span class="w"> </span><span class="err">|</span><span class="k">error</span><span class="err">|</span><span class="p">:(</span><span class="nb">missing value</span><span class="p">)</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">theResults</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="nv">theRequest</span>'s <span class="nv">results</span><span class="p">()</span><span class="w">
-	</span><span class="k">set</span><span class="w"> </span><span class="nv">theText</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="p">{}</span><span class="w">
-	</span><span class="k">repeat</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nv">observation</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nv">theResults</span><span class="w">
-		</span><span class="nb">copy</span><span class="w"> </span><span class="p">((</span><span class="nb">first</span><span class="w"> </span><span class="nb">item</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="nv">observation</span>'s <span class="nv">topCandidates</span><span class="p">:</span><span class="mi">1</span><span class="p">))</span>'s <span class="err">|</span><span class="nv">string</span><span class="err">|</span><span class="p">()</span><span class="w"> </span><span class="k">as </span><span class="nc">text</span><span class="p">)</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nv">theText</span><span class="w">
-	</span><span class="k">end</span><span class="w"> </span><span class="k">repeat</span><span class="w">
-	</span><span class="nb">return</span><span class="w"> </span><span class="nv">theText</span><span class="w">
-</span><span class="k">end</span><span class="w"> </span><span class="nv">getScreenText</span><span class="w">
-
-</span><span class="k">on</span> <span class="nb">run</span><span class="w"> </span><span class="p">(</span><span class="nv">argv</span><span class="p">)</span><span class="w">
-	</span><span class="nv">getScreenText</span><span class="p">()</span><span class="w">
-</span><span class="k">end</span><span class="w"> </span><span class="nb">run</span><span class="w">
-</span></code></pre></div></div>
-
-<h2 id="limitations">Limitations</h2>
-
-<p>This version does not continue to run, nor write the captured text to a file or send it to a server so isn’t currently much use for much more than a proof of concept.</p>
-
-<p>This version doesn’t work in automator for reasons I don’t understand, so you can’t easily trigger it from a key press.</p>
-
-<p>It uses <code class="language-plaintext highlighter-rouge">screencapture</code> by shelling out, so this is quite easy to detect. I’m sure there are ways to do a screenshot more directly which would avoid this obvious detection. This can probably be avoided by using <a href="https://developer.apple.com/documentation/screencapturekit/scshareablecontent/3916733-getshareablecontentwithcompletio?language=objc">ScreenCaptureKit</a> but I couldn’t work out the syntax in AppleScript.</p>]]></content><author><name></name></author><category term="macOS" /><category term="APIs" /><category term="Machine Learning" /><summary type="html"><![CDATA[Recording what you see on macOS - no external dependencies]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name></name></author><category term="GitHub" /><summary type="html"><![CDATA[Authenticating to AWS from GitHub actions for multiple AWS accounts]]></summary></entry></feed>

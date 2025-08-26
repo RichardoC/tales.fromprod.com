@@ -119,6 +119,8 @@ Here is my customised version of the initial playwright Github Action. The main 
 
 - Cache the browsers downloaded, based on playwright version and configuration
 
+{% raw %}
+
 ```yaml
 name: Scheduled Playwright Tests
 on:
@@ -177,3 +179,5 @@ jobs:
           path: playwright-report/
           retention-days: 8
 ```
+
+{% endraw %}
