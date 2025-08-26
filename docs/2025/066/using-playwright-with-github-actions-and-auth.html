@@ -115,7 +115,7 @@
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install Playwright Browsers</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright install --with-deps</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache Playwright Browsers</span>
@@ -125,16 +125,16 @@
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run Playwright tests</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright test</span>
         <span class="na">env</span><span class="pi">:</span>
-          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">${{ secrets.USERNAME }}</span>
+          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">${{ secrets.EMAIL }}</span>
+          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">${{ secrets.PASSWORD }}</span>
+          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">${{ secrets.TOTP_SEED }}</span>
       <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v4</span>
-        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">${{ !cancelled() }}</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">playwright-report</span>
           <span class="na">path</span><span class="pi">:</span> <span class="s">playwright-report/</span>

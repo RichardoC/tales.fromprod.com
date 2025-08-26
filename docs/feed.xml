@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-18T13:35:27+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Get Snyk Code to accept PRs</title><link href="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html" rel="alternate" type="text/html" title="Get Snyk Code to accept PRs" /><published>2025-08-14T12:00:00+00:00</published><updated>2025-08-14T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs</id><content type="html" xml:base="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html"><![CDATA[<h1 id="get-snyk-code-to-accept-prs">Get Snyk Code to accept PRs</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-26T10:06:38+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Get Snyk Code to accept PRs</title><link href="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html" rel="alternate" type="text/html" title="Get Snyk Code to accept PRs" /><published>2025-08-14T12:00:00+00:00</published><updated>2025-08-14T12:00:00+00:00</updated><id>https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs</id><content type="html" xml:base="https://tales.fromprod.com/2025/226/get-snyk-to-accept-PRs.html"><![CDATA[<h1 id="get-snyk-code-to-accept-prs">Get Snyk Code to accept PRs</h1>
 
 <p>Sometimes you need to merge a PR that uses an HTTP server for a test, and Snyk code is configured to block you. Here’s a bad way to convince Snyk “no really, this one is fine” in a way that robs your reviewer of making an informed choice about whether to accept the vulnerability.</p>
 
@@ -792,7 +792,7 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install Playwright Browsers</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright install --with-deps</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Cache Playwright Browsers</span>
@@ -802,16 +802,16 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">path</span><span class="pi">:</span> <span class="pi">|</span>
             <span class="s">~/.cache/ms-playwright</span>
-          <span class="na">key</span><span class="pi">:</span> <span class="s">$-playwright-$-$</span>
+          <span class="na">key</span><span class="pi">:</span> <span class="s">${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}-${{ env.PLAYWRIGHT_CONFIG_HASH }}</span>
       <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Run Playwright tests</span>
         <span class="na">run</span><span class="pi">:</span> <span class="s">npx playwright test</span>
         <span class="na">env</span><span class="pi">:</span>
-          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">$</span>
-          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">USERNAME</span><span class="pi">:</span> <span class="s">${{ secrets.USERNAME }}</span>
+          <span class="na">EMAIL</span><span class="pi">:</span> <span class="s">${{ secrets.EMAIL }}</span>
+          <span class="na">PASSWORD</span><span class="pi">:</span> <span class="s">${{ secrets.PASSWORD }}</span>
+          <span class="na">TOTP_SEED</span><span class="pi">:</span> <span class="s">${{ secrets.TOTP_SEED }}</span>
       <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/upload-artifact@v4</span>
-        <span class="na">if</span><span class="pi">:</span> <span class="s">$</span>
+        <span class="na">if</span><span class="pi">:</span> <span class="s">${{ !cancelled() }}</span>
         <span class="na">with</span><span class="pi">:</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">playwright-report</span>
           <span class="na">path</span><span class="pi">:</span> <span class="s">playwright-report/</span>
