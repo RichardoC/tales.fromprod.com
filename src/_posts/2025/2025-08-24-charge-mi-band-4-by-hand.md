@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Charge a Mi Band 4 by hand"
-date: 2025-08-25 12:00:00 -0000
+date: 2025-08-24 13:00:00 -0000
 categories: [Hardware, Nonsense]
 ---
 
@@ -44,7 +44,7 @@ From my testing, the right contact (in this orientation) is where +5V should go,
 
 ### What should I use for the charger ports?
 
-Cut the end of an old USB cable, and use the postive/neutral wires... Or in my case use an old PSP charger I found, and put wires in to it to get the 5V/0 since it's labeled nicely.
+Cut the end of an old USB cable, and use the positive/neutral wires... Or in my case use an old PSP charger I found, and put wires in to it to get the 5V/0 since it's labeled nicely.
 
 ### How do I hold the wires in place?
 
