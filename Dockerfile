@@ -1,4 +1,4 @@
-FROM ruby:3.4.5-alpine3.22@sha256:e284f39a2103a564dca9771a81bfecb455b04cd3be4149b133ed7e508ef1b65f
+FROM ruby:3.4.6-alpine3.22@sha256:c3ff6fe470a69c28cbd985c7d2d132946b3dd4ec1b3d1856eb34ae386e6d6a98
 
 # Based on https://github.com/rockstorm101/jekyll-docker/blob/master/Dockerfile
 
