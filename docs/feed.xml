@@ -1,4 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2025-08-26T10:11:03+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Charge a Mi Band 4 by hand</title><link href="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html" rel="alternate" type="text/html" title="Charge a Mi Band 4 by hand" /><published>2025-08-24T13:00:00+00:00</published><updated>2025-08-24T13:00:00+00:00</updated><id>https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand</id><content type="html" xml:base="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html"><![CDATA[<h1 id="charge-a-mi-band-4-by-hand">Charge a Mi Band 4 by hand</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-04-01T10:41:58+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Minimal cloudflared permissions, for a ngrok alternative</title><link href="https://tales.fromprod.com/2026/091/cloudflared-permissions.html" rel="alternate" type="text/html" title="Minimal cloudflared permissions, for a ngrok alternative" /><published>2026-04-01T10:00:00+00:00</published><updated>2026-04-01T10:00:00+00:00</updated><id>https://tales.fromprod.com/2026/091/cloudflared-permissions</id><content type="html" xml:base="https://tales.fromprod.com/2026/091/cloudflared-permissions.html"><![CDATA[<h1 id="minimal-cloudflared-permissions-for-a-ngrok-alternative">Minimal cloudflared permissions, for a ngrok alternative</h1>
+
+<p>Cloudflare have a product (sometimes) called <a href="https://github.com/cloudflare/cloudflared">cloudflared</a> which can be used as an ngrok alternative. I wanted to enable developers to use this, but give them the minimal permissions and only allow it to be used with a specific domain.</p>
+
+<p>After reading hundreds of pages of documentation, and spending hours with their support - finally I found the minimum set required, which can be added to a Cloudflare Member Group’s permission policy.</p>
+
+<p>Sorry about the lack of details, but cloudflare weren’t very specific on why each bit is required</p>
+
+<h2 id="account-level-permissions">Account level permissions</h2>
+
+<ul>
+  <li>Cloudflare One Connector Read and Monitor: cloudflared; Required so the cli can see if the tunnel is working</li>
+  <li>Cloudflare Gateway; Required to actually configure the tunnel</li>
+  <li>Cloudflare Zero Trust; Required to actually configure the tunnel</li>
+  <li>Load Balancer; Required to actually configure the tunnel</li>
+  <li>Cloudflare Access; Required to actually configure the tunnel</li>
+</ul>
+
+<h2 id="zone-level-permissions-scope-to-the-relevant-domain">Zone level permissions (scope to the relevant domain)</h2>
+
+<ul>
+  <li>Zone Versioning Read; Required so the cli can see current DNS records</li>
+  <li>Domain DNS; Required so the cli can create and update records, to allow traffic to actually get to the tunnel</li>
+</ul>]]></content><author><name></name></author><category term="APIs" /><category term="Cloudflare" /><category term="Security" /><summary type="html"><![CDATA[Minimal cloudflared permissions, for a ngrok alternative]]></summary></entry><entry><title type="html">Charge a Mi Band 4 by hand</title><link href="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html" rel="alternate" type="text/html" title="Charge a Mi Band 4 by hand" /><published>2025-08-24T13:00:00+00:00</published><updated>2025-08-24T13:00:00+00:00</updated><id>https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand</id><content type="html" xml:base="https://tales.fromprod.com/2025/236/charge-mi-band-4-by-hand.html"><![CDATA[<h1 id="charge-a-mi-band-4-by-hand">Charge a Mi Band 4 by hand</h1>
 
 <p>You’re on holiday, and forgot to charge your smartwatch before you left. You also forgot your charger. Now what?</p>
 
@@ -151,80 +174,80 @@ These permissions means that (via the cli) you can ask github to make a commit o
  * Uses Cerebras Qwen2.5 model via OpenAI-compatible API
  */</span>
 
-<span class="kd">function</span> <span class="nx">onGmailCompose</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nf">onGmailCompose</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nf">createComposeActionCard</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">createComposeActionCard</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">createComposeActionCard</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// Check if we have cached results</span>
-  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nx">getCachedAnalysis</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nf">getCachedAnalysis</span><span class="p">();</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// true = minimized</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// true = minimized</span>
   <span class="p">}</span>
 
-  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Checker</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setImageUrl</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png</span><span class="dl">'</span><span class="p">))</span>
-    <span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-          <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Check Professional Tone</span><span class="dl">'</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-            <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
-    <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Checker</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setImageUrl</span><span class="p">(</span><span class="dl">'</span><span class="s1">https://www.gstatic.com/images/branding/product/1x/gmail_48dp.png</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newButtonSet</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+          <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Check Professional Tone</span><span class="dl">'</span><span class="p">)</span>
+          <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
+    <span class="p">.</span><span class="nf">build</span><span class="p">();</span>
 
   <span class="k">return</span> <span class="p">[</span><span class="nx">card</span><span class="p">];</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">checkEmailTone</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">checkEmailTone</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">emailContent</span> <span class="o">=</span> <span class="nx">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">emailContent</span> <span class="o">=</span> <span class="nf">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Please add content to your email before checking tone.</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nf">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Please add content to your email before checking tone.</span><span class="dl">'</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="c1">// Create content hash for caching</span>
-    <span class="kd">const</span> <span class="nx">contentHash</span> <span class="o">=</span> <span class="nx">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">contentHash</span> <span class="o">=</span> <span class="nf">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
 
     <span class="c1">// Check cache first</span>
-    <span class="kd">let</span> <span class="nx">analysis</span> <span class="o">=</span> <span class="nx">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">analysis</span> <span class="o">=</span> <span class="nf">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">);</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">analysis</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">analysis</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">// Analyze with Cerebras if not cached</span>
-      <span class="nx">analysis</span> <span class="o">=</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
+      <span class="nx">analysis</span> <span class="o">=</span> <span class="nf">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">);</span>
 
       <span class="c1">// Cache the result</span>
-      <span class="nx">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">);</span>
+      <span class="nf">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span> <span class="c1">// false = expanded</span>
+    <span class="k">return</span> <span class="nf">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span> <span class="c1">// false = expanded</span>
 
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error checking email tone:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error analyzing email. Please try again.</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error checking email tone:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">createErrorCard</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error analyzing email. Please try again.</span><span class="dl">'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">toggleResultView</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">toggleResultView</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">isMinimized</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">parameters</span><span class="p">?.</span><span class="nx">minimized</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nx">getCachedAnalysis</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">cachedResult</span> <span class="o">=</span> <span class="nf">getCachedAnalysis</span><span class="p">();</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="o">!</span><span class="nx">isMinimized</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">createResultCard</span><span class="p">(</span><span class="nx">cachedResult</span><span class="p">,</span> <span class="o">!</span><span class="nx">isMinimized</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+  <span class="k">return</span> <span class="nf">createComposeActionCard</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">clearCache</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">clearUserCache</span><span class="p">();</span>
-  <span class="k">return</span> <span class="nx">createComposeActionCard</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nf">clearCache</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">clearUserCache</span><span class="p">();</span>
+  <span class="k">return</span> <span class="nf">createComposeActionCard</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">getEmailContent</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">subject</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">formInput</span><span class="p">?.</span><span class="nx">subject</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">gmail</span><span class="p">?.</span><span class="nx">subject</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">formInput</span><span class="p">?.</span><span class="nx">body</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">gmail</span><span class="p">?.</span><span class="nx">body</span> <span class="o">||</span> <span class="dl">''</span><span class="p">;</span>
 
@@ -234,70 +257,70 @@ These permissions means that (via the cli) you can ask github to make a commit o
   <span class="p">};</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">createContentHash</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">content</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span><span class="p">}</span><span class="s2">|</span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">body</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
-  <span class="k">return</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nx">computeDigest</span><span class="p">(</span><span class="nx">Utilities</span><span class="p">.</span><span class="nx">DigestAlgorithm</span><span class="p">.</span><span class="nx">MD5</span><span class="p">,</span> <span class="nx">content</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">byte</span> <span class="o">+</span> <span class="mi">256</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="nx">byte</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">padStart</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">))</span>
-    <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nf">computeDigest</span><span class="p">(</span><span class="nx">Utilities</span><span class="p">.</span><span class="nx">DigestAlgorithm</span><span class="p">.</span><span class="nx">MD5</span><span class="p">,</span> <span class="nx">content</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">byte</span> <span class="o">+</span> <span class="mi">256</span><span class="p">)</span> <span class="o">%</span> <span class="mi">256</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">byte</span> <span class="o">=&gt;</span> <span class="nx">byte</span><span class="p">.</span><span class="nf">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nf">padStart</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="dl">''</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">cache</span> <span class="o">=</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nx">getUuid</span><span class="p">();</span> <span class="c1">// Generate unique cache key per user session</span>
+<span class="kd">function</span> <span class="nf">cacheAnalysis</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">cache</span> <span class="o">=</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nf">getUuid</span><span class="p">();</span> <span class="c1">// Generate unique cache key per user session</span>
   <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">analysis</span><span class="p">:</span> <span class="nx">analysis</span><span class="p">,</span>
     <span class="na">contentHash</span><span class="p">:</span> <span class="nx">contentHash</span><span class="p">,</span>
-    <span class="na">timestamp</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span>
+    <span class="na">timestamp</span><span class="p">:</span> <span class="k">new</span> <span class="nc">Date</span><span class="p">().</span><span class="nf">getTime</span><span class="p">()</span>
   <span class="p">};</span>
 
   <span class="k">try</span> <span class="p">{</span>
-    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">cacheData</span><span class="p">),</span> <span class="mi">3600</span><span class="p">);</span> <span class="c1">// 1 hour</span>
-    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">,</span> <span class="mi">3600</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">cacheData</span><span class="p">),</span> <span class="mi">3600</span><span class="p">);</span> <span class="c1">// 1 hour</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">put</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">,</span> <span class="nx">contentHash</span><span class="p">,</span> <span class="mi">3600</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">getCachedAnalysis</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">getCachedAnalysis</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">cached</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">cached</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
       <span class="c1">// Check if cache is less than 1 hour old</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">&lt;</span> <span class="mi">3600000</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if </span><span class="p">(</span><span class="k">new</span> <span class="nc">Date</span><span class="p">().</span><span class="nf">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">&lt;</span> <span class="mi">3600000</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">analysis</span><span class="p">;</span>
       <span class="p">}</span>
     <span class="p">}</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">getCachedAnalysisByHash</span><span class="p">(</span><span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
-    <span class="kd">const</span> <span class="nx">currentHash</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">cached</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">currentHash</span> <span class="o">=</span> <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">);</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nx">cached</span> <span class="o">&amp;&amp;</span> <span class="nx">currentHash</span> <span class="o">===</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">cached</span> <span class="o">&amp;&amp;</span> <span class="nx">currentHash</span> <span class="o">===</span> <span class="nx">contentHash</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">cacheData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">cached</span><span class="p">);</span>
       <span class="k">return</span> <span class="nx">cacheData</span><span class="p">.</span><span class="nx">analysis</span><span class="p">;</span>
     <span class="p">}</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache hash retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache hash retrieval error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">clearUserCache</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">clearUserCache</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="nx">CacheService</span><span class="p">.</span><span class="nx">getUserCache</span><span class="p">().</span><span class="nx">removeAll</span><span class="p">([</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">]);</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache clear error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="nx">CacheService</span><span class="p">.</span><span class="nf">getUserCache</span><span class="p">().</span><span class="nf">removeAll</span><span class="p">([</span><span class="dl">'</span><span class="s1">email_analysis</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">current_hash</span><span class="dl">'</span><span class="p">]);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cache clear error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">analyzeWithCerebras</span><span class="p">(</span><span class="nx">emailContent</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">prompt</span> <span class="o">=</span> <span class="s2">`Analyze this email for professional tone and business appropriateness:
 
 Subject: </span><span class="p">${</span><span class="nx">emailContent</span><span class="p">.</span><span class="nx">subject</span><span class="p">}</span><span class="s2">
@@ -320,19 +343,19 @@ Focus on:
 - Business etiquette`</span><span class="p">;</span>
 
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to analyze email with AI</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nf">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to analyze email with AI</span><span class="dl">'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">().</span><span class="nx">getProperty</span><span class="p">(</span><span class="dl">'</span><span class="s1">CEREBRAS_API_KEY</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nf">callCerebrasAPI</span><span class="p">(</span><span class="nx">prompt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">apiKey</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nf">getScriptProperties</span><span class="p">().</span><span class="nf">getProperty</span><span class="p">(</span><span class="dl">'</span><span class="s1">CEREBRAS_API_KEY</span><span class="dl">'</span><span class="p">);</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">apiKey</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API key not configured</span><span class="dl">'</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">apiKey</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Cerebras API key not configured</span><span class="dl">'</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">https://api.cerebras.ai/v1/chat/completions</span><span class="dl">'</span><span class="p">;</span>
@@ -360,38 +383,38 @@ Focus on:
       <span class="dl">'</span><span class="s1">Authorization</span><span class="dl">'</span><span class="p">:</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="nx">apiKey</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
       <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="na">payload</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+    <span class="na">payload</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
   <span class="p">};</span>
 
-  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nf">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getResponseCode</span><span class="p">()</span> <span class="o">!==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">errorText</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">API Error Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">errorText</span><span class="p">);</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">`API request failed: </span><span class="p">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">getResponseCode</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nf">getResponseCode</span><span class="p">()</span> <span class="o">!==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">errorText</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nf">getContentText</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">API Error Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">errorText</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="s2">`API request failed: </span><span class="p">${</span><span class="nx">response</span><span class="p">.</span><span class="nf">getResponseCode</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
+  <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nf">getContentText</span><span class="p">());</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">parseCerebrasResponse</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nx">trim</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">message</span><span class="p">.</span><span class="nx">content</span><span class="p">.</span><span class="nf">trim</span><span class="p">();</span>
 
-    <span class="kd">let</span> <span class="nx">jsonMatch</span> <span class="o">=</span> <span class="nx">content</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/</span><span class="se">\{[\s\S]</span><span class="sr">*</span><span class="se">\}</span><span class="sr">/</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsonMatch</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">jsonMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="kd">let</span> <span class="nx">jsonMatch</span> <span class="o">=</span> <span class="nx">content</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/</span><span class="se">\{[\s\S]</span><span class="sr">*</span><span class="se">\}</span><span class="sr">/</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">jsonMatch</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">jsonMatch</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="nx">parseTextResponse</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">parseTextResponse</span><span class="p">(</span><span class="nx">content</span><span class="p">);</span>
 
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Parse error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to parse AI response</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Parse error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to parse AI response</span><span class="dl">'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">parseTextResponse</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">parseTextResponse</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">score</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
     <span class="na">tone</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Professional</span><span class="dl">'</span><span class="p">,</span>
@@ -400,158 +423,158 @@ Focus on:
     <span class="na">positives</span><span class="p">:</span> <span class="p">[]</span>
   <span class="p">};</span>
 
-  <span class="kd">const</span> <span class="nx">scoreMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/score</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">(\d</span><span class="sr">+</span><span class="se">)</span><span class="sr">/i</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">scoreMatch</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">score</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">scoreMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">])));</span>
+  <span class="kd">const</span> <span class="nx">scoreMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/score</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">(\d</span><span class="sr">+</span><span class="se">)</span><span class="sr">/i</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">scoreMatch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">score</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nf">parseInt</span><span class="p">(</span><span class="nx">scoreMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">])));</span>
   <span class="p">}</span>
 
-  <span class="kd">const</span> <span class="nx">toneMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/tone</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">[</span><span class="sr">"</span><span class="se">\']?([^</span><span class="sr">"</span><span class="se">\'\n]</span><span class="sr">+</span><span class="se">)[</span><span class="sr">"</span><span class="se">\']?</span><span class="sr">/i</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">toneMatch</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">tone</span> <span class="o">=</span> <span class="nx">toneMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">trim</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">toneMatch</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/tone</span><span class="se">[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">[</span><span class="sr">"</span><span class="se">\']?([^</span><span class="sr">"</span><span class="se">\'\n]</span><span class="sr">+</span><span class="se">)[</span><span class="sr">"</span><span class="se">\']?</span><span class="sr">/i</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">toneMatch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">tone</span> <span class="o">=</span> <span class="nx">toneMatch</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">trim</span><span class="p">();</span>
   <span class="p">}</span>
 
-  <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/issues</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">issuesSection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">issues</span> <span class="o">=</span> <span class="nx">issuesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/issues</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">issuesSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">issues</span> <span class="o">=</span> <span class="nx">issuesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nf">trim</span><span class="p">()).</span><span class="nf">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/suggestions</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">=</span> <span class="nx">suggestionsSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/suggestions</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">=</span> <span class="nx">suggestionsSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nf">trim</span><span class="p">()).</span><span class="nf">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/positives</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">positivesSection</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">positives</span> <span class="o">=</span> <span class="nx">positivesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nx">trim</span><span class="p">()).</span><span class="nx">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">match</span><span class="p">(</span><span class="sr">/positives</span><span class="se">?[</span><span class="sr">:</span><span class="se">\s]</span><span class="sr">*</span><span class="se">\[(</span><span class="sr">.*</span><span class="se">?)\]</span><span class="sr">/i</span><span class="nx">s</span><span class="p">);</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">positivesSection</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">positives</span> <span class="o">=</span> <span class="nx">positivesSection</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">,</span><span class="dl">'</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"</span><span class="se">\'\[\]]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">''</span><span class="p">).</span><span class="nf">trim</span><span class="p">()).</span><span class="nf">filter</span><span class="p">(</span><span class="nx">s</span> <span class="o">=&gt;</span> <span class="nx">s</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">isMinimized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Analysis</span><span class="dl">'</span><span class="p">));</span>
+<span class="kd">function</span> <span class="nf">createResultCard</span><span class="p">(</span><span class="nx">analysis</span><span class="p">,</span> <span class="nx">isMinimized</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Tone Analysis</span><span class="dl">'</span><span class="p">));</span>
 
   <span class="c1">// Always show score and basic info</span>
-  <span class="kd">const</span> <span class="nx">mainSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newKeyValue</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Score</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">score</span><span class="p">}</span><span class="s2">/10`</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">STAR</span><span class="p">))</span>
-    <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newKeyValue</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Tone Assessment</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">tone</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">Professional</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">DESCRIPTION</span><span class="p">));</span>
+  <span class="kd">const</span> <span class="nx">mainSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newKeyValue</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Professional Score</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setContent</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">score</span><span class="p">}</span><span class="s2">/10`</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">STAR</span><span class="p">))</span>
+    <span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newKeyValue</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setTopLabel</span><span class="p">(</span><span class="dl">'</span><span class="s1">Tone Assessment</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setContent</span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">tone</span> <span class="o">||</span> <span class="dl">'</span><span class="s1">Professional</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setIcon</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">Icon</span><span class="p">.</span><span class="nx">DESCRIPTION</span><span class="p">));</span>
 
-  <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">mainSection</span><span class="p">);</span>
+  <span class="nx">card</span><span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">mainSection</span><span class="p">);</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// Add detailed sections when expanded</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">⚠️ Areas for Improvement</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">issuesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">⚠️ Areas for Improvement</span><span class="dl">'</span><span class="p">);</span>
 
-      <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">issue</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">issue</span> <span class="o">&amp;&amp;</span> <span class="nx">issue</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
-          <span class="nx">issuesSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
-            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">issue</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">issues</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">issue</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">issue</span> <span class="o">&amp;&amp;</span> <span class="nx">issue</span><span class="p">.</span><span class="nf">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">issuesSection</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">issue</span><span class="p">.</span><span class="nf">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
         <span class="p">}</span>
       <span class="p">});</span>
 
-      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">issuesSection</span><span class="p">);</span>
+      <span class="nx">card</span><span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">issuesSection</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">💡 Suggestions</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">suggestionsSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">💡 Suggestions</span><span class="dl">'</span><span class="p">);</span>
 
-      <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">suggestion</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">suggestion</span> <span class="o">&amp;&amp;</span> <span class="nx">suggestion</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
-          <span class="nx">suggestionsSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
-            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">suggestion</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">suggestions</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">suggestion</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">suggestion</span> <span class="o">&amp;&amp;</span> <span class="nx">suggestion</span><span class="p">.</span><span class="nf">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">suggestionsSection</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">suggestion</span><span class="p">.</span><span class="nf">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
         <span class="p">}</span>
       <span class="p">});</span>
 
-      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">);</span>
+      <span class="nx">card</span><span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">suggestionsSection</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">✅ Positive Aspects</span><span class="dl">'</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span> <span class="o">&amp;&amp;</span> <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">const</span> <span class="nx">positivesSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="dl">'</span><span class="s1">✅ Positive Aspects</span><span class="dl">'</span><span class="p">);</span>
 
-      <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">positive</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">positive</span> <span class="o">&amp;&amp;</span> <span class="nx">positive</span><span class="p">.</span><span class="nx">trim</span><span class="p">())</span> <span class="p">{</span>
-          <span class="nx">positivesSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
-            <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">positive</span><span class="p">.</span><span class="nx">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
+      <span class="nx">analysis</span><span class="p">.</span><span class="nx">positives</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">positive</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">positive</span> <span class="o">&amp;&amp;</span> <span class="nx">positive</span><span class="p">.</span><span class="nf">trim</span><span class="p">())</span> <span class="p">{</span>
+          <span class="nx">positivesSection</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextParagraph</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="s2">`• </span><span class="p">${</span><span class="nx">positive</span><span class="p">.</span><span class="nf">trim</span><span class="p">()}</span><span class="s2">`</span><span class="p">));</span>
         <span class="p">}</span>
       <span class="p">});</span>
 
-      <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">positivesSection</span><span class="p">);</span>
+      <span class="nx">card</span><span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">positivesSection</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
 
   <span class="c1">// Control buttons</span>
-  <span class="kd">const</span> <span class="nx">buttonSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">();</span>
-  <span class="kd">const</span> <span class="nx">buttonSet</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">buttonSection</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">buttonSet</span> <span class="o">=</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newButtonSet</span><span class="p">();</span>
 
-  <span class="k">if</span> <span class="p">(</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Show Details</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">})));</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">isMinimized</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">buttonSet</span><span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Show Details</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">true</span><span class="dl">'</span><span class="p">})));</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Minimize</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">false</span><span class="dl">'</span><span class="p">})));</span>
+    <span class="nx">buttonSet</span><span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Minimize</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">toggleResultView</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">setParameters</span><span class="p">({</span><span class="na">minimized</span><span class="p">:</span> <span class="dl">'</span><span class="s1">false</span><span class="dl">'</span><span class="p">})));</span>
   <span class="p">}</span>
 
-  <span class="nx">buttonSet</span><span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Analyze Again</span><span class="dl">'</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))</span>
-    <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Clear Cache</span><span class="dl">'</span><span class="p">)</span>
-      <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">clearCache</span><span class="dl">'</span><span class="p">)));</span>
+  <span class="nx">buttonSet</span><span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Analyze Again</span><span class="dl">'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))</span>
+    <span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Clear Cache</span><span class="dl">'</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">clearCache</span><span class="dl">'</span><span class="p">)));</span>
 
-  <span class="nx">buttonSection</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">buttonSet</span><span class="p">);</span>
-  <span class="nx">card</span><span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">buttonSection</span><span class="p">);</span>
+  <span class="nx">buttonSection</span><span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">buttonSet</span><span class="p">);</span>
+  <span class="nx">card</span><span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">buttonSection</span><span class="p">);</span>
 
-  <span class="k">return</span> <span class="nx">card</span><span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+  <span class="k">return</span> <span class="nx">card</span><span class="p">.</span><span class="nf">build</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">createErrorCard</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardBuilder</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardHeader</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error</span><span class="dl">'</span><span class="p">))</span>
-    <span class="p">.</span><span class="nx">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newCardSection</span><span class="p">()</span>
-      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextParagraph</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">message</span><span class="p">))</span>
-      <span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newButtonSet</span><span class="p">()</span>
-        <span class="p">.</span><span class="nx">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newTextButton</span><span class="p">()</span>
-          <span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Try Again</span><span class="dl">'</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nx">newAction</span><span class="p">()</span>
-            <span class="p">.</span><span class="nx">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
-    <span class="p">.</span><span class="nx">build</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nf">createErrorCard</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="nf">setHeader</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardHeader</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">setTitle</span><span class="p">(</span><span class="dl">'</span><span class="s1">Error</span><span class="dl">'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nf">addSection</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newCardSection</span><span class="p">()</span>
+      <span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextParagraph</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="nx">message</span><span class="p">))</span>
+      <span class="p">.</span><span class="nf">addWidget</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newButtonSet</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">addButton</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newTextButton</span><span class="p">()</span>
+          <span class="p">.</span><span class="nf">setText</span><span class="p">(</span><span class="dl">'</span><span class="s1">Try Again</span><span class="dl">'</span><span class="p">)</span>
+          <span class="p">.</span><span class="nf">setOnClickAction</span><span class="p">(</span><span class="nx">CardService</span><span class="p">.</span><span class="nf">newAction</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">setFunctionName</span><span class="p">(</span><span class="dl">'</span><span class="s1">checkEmailTone</span><span class="dl">'</span><span class="p">)))))</span>
+    <span class="p">.</span><span class="nf">build</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">testCerebrasAPI</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">testCerebrasAPI</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">testEmail</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">subject</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Test Email</span><span class="dl">'</span><span class="p">,</span>
     <span class="na">body</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Hey there! Just wanted to check if we can meet tomorrow. Let me know!</span><span class="dl">'</span>
   <span class="p">};</span>
 
   <span class="k">try</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">analyzeWithCerebras</span><span class="p">(</span><span class="nx">testEmail</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test result:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nf">analyzeWithCerebras</span><span class="p">(</span><span class="nx">testEmail</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test result:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
-  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
-    <span class="k">return</span> <span class="nx">error</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">error</span><span class="p">.</span><span class="nf">toString</span><span class="p">();</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -707,23 +730,23 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// e2e-tests/external-users/auth.setup.ts</span>
 
-<span class="k">import</span> <span class="p">{</span> <span class="nx">test</span> <span class="k">as</span> <span class="nx">setup</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">promises</span> <span class="k">as</span> <span class="nx">fs</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">test</span> <span class="kd">as </span><span class="nx">setup</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@playwright/test</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">promises</span> <span class="kd">as </span><span class="nx">fs</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="nx">path</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="k">import</span> <span class="p">{</span> <span class="nx">login</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">../lib/login</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="kd">const</span> <span class="nx">authFile</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">external-users.auth.json</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">authFile</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">dirname</span><span class="p">,</span> <span class="dl">"</span><span class="s2">external-users.auth.json</span><span class="dl">"</span><span class="p">);</span>
 
-<span class="nx">setup</span><span class="p">(</span><span class="dl">"</span><span class="s2">authenticate</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">({</span> <span class="nx">page</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nf">setup</span><span class="p">(</span><span class="dl">"</span><span class="s2">authenticate</span><span class="dl">"</span><span class="p">,</span> <span class="k">async </span><span class="p">({</span> <span class="nx">page</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// login is my custom function to do all the authentication/totp goodness based on https://playwrightsolutions.com/playwright-login-test-with-2-factor-authentication-2fa-enabled/</span>
   <span class="c1">// login will still need to have a backoff in case multiple github actions run at the same time, and deal with retries</span>
-  <span class="k">await</span> <span class="nx">login</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span> <span class="dl">"</span><span class="s2">USERNAME</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">EMAIL</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">PASSWORD</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">TOTP_SEED</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">await</span> <span class="nf">login</span><span class="p">(</span><span class="nx">page</span><span class="p">,</span> <span class="dl">"</span><span class="s2">USERNAME</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">EMAIL</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">PASSWORD</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">TOTP_SEED</span><span class="dl">"</span><span class="p">);</span>
 
-  <span class="k">await</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">dirname</span><span class="p">(</span><span class="nx">authFile</span><span class="p">),</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}).</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{});</span>
+  <span class="k">await</span> <span class="nx">fs</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nf">dirname</span><span class="p">(</span><span class="nx">authFile</span><span class="p">),</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">}).</span><span class="k">catch</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{});</span>
 
   <span class="c1">// Save out the cookies/etc for use by *all* browsers</span>
-  <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">context</span><span class="p">().</span><span class="nx">storageState</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">authFile</span> <span class="p">});</span>
+  <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nf">context</span><span class="p">().</span><span class="nf">storageState</span><span class="p">({</span> <span class="na">path</span><span class="p">:</span> <span class="nx">authFile</span> <span class="p">});</span>
 <span class="p">});</span>
 </code></pre></div></div>
 
@@ -736,7 +759,7 @@ done</span> <span class="o">||</span> <span class="nb">break</span>
  * See https://playwright.dev/docs/test-configuration.
  */</span>
 <span class="c1">// eslint-disable-next-line no-restricted-exports</span>
-<span class="k">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+<span class="k">export</span> <span class="k">default</span> <span class="nf">defineConfig</span><span class="p">({</span>
   <span class="na">testDir</span><span class="p">:</span> <span class="dl">"</span><span class="s2">./e2e-tests</span><span class="dl">"</span><span class="p">,</span>
   <span class="cm">/* Run tests in files in parallel */</span>
   <span class="na">fullyParallel</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
@@ -1375,209 +1398,4 @@ accelerometer_to_sound_with_integration('accelerometer_audio.txt', output_wav='o
 
 <h2 id="conclusions">Conclusions</h2>
 
-<p>The low sampling rate (~ 1kHz) and low sensitivity to typical speech frequencies mean this isn’t a practical device to use as microphone. This still could have some uses, such as recording the frequency of dancers jumping at the club <a href="https://wiki.emfcamp.org/2024/wiki/Null_Sector">Null Sector</a> to compare this to the tempo of the songs being played from worn Tildagons.</p>]]></content><author><name></name></author><category term="Nonsense" /><category term="Python" /><category term="ESP32" /><summary type="html"><![CDATA[Failing to record audio with a Tildagon ESP32]]></summary></entry><entry><title type="html">Authenticating to AWS from GitHub actions</title><link href="https://tales.fromprod.com/2024/234/github-actions-auth-to-AWS.html" rel="alternate" type="text/html" title="Authenticating to AWS from GitHub actions" /><published>2024-08-21T09:00:00+00:00</published><updated>2024-08-21T09:00:00+00:00</updated><id>https://tales.fromprod.com/2024/234/github-actions-auth-to-AWS</id><content type="html" xml:base="https://tales.fromprod.com/2024/234/github-actions-auth-to-AWS.html"><![CDATA[<h1 id="authenticating-to-aws-from-github-actions-for-multiple-aws-accounts">Authenticating to AWS from GitHub actions for multiple AWS accounts</h1>
-
-<p>If you’re doing any sort of Infra as code on GitHub, and have AWS estate you’re going to have to authenticate somehow.</p>
-
-<p>You’ve two main options for doing this</p>
-
-<ul>
-  <li>Creating an IAM user in AWS which requires manual key rotation and doesn’t follow best practices (Don’t do this)</li>
-  <li>Using <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html">OIDC</a> so you don’t directly have to deal with credentials</li>
-</ul>
-
-<h2 id="using-oidc-to-authenticate-to-aws-from-github">Using OIDC to authenticate to AWS from GitHub</h2>
-
-<p>Guides used</p>
-
-<ul>
-  <li><a href="https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services">https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services</a></li>
-  <li><a href="https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/">https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/</a></li>
-</ul>
-
-<h3 id="account-layout">Account layout</h3>
-
-<ul>
-  <li>AWS Organisation
-    <ul>
-      <li>Shared Services</li>
-      <li>Development</li>
-      <li>Production</li>
-      <li>…</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="iam-considerations">IAM considerations</h3>
-
-<ul>
-  <li>I wanted teams to only have to add an IAM role if they needed some new access and it should “just work”</li>
-  <li>The solution should only allow access to AWS IAM roles that have “opted in”</li>
-  <li>The teams should be able to limit their access to their specific repos or Github workflows.</li>
-</ul>
-
-<h3 id="how-does-it-work">How does it work?</h3>
-
-<ul>
-  <li>AWS Organisation
-    <ul>
-      <li>Shared Services (0000000000)
-        <ul>
-          <li>Identity Provider - Github OIDC</li>
-          <li>Github Assumed role - GithubRole</li>
-        </ul>
-      </li>
-      <li>Development (1111111111)
-        <ul>
-          <li>Team managed role - DevelopmentDeployerRole</li>
-        </ul>
-      </li>
-      <li>Production (2222222222)
-        <ul>
-          <li>Team managed role - ProductionDeployerRole</li>
-        </ul>
-      </li>
-      <li>…</li>
-    </ul>
-  </li>
-</ul>
-
-<p>Github workflows request a JWT from Github, and then use this to assume the <code class="language-plaintext highlighter-rouge">GithubRole</code>
-They then use the sts token they received from AWS to assume the <code class="language-plaintext highlighter-rouge">DevelopmentDeployerRole</code> or <code class="language-plaintext highlighter-rouge">ProductionDeployerRole</code> and do whatever they need to.</p>
-
-<h3 id="details-of-how-it-actually-works">Details of how it actually works</h3>
-
-<h4 id="example-github-workflow">Example github workflow</h4>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jobs:
-  push:
-    name: Push to ECR
-    runs-on: ubuntu-latest
-
-    steps:
-
-	  # Do your building before
-      - name: Configure initial AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: "arn:aws:iam::0000000000:role/GithubRole"
-          aws-region: $
-
-      - name: Configure AWS credentials for specific container registry
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: "arn:aws:iam::1111111111:role/DevelopmentDeployerRole"
-          aws-region: $
-          role-chaining: true
-          role-skip-session-tagging: true
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          registries: 1111111111.dkr.ecr.eu-west-1.amazonaws.com/hello-repository
-	# Do the actually pushing following
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-publish
-        shell: bash
-        env:
-          ECR_REGISTRY: 1111111111.dkr.ecr.eu-west-1.amazonaws.com/hello-repository
-          IMAGE_TAG: 00001
-        run: |
-          docker build "$" -f "$" -t "$ECR_REGISTRY:$IMAGE_TAG"
-          docker push "$ECR_REGISTRY:$IMAGE_TAG"
-          echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY"
-          echo "image_tag=$IMAGE_TAG"
-          echo "full_image=$ECR_REGISTRY:$IMAGE_TAG"
-permissions:
-  id-token: write # required to issue a Github JWT to use against AWS
-  contents: read # to actually read the repo to build your code
-</code></pre></div></div>
-
-<h4 id="example-configuration-identity-provider---github-oidc">Example configuration <code class="language-plaintext highlighter-rouge">Identity Provider - Github OIDC</code></h4>
-
-<p>This is an example from typescript using the <a href="https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html">AWS CDK</a>, within a CDK Stack</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">githubAuthProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">OpenIdConnectProvider</span><span class="p">(</span>
-  <span class="k">this</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">GithubActions</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">{</span>
-    <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://token.actions.githubusercontent.com</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">clientIds</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">sts.amazonaws.com</span><span class="dl">"</span><span class="p">],</span>
-    <span class="na">thumbprints</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">74f3a68f16524f15424927704c9506f55a9316bd</span><span class="dl">"</span><span class="p">],</span> <span class="c1">// Found by hand following https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html</span>
-  <span class="p">}</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<h4 id="example-configuration-github-assumed-role---githubrole">Example configuration <code class="language-plaintext highlighter-rouge">Github Assumed role - GithubRole</code></h4>
-
-<p>This is an example from typescript using the <a href="https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html">AWS CDK</a>, within a CDK Stack</p>
-
-<p>This would allow all github workflows for all repos in your Github Organisation <code class="language-plaintext highlighter-rouge">example-org</code> to assume suitably tagged roles, regardless of account.</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">githubActionsRole</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">Role</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="dl">"</span><span class="s2">GithubActionsRole</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
-  <span class="na">roleName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GithubActionsRole</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// Must be static to make cross account auth easier</span>
-  <span class="na">assumedBy</span><span class="p">:</span> <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">PrincipalWithConditions</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">WebIdentityPrincipal</span><span class="p">(</span>
-      <span class="s2">`arn:aws:iam::</span><span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="nx">account</span><span class="p">}</span><span class="s2">:oidc-provider/token.actions.githubusercontent.com`</span>
-    <span class="p">),</span>
-    <span class="c1">// It's important that this role is locked down to only our github orgs, as otherwise anyone on github could use permissions on our AWS infrastructure.</span>
-    <span class="p">{</span>
-      <span class="na">StringEquals</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">token.actions.githubusercontent.com:aud</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sts.amazonaws.com</span><span class="dl">"</span><span class="p">,</span>
-      <span class="p">},</span>
-      <span class="na">StringLike</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">token.actions.githubusercontent.com:sub</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">repo:example-org/*</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// This currently allows all repos in the example-org github org to assume this role.</span>
-      <span class="p">},</span>
-    <span class="p">}</span>
-  <span class="p">),</span>
-<span class="p">});</span>
-<span class="nx">githubActionsRole</span><span class="p">.</span><span class="nx">addToPolicy</span><span class="p">(</span>
-  <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">PolicyStatement</span><span class="p">({</span>
-    <span class="na">effect</span><span class="p">:</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">Effect</span><span class="p">.</span><span class="nx">ALLOW</span><span class="p">,</span>
-    <span class="na">actions</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">sts:AssumeRole</span><span class="dl">"</span><span class="p">],</span>
-    <span class="na">resources</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">*</span><span class="dl">"</span><span class="p">],</span>
-    <span class="c1">// This should only be allowed to assume other roles that explicitly opt in via the tag below.</span>
-    <span class="c1">// Prevents this role being able to assume every role in the shared-services account</span>
-    <span class="na">conditions</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">StringEquals</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">iam:ResourceTag/example:allow-example-org-github-access</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">true</span><span class="dl">"</span><span class="p">,</span>
-      <span class="p">},</span>
-    <span class="p">},</span>
-  <span class="p">})</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<h4 id="example-configuration---team-managed-role---developmentdeployerrole">Example configuration - <code class="language-plaintext highlighter-rouge">Team managed role - DevelopmentDeployerRole</code></h4>
-
-<p>This is an example from typescript using the <a href="https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html">AWS CDK</a>, within a CDK Stack</p>
-
-<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// For the assumeRoleChain</span>
-<span class="kd">const</span> <span class="nx">githubActionsRole</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">Role</span><span class="p">(</span>
-  <span class="k">this</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">DevelopmentDeployerRole</span><span class="dl">"</span><span class="p">,</span>
-
-  <span class="p">{</span>
-    <span class="na">roleName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">DevelopmentDeployerRole</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// Must be static since it's referenced in GitHub Actions resources</span>
-    <span class="na">assumedBy</span><span class="p">:</span> <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">PrincipalWithConditions</span><span class="p">(</span>
-      <span class="k">new</span> <span class="nx">cdk</span><span class="p">.</span><span class="nx">aws_iam</span><span class="p">.</span><span class="nx">ArnPrincipal</span><span class="p">(</span>
-        <span class="dl">"</span><span class="s2">arn:aws:sts::0000000000:assumed-role/GithubRole/GitHubActions</span><span class="dl">"</span>
-      <span class="p">),</span>
-      <span class="p">{</span>
-        <span class="c1">// Able to add conditions here to limit to specific repos / workflows</span>
-        <span class="na">StringLike</span><span class="p">:</span> <span class="p">{</span>
-          <span class="dl">"</span><span class="s2">token.actions.githubusercontent.com:sub</span><span class="dl">"</span><span class="p">:</span>
-            <span class="dl">"</span><span class="s2">repo:example-org/repo-frontend/*</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// This allows workflows from only the `repo-frontend` repo in the example-org organisation to assume the role via the chaining.</span>
-        <span class="p">},</span>
-      <span class="p">}</span>
-    <span class="p">),</span>
-  <span class="p">}</span>
-<span class="p">);</span>
-<span class="c1">// Github Action role limited to only assume roles with this tag</span>
-<span class="nx">cdk</span><span class="p">.</span><span class="nx">Tags</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="nx">githubActionsRole</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span>
-  <span class="dl">"</span><span class="s2">example:allow-example-org-github-access</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">true</span><span class="dl">"</span>
-<span class="p">);</span>
-
-<span class="c1">// now actually add the permissions you want this role to have</span>
-</code></pre></div></div>]]></content><author><name></name></author><category term="GitHub" /><summary type="html"><![CDATA[Authenticating to AWS from GitHub actions for multiple AWS accounts]]></summary></entry></feed>
+<p>The low sampling rate (~ 1kHz) and low sensitivity to typical speech frequencies mean this isn’t a practical device to use as microphone. This still could have some uses, such as recording the frequency of dancers jumping at the club <a href="https://wiki.emfcamp.org/2024/wiki/Null_Sector">Null Sector</a> to compare this to the tempo of the songs being played from worn Tildagons.</p>]]></content><author><name></name></author><category term="Nonsense" /><category term="Python" /><category term="ESP32" /><summary type="html"><![CDATA[Failing to record audio with a Tildagon ESP32]]></summary></entry></feed>
