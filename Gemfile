@@ -4,14 +4,15 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-
-gem "github-pages", group: :jekyll_plugins
+# github-pages (and its commonmarker stack) declares Ruby < 4.0; use Jekyll 4 directly for Ruby 4.x.
+gem "jekyll", "~> 4.4"
 gem "just-the-docs"
+gem "jekyll-include-cache"
+gem "jekyll-seo-tag"
 
-
-# If you have any plugins, put them here!
 group :jekyll_plugins do
   gem "jekyll-feed"
+  gem "jekyll-remote-theme"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -29,3 +30,7 @@ gem "wdm", :install_if => Gem.win_platform?
 gem "kramdown-parser-gfm"
 
 gem "webrick"
+
+# used to be standard library, but not anymore
+gem "csv"
+gem "bigdecimal"
