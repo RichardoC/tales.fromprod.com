@@ -11,6 +11,9 @@ At the time of writing (2026-06-18), Google Workspace appears to be starting to 
 
 At this time, Firefox access still seems to work but I've no idea for how long.
 
+| 📝 Update as of 15:31Z  2026-06-18    |   Google support called and claim this will only happen for admins trying to access https://admin.google.com and that it isn't blocking, it's just a recommendation. They said they will not be documenting this publicly    |
+|---------------|:---------------------------------------------|
+
 ## Specific warning
 
 ```
