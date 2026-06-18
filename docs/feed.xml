@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-04-01T11:08:22+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Snyk issues in linear</title><link href="https://tales.fromprod.com/2026/091/snyk-linear-sync.html" rel="alternate" type="text/html" title="Snyk issues in linear" /><published>2026-04-01T11:00:00+00:00</published><updated>2026-04-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2026/091/snyk-linear-sync</id><content type="html" xml:base="https://tales.fromprod.com/2026/091/snyk-linear-sync.html"><![CDATA[<h1 id="snyk-issues-in-linear">Snyk issues in linear</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-06-18T14:56:01+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Google workspace threatening to block firefox access</title><link href="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html" rel="alternate" type="text/html" title="Google workspace threatening to block firefox access" /><published>2026-06-18T14:00:00+00:00</published><updated>2026-06-18T14:00:00+00:00</updated><id>https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox</id><content type="html" xml:base="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html"><![CDATA[<h1 id="google-workspace-threatening-to-block-firefox">Google workspace threatening to block firefox</h1>
+
+<p>At the time of writing (2026-06-18), Google Workspace appears to be starting to warn users from Firefox that they must use Chrome. This was for a <code class="language-plaintext highlighter-rouge">Google Workspace Business Plus</code> account and workspace, from an up to date browser and OS.</p>
+
+<p>At this time, Firefox access still seems to work but I’ve no idea for how long.</p>
+
+<h2 id="specific-warning">Specific warning</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Icon indicating that the user may soon lose their access to their account.
+Secure your device for safe app access
+To help keep your data secure, make sure that your device meets your organisation's security requirements
+Next steps
+
+    Download Chrome Browser and sign in with your work account
+
+</code></pre></div></div>
+
+<p>This was from a webpage with url <code class="language-plaintext highlighter-rouge">https://access.workspace.google.com/remediate?urlparams=REDACTED</code></p>
+
+<p>Screenshot below</p>
+
+<p><img src="/static/2026-06-18-google-workspace-threatening-to-block-firefox/warning-screen.png" alt="A google workspace page with the following text Icon indicating that the user may soon lose their access to their account and that they must install Chrome" width="610" /></p>
+
+<h2 id="response-from-google-support">Response from Google support</h2>
+
+<p>Absolutely nothing useful, repeatedly transferred around and took ages.</p>
+
+<h2 id="why-do-i-care">Why do I care?</h2>
+
+<p>My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don’t want to be forced to use Chrome for no discernable benefit.</p>]]></content><author><name></name></author><category term="Google" /><category term="Firefox" /><summary type="html"><![CDATA[Google workspace threatening to block firefox]]></summary></entry><entry><title type="html">Snyk issues in linear</title><link href="https://tales.fromprod.com/2026/091/snyk-linear-sync.html" rel="alternate" type="text/html" title="Snyk issues in linear" /><published>2026-04-01T11:00:00+00:00</published><updated>2026-04-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2026/091/snyk-linear-sync</id><content type="html" xml:base="https://tales.fromprod.com/2026/091/snyk-linear-sync.html"><![CDATA[<h1 id="snyk-issues-in-linear">Snyk issues in linear</h1>
 
 <p>At the time of writing (2025-04-01) Snyk doesn’t support syncing found issues into <a href="https://linear.app/">Linear</a>, , only <a href="https://docs.snyk.io/integrations/jira-and-slack-integrations/jira-integration">Jira</a> so I decided to make a cli to do this automatically.</p>
 
@@ -996,78 +1026,4 @@ https://api.business.githubcopilot.com/_ping</p>
 
 <h3 id="future-research">Future research</h3>
 
-<p>How codebases are indexed, and how that’s used with the extension.</p>]]></content><author><name></name></author><category term="APIs" /><category term="Security" /><category term="Github" /><summary type="html"><![CDATA[Reverse Engineering Github Copilot APIs]]></summary></entry><entry><title type="html">Migrate cloudformation to opentofu with LLMs</title><link href="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html" rel="alternate" type="text/html" title="Migrate cloudformation to opentofu with LLMs" /><published>2024-09-23T15:00:00+00:00</published><updated>2024-09-23T15:00:00+00:00</updated><id>https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms</id><content type="html" xml:base="https://tales.fromprod.com/2024/267/migrate-cloudformation-to-opentofu-with-llms.html"><![CDATA[<h1 id="migrate-cloudformation-to-opentofu-with-llms">Migrate cloudformation to opentofu with LLMs</h1>
-
-<p>I discovered that Cloudformation won’t override manual changes so decided to migrate a typescript CDK stack over to openTofu. This means I now get to the delta between reality and what I requested.</p>
-
-<p>However, migrating between these technologies can be fiddly so figured I should get some help generating the bulk of the required changes and I can then manually tweak as required.</p>
-
-<h2 id="first-attempt---cf2tf">First attempt - cf2tf</h2>
-
-<p><a href="https://github.com/DontShaveTheYak/cf2tf">https://github.com/DontShaveTheYak/cf2tf</a> - A nice tool, but requires quite a lot of manual changes to the resulting Terraform in my experience.</p>
-
-<h3 id="steps">Steps</h3>
-
-<ul>
-  <li>npx cdk synth MyStack</li>
-  <li>cf2tf MyStack.template.json</li>
-  <li>manually fix the openTofu to cover all resources</li>
-  <li>run <code class="language-plaintext highlighter-rouge">tofu init</code></li>
-  <li>manually write all the required <code class="language-plaintext highlighter-rouge">tofu import</code> statements to ensure all resources governed by openTofu</li>
-  <li>Check in AWS Cloudformation Console that every <code class="language-plaintext highlighter-rouge">resource</code> has an openTofu entry</li>
-  <li>In the AWS Cloudformation Console manually update the cloudformation template in Application Composer to ensure all resources have a DeletionPolicy: Retain</li>
-  <li>Delete the Cloudformation Stack via the console</li>
-  <li>Delete the stack from the local repo</li>
-</ul>
-
-<h2 id="second-attempt---openais-o1-preview-llm">Second attempt - OpenAI’s o1-preview LLM</h2>
-
-<p>The steps listed are similar to the first attempt, but far fewer manual changes were required and typically the import commands were writen correctly. This worked well for stacks with small numbers of resources (~10) and less well on large stacks (~80 resources)</p>
-
-<p>Just change any terraform commands to <code class="language-plaintext highlighter-rouge">tofu</code></p>
-
-<h3 id="steps-1">Steps</h3>
-
-<ul>
-  <li>npx cdk synth MyStack</li>
-  <li>Add files to the template prompt</li>
-  <li>run prompt via chatgpt or API</li>
-  <li>run <code class="language-plaintext highlighter-rouge">tofu init</code></li>
-  <li>Check the required <code class="language-plaintext highlighter-rouge">tofu import</code> statements provided, and run them to ensure all resources governed by openTofu</li>
-  <li>Check in AWS Cloudformation Console that every <code class="language-plaintext highlighter-rouge">resource</code> has an openTofu entry</li>
-  <li>In the AWS Cloudformation Console manually update the cloudformation template in Application Composer to ensure all resources have a DeletionPolicy: Retain</li>
-  <li>Delete the Cloudformation Stack via the console</li>
-  <li>Delete the stack from the local repo</li>
-</ul>
-
-<h4 id="prompt">Prompt</h4>
-
-<p>Add the relevant files between the [START FILE: XXX] and [END FILE] tags, then send this over via the openAI API, or via ChatGPT.</p>
-
-<p>Do <strong>NOT</strong> use the file upload function of chatgpt, it performs much worse on the details which mean the imports don’t work. I suspect this is because it’s using RAG on the files, rather than including them in their entirety in the context.</p>
-
-<p>I tested this with <code class="language-plaintext highlighter-rouge">o1-preview-2024-09-12</code></p>
-
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-Convert this cloudformation cdk in typescript to terraform. It's infrastructure as code for an AWS environment. It already exists so I'll have to do terraform imports of the existing resources. Include the import statements.
-
-Here is the cloudformation template
-
-[START FILE: MyStack.assets.json]
-
-[END FILE]
-
-[START FILE: MyStack.template.json]
-
-[END FILE]
-
-[START FILE: library.ts]
-// some actual cloudformation stacks
-
-[END FILE]
-
-[START FILE: manifest.json]
-
-[END FILE]
-
-</code></pre></div></div>]]></content><author><name></name></author><category term="ChatGPT" /><category term="APIs" /><summary type="html"><![CDATA[Migrate cloudformation to opentofu with LLMs]]></summary></entry></feed>
+<p>How codebases are indexed, and how that’s used with the extension.</p>]]></content><author><name></name></author><category term="APIs" /><category term="Security" /><category term="Github" /><summary type="html"><![CDATA[Reverse Engineering Github Copilot APIs]]></summary></entry></feed>
