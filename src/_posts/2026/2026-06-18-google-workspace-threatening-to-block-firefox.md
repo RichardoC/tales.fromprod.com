@@ -40,14 +40,14 @@ Absolutely nothing useful, repeatedly transferred around and took ages.
 <<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+
 ### Emailed update from their support after they called me
 
-I'm publishing this in full, none of this actually addresses the issue or answers anything I asked on the call
-=======
+# I'm publishing this in full, none of this actually addresses the issue or answers anything I asked on the call
+
 ### Emailed update from their support
 
 I'm publishing this in full, none of this actually addresses the issue
->>>>>>> main
 
 ```
 [redacted personal information about myself and the support staff]
@@ -87,15 +87,9 @@ Should you have any further questions, we'd be happy to provide assistance. This
 Thank you for choosing Google Workspace, and I hope you have a wonderful day!
 
 Kind regards,
-<<<<<<< HEAD
 [redacted]
 ```
 
->>>>>>> Stashed changes
-=======
-```
-
->>>>>>> main
 ## Why do I care?
 
 My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don't want to be forced to use Chrome for no discernable benefit.

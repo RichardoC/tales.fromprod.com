@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-06-19T22:33:24+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Google workspace threatening to block firefox access</title><link href="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html" rel="alternate" type="text/html" title="Google workspace threatening to block firefox access" /><published>2026-06-18T14:00:00+00:00</published><updated>2026-06-18T14:00:00+00:00</updated><id>https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox</id><content type="html" xml:base="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html"><![CDATA[<h1 id="google-workspace-threatening-to-block-firefox">Google workspace threatening to block firefox</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-06-19T22:43:12+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Google workspace threatening to block firefox access</title><link href="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html" rel="alternate" type="text/html" title="Google workspace threatening to block firefox access" /><published>2026-06-18T14:00:00+00:00</published><updated>2026-06-18T14:00:00+00:00</updated><id>https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox</id><content type="html" xml:base="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html"><![CDATA[<h1 id="google-workspace-threatening-to-block-firefox">Google workspace threatening to block firefox</h1>
 
 <p>At the time of writing (2026-06-18), Google Workspace appears to be starting to warn users from Firefox that they must use Chrome. This was for a <code class="language-plaintext highlighter-rouge">Google Workspace Business Plus</code> account and workspace, from an up to date browser and OS.</p>
 
@@ -32,27 +32,14 @@ Next steps
 <p>«««&lt; HEAD
 «««&lt; Updated upstream
 =======</p>
+
 <h3 id="emailed-update-from-their-support-after-they-called-me">Emailed update from their support after they called me</h3>
 
 <h1 id="im-publishing-this-in-full-none-of-this-actually-addresses-the-issue-or-answers-anything-i-asked-on-the-call">I’m publishing this in full, none of this actually addresses the issue or answers anything I asked on the call</h1>
+
 <h3 id="emailed-update-from-their-support">Emailed update from their support</h3>
 
 <p>I’m publishing this in full, none of this actually addresses the issue</p>
-<blockquote>
-  <blockquote>
-    <blockquote>
-      <blockquote>
-        <blockquote>
-          <blockquote>
-            <blockquote>
-              <p>main</p>
-            </blockquote>
-          </blockquote>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </blockquote>
-</blockquote>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[redacted personal information about myself and the support staff]
 I appreciate you accepting my call earlier.
@@ -91,43 +78,10 @@ Should you have any further questions, we'd be happy to provide assistance. This
 Thank you for choosing Google Workspace, and I hope you have a wonderful day!
 
 Kind regards,
-&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 [redacted]
 </code></pre></div></div>
 
-<blockquote>
-  <blockquote>
-    <blockquote>
-      <blockquote>
-        <blockquote>
-          <blockquote>
-            <blockquote>
-              <h1 id="stashed-changes">Stashed changes</h1>
-              <p>```</p>
-            </blockquote>
-          </blockquote>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </blockquote>
-</blockquote>
-
-<blockquote>
-  <blockquote>
-    <blockquote>
-      <blockquote>
-        <blockquote>
-          <blockquote>
-            <blockquote>
-              <p>main</p>
-              <h2 id="why-do-i-care">Why do I care?</h2>
-            </blockquote>
-          </blockquote>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<h2 id="why-do-i-care">Why do I care?</h2>
 
 <p>My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don’t want to be forced to use Chrome for no discernable benefit.</p>
 
