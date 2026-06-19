@@ -11,8 +11,8 @@ At the time of writing (2026-06-18), Google Workspace appears to be starting to 
 
 At this time, Firefox access still seems to work but I've no idea for how long.
 
-| 📝 Update as of 15:31Z  2026-06-18    |   Google support called and claim this will only happen for admins trying to access https://admin.google.com and that it isn't blocking, it's just a recommendation. They said they will not be documenting this publicly    |
-|---------------|:---------------------------------------------|
+| 📝 Update as of 15:31Z 2026-06-18 | Google support called and claim this will only happen for admins trying to access https://admin.google.com and that it isn't blocking, it's just a recommendation. They said they will not be documenting this publicly |
+| --------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## Specific warning
 
@@ -37,11 +37,17 @@ Screenshot below
 
 Absolutely nothing useful, repeatedly transferred around and took ages.
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 ### Emailed update from their support after they called me
 
 I'm publishing this in full, none of this actually addresses the issue or answers anything I asked on the call
+=======
+### Emailed update from their support
+
+I'm publishing this in full, none of this actually addresses the issue
+>>>>>>> main
 
 ```
 [redacted personal information about myself and the support staff]
@@ -81,10 +87,22 @@ Should you have any further questions, we'd be happy to provide assistance. This
 Thank you for choosing Google Workspace, and I hope you have a wonderful day!
 
 Kind regards,
+<<<<<<< HEAD
 [redacted]
 ```
 
 >>>>>>> Stashed changes
+=======
+```
+
+>>>>>>> main
 ## Why do I care?
 
 My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don't want to be forced to use Chrome for no discernable benefit.
+
+## Okay, but didn't your admin configure $enterprise_feature
+
+Sadly not, I'm the admin and can confirm the following
+
+- We haven't configured, and don't use IAP (Identity Aware Proxy) - I've used this before and yes that is Chrome only due to how it does device verification
+- This isn't because of "Context Aware Access" this is an enterprise only feature, and we're on `Google Workspace Business Plus`
