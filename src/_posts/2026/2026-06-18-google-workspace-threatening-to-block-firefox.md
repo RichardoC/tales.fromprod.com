@@ -37,6 +37,54 @@ Screenshot below
 
 Absolutely nothing useful, repeatedly transferred around and took ages.
 
+<<<<<<< Updated upstream
+=======
+### Emailed update from their support after they called me
+
+I'm publishing this in full, none of this actually addresses the issue or answers anything I asked on the call
+
+```
+[redacted personal information about myself and the support staff]
+I appreciate you accepting my call earlier.
+
+To ensure your users have the best, most secure, and feature-rich experience with Google Workspace services, it's crucial to use up-to-date, compatible web browsers. Using supported browsers provides access to the latest features and offers improved security and performance.
+
+Here are the browsers compatible with Google Workspace:
+
+    Google Chrome: We recommend and fully support the latest version of Google Chrome. Chrome typically updates automatically, ensuring access to all Google Workspace features and functionality.
+
+    Mozilla Firefox: Google Workspace works well with Firefox. We support the current and the previous major version. Please note that Firefox does not currently support:
+        Offline access to Gmail, Google Calendar, Google Docs, Sheets, and Slides.
+        Client-side encryption in Google Meet.
+
+    Apple Safari: Google Workspace also works well with Safari. We support the current and the previous major version. Safari does not currently support:
+        Offline access to Gmail, Calendar, Docs, Sheets, and Slides.
+        Desktop notifications in Gmail.
+
+    Microsoft Edge: Google Workspace works well with Microsoft Edge. We support the current and the previous major version.
+
+Key Recommendations:
+
+    Keep Browsers Updated: Always encourage users to run the latest versions of these supported browsers. For Firefox, Safari, and Edge, when a new browser version is released, we begin supporting that version and stop supporting the third most recent version.
+    Enable Cookies and JavaScript: To use Google Workspace effectively, ensure that both cookies and JavaScript are enabled in the browser settings.
+    Unsupported Browsers: While some functionality might work on older or unsupported browsers, we cannot guarantee full feature availability or performance. Users may encounter issues or find some applications do not open correctly.
+    Mobile Access: For the best experience on mobile devices (Android, iPhone, and iPad), please use the dedicated Google Workspace mobile applications, which are built specifically for these platforms.
+
+By following these guidelines, your organization can maximize the benefits and security offered by Google Workspace.
+
+For future reference, please check and review these articles:
+Supported browsers for Google Workspace | Support & troubleshooting | Google Workspace Help
+Service-specific Google Workspace requirements | Support & troubleshooting | Google Workspace Help
+
+Should you have any further questions, we'd be happy to provide assistance. This case will be closed in the next 3 business days, you can always reply to this message within the next 30 days and the case will reopen.
+
+Thank you for choosing Google Workspace, and I hope you have a wonderful day!
+
+Kind regards,
+[redacted]
+```
+
+>>>>>>> Stashed changes
 ## Why do I care?
 
 My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don't want to be forced to use Chrome for no discernable benefit.

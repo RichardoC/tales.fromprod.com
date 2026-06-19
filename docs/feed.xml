@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-06-18T14:56:01+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Google workspace threatening to block firefox access</title><link href="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html" rel="alternate" type="text/html" title="Google workspace threatening to block firefox access" /><published>2026-06-18T14:00:00+00:00</published><updated>2026-06-18T14:00:00+00:00</updated><id>https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox</id><content type="html" xml:base="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html"><![CDATA[<h1 id="google-workspace-threatening-to-block-firefox">Google workspace threatening to block firefox</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://tales.fromprod.com/feed.xml" rel="self" type="application/atom+xml" /><link href="https://tales.fromprod.com/" rel="alternate" type="text/html" /><updated>2026-06-19T22:32:05+00:00</updated><id>https://tales.fromprod.com/feed.xml</id><title type="html">Tales from Prod</title><subtitle>Welcome to Richard Finlay Tweed&apos;s thoughts on Cloud Native Software, Kubernetes, Production and whatever else he&apos;s been tinkering with.</subtitle><entry><title type="html">Google workspace threatening to block firefox access</title><link href="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html" rel="alternate" type="text/html" title="Google workspace threatening to block firefox access" /><published>2026-06-18T14:00:00+00:00</published><updated>2026-06-18T14:00:00+00:00</updated><id>https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox</id><content type="html" xml:base="https://tales.fromprod.com/2026/169/google-workspace-threatening-to-block-firefox.html"><![CDATA[<h1 id="google-workspace-threatening-to-block-firefox">Google workspace threatening to block firefox</h1>
 
 <p>At the time of writing (2026-06-18), Google Workspace appears to be starting to warn users from Firefox that they must use Chrome. This was for a <code class="language-plaintext highlighter-rouge">Google Workspace Business Plus</code> account and workspace, from an up to date browser and OS.</p>
 
 <p>At this time, Firefox access still seems to work but I’ve no idea for how long.</p>
+
+<p>| 📝 Update as of 15:31Z  2026-06-18    |   Google support called and claim this will only happen for admins trying to access https://admin.google.com and that it isn’t blocking, it’s just a recommendation. They said they will not be documenting this publicly    |
+|—————|:———————————————|</p>
 
 <h2 id="specific-warning">Specific warning</h2>
 
@@ -26,7 +29,67 @@ Next steps
 
 <p>Absolutely nothing useful, repeatedly transferred around and took ages.</p>
 
-<h2 id="why-do-i-care">Why do I care?</h2>
+<h1 id="-updated-upstream">«««&lt; Updated upstream</h1>
+<h3 id="emailed-update-from-their-support-after-they-called-me">Emailed update from their support after they called me</h3>
+
+<p>I’m publishing this in full, none of this actually addresses the issue or answers anything I asked on the call</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[redacted personal information about myself and the support staff]
+I appreciate you accepting my call earlier.
+
+To ensure your users have the best, most secure, and feature-rich experience with Google Workspace services, it's crucial to use up-to-date, compatible web browsers. Using supported browsers provides access to the latest features and offers improved security and performance.
+
+Here are the browsers compatible with Google Workspace:
+
+    Google Chrome: We recommend and fully support the latest version of Google Chrome. Chrome typically updates automatically, ensuring access to all Google Workspace features and functionality.
+
+    Mozilla Firefox: Google Workspace works well with Firefox. We support the current and the previous major version. Please note that Firefox does not currently support:
+        Offline access to Gmail, Google Calendar, Google Docs, Sheets, and Slides.
+        Client-side encryption in Google Meet.
+
+    Apple Safari: Google Workspace also works well with Safari. We support the current and the previous major version. Safari does not currently support:
+        Offline access to Gmail, Calendar, Docs, Sheets, and Slides.
+        Desktop notifications in Gmail.
+
+    Microsoft Edge: Google Workspace works well with Microsoft Edge. We support the current and the previous major version.
+
+Key Recommendations:
+
+    Keep Browsers Updated: Always encourage users to run the latest versions of these supported browsers. For Firefox, Safari, and Edge, when a new browser version is released, we begin supporting that version and stop supporting the third most recent version.
+    Enable Cookies and JavaScript: To use Google Workspace effectively, ensure that both cookies and JavaScript are enabled in the browser settings.
+    Unsupported Browsers: While some functionality might work on older or unsupported browsers, we cannot guarantee full feature availability or performance. Users may encounter issues or find some applications do not open correctly.
+    Mobile Access: For the best experience on mobile devices (Android, iPhone, and iPad), please use the dedicated Google Workspace mobile applications, which are built specifically for these platforms.
+
+By following these guidelines, your organization can maximize the benefits and security offered by Google Workspace.
+
+For future reference, please check and review these articles:
+Supported browsers for Google Workspace | Support &amp; troubleshooting | Google Workspace Help
+Service-specific Google Workspace requirements | Support &amp; troubleshooting | Google Workspace Help
+
+Should you have any further questions, we'd be happy to provide assistance. This case will be closed in the next 3 business days, you can always reply to this message within the next 30 days and the case will reopen.
+
+Thank you for choosing Google Workspace, and I hope you have a wonderful day!
+
+Kind regards,
+[redacted]
+</code></pre></div></div>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <blockquote>
+              <p>Stashed changes</p>
+              <h2 id="why-do-i-care">Why do I care?</h2>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
 
 <p>My team need to make sure that their software works in multiple browsers, and I personally prefer using firefox and don’t want to be forced to use Chrome for no discernable benefit.</p>]]></content><author><name></name></author><category term="Google" /><category term="Firefox" /><summary type="html"><![CDATA[Google workspace threatening to block firefox]]></summary></entry><entry><title type="html">Snyk issues in linear</title><link href="https://tales.fromprod.com/2026/091/snyk-linear-sync.html" rel="alternate" type="text/html" title="Snyk issues in linear" /><published>2026-04-01T11:00:00+00:00</published><updated>2026-04-01T11:00:00+00:00</updated><id>https://tales.fromprod.com/2026/091/snyk-linear-sync</id><content type="html" xml:base="https://tales.fromprod.com/2026/091/snyk-linear-sync.html"><![CDATA[<h1 id="snyk-issues-in-linear">Snyk issues in linear</h1>
 
