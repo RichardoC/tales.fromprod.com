@@ -13,6 +13,8 @@ At this time, Firefox access still seems to work but I've no idea for how long.
 
 | 📝 Update as of 15:31Z 2026-06-18 | Google support called and claim this will only happen for admins trying to access https://admin.google.com and that it isn't blocking, it's just a recommendation. They said they will not be documenting this publicly |
 | --------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 📝 Update as of 15:30Z 2026-06-22 | Google support did an internal escalation and said you can find out what caused this alert by going to https://admin.google.com/ac/sc/investigation and selecting `Context-aware access log events` whih=ch will then tell you what the user was doing, and why they got the prompt. In this case, it was "User warned (security advisor)" because of "NON_CPR_OTHER_BROWSER" due to the interaction with "Prevent access from unsafe devices" on https://admin.google.com/ac/context-aware/security-advisor?journey=218 . I'm still unimpressed that Google officially consider non-Chrome insecure and scare users towards using Chrome for a paid product.|
+| --------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 ## Specific warning
 
