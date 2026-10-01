@@ -45,7 +45,7 @@ GEM
       webrick (~> 1.7)
     jekyll-feed (0.18.0)
       jekyll (>= 3.7, < 5.0)
-    jekyll-include-cache (0.3.0)
+    jekyll-include-cache (0.3.1)
       jekyll (>= 3.7, < 5.0)
     jekyll-remote-theme (0.4.3)
       addressable (~> 2.0)
@@ -137,7 +137,7 @@ CHECKSUMS
   i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
   jekyll (4.4.1) sha256=4c1144d857a5b2b80d45b8cf5138289579a9f8136aadfa6dd684b31fe2bc18c1
   jekyll-feed (0.18.0) sha256=8e6829f455b8764a8fa1bbb198d0ebb3525128dacc6ffe9d15f4df7388bc3647
-  jekyll-include-cache (0.3.0) sha256=c2225509bf06196d2570f13d3f45626baa7067915c1455d750ccb4d6c7e69132
+  jekyll-include-cache (0.3.1) sha256=4ba9c00b05247245420656dc313826ca761c4e0b13c0976ad298225f9f7792d3
   jekyll-remote-theme (0.4.3) sha256=d3fde726484fb3df04de9e347baf75aaa3d5bfea771a330412e0c52608e54b40
   jekyll-sass-converter (3.0.0) sha256=e2e7674f186e906b9d99b8066e13f9b4d5cb9f806d36f7bc8cf2610053d8c902
   jekyll-seo-tag (2.9.1) sha256=ed5c757a091048b6ef9109f856f84a29beaeb70f531ba5775a5e92129a28093e
